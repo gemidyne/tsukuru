@@ -1,0 +1,34 @@
+﻿<Window x:Class="Tsukuru.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:Tsukuru.UserControls"
+        MinWidth="600"
+        Icon="vpn.ico"
+        Title="Tsukuru" 
+        Height="500" 
+        Width="750"
+        ResizeMode="NoResize"
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressValue="{Binding TaskbarProgress}" ProgressState="{Binding TaskbarState}"/>
+    </Window.TaskbarItemInfo>
+    <Window.Background>
+        <ImageBrush ImageSource="Resources/bg.png" Stretch="None" TileMode="Tile" />
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <uc:LogoControl Grid.Row="0" 
+                        Margin="15,0" />
+        <uc:CompilationSettingsControl Grid.Row="1"
+                                       Margin="15,0,15,15">
+            <uc:CompilationSettingsControl.Effect>
+                <DropShadowEffect Direction="270" 
+                                  ShadowDepth="1"/>
+            </uc:CompilationSettingsControl.Effect>
+        </uc:CompilationSettingsControl>
+    </Grid>
+</Window>

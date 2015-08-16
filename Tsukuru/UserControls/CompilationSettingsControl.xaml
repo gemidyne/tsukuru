@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="Tsukuru.UserControls.CompilationSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:uc="clr-namespace:Tsukuru.UserControls"
+             xmlns:vm="clr-namespace:Tsukuru.ViewModels"
+             mc:Ignorable="d" 
+             Background="White"
+             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}">
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+
+        <Label Content="SourcePawn Compiler" 
+               Margin="10"
+               HorizontalAlignment="Right" VerticalAlignment="Center"
+               Grid.Row="0" Grid.Column="0" />
+        <Grid Grid.Row="0" Grid.Column="1" Height="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="25" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0"
+                     IsReadOnly="True"
+                     Text="{Binding SourcePawnCompiler}" />
+            <Button Grid.Column="1"
+                    Command="{Binding BrowseCompilerCommand}" 
+                    Content="..." />
+        </Grid>
+
+        <Label Content="Files to compile" 
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Center"
+               Margin="10"
+               Grid.Row="1" Grid.Column="0" />
+        <uc:CompilationFilesControl Grid.Row="1" Grid.Column="1" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="4">
+            <CheckBox Content="Execute post build scripts?" 
+                      IsChecked="{Binding ExecutePostBuildScripts}" 
+                      Margin="10" />
+            <CheckBox Content="Increment version file?" 
+                      IsChecked="{Binding IncrementVersion}" 
+                      Margin="10" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1"
+                    Grid.Row="3" 
+                    HorizontalAlignment="Right" 
+                    Margin="4"
+                    Orientation="Horizontal">
+            <ProgressBar IsIndeterminate="{Binding IsProgressIndeterminate}" 
+                         Margin="5,0" 
+                         Maximum="{Binding ProgressBarMaximum}"
+                         Value="{Binding ProgressBarValue}"
+                         Width="300" />
+            <Button Command="{Binding BuildCommand}" 
+                    Content="Build" 
+                    IsEnabled="{Binding AreCommandButtonsEnabled}"
+                    Width="100" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Tsukuru.UserControls.LogoControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="50" 
+             d:DesignHeight="50" d:DesignWidth="600">
+    <Grid>
+        <Image Source="/Tsukuru;component/logo.png" Margin="0,5" />
+        <Label Content="by anarchysteven"
+               Foreground="White"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom">
+            <Label.Effect>
+                <DropShadowEffect Direction="270" ShadowDepth="1"/>
+            </Label.Effect>
+        </Label>
+
+        <Label Content="{Binding AppVersion, FallbackValue=v1.0.0.0}"
+               Foreground="White"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom">
+            <Label.Effect>
+                <DropShadowEffect Direction="270" ShadowDepth="1"/>
+            </Label.Effect>
+        </Label>
+    </Grid>
+</UserControl>
