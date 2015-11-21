@@ -15,5 +15,5 @@ Tsukuru is a Windows application that allows scripters of the Source engine modi
 - MvvmLightLibs (v5.1.1.0)
 - CommonServiceLocator (v1.3)
 
-## Copyright
+## License
 Licensed under the [GNU GPL License](LICENSE.md)
