@@ -1,11 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using Tsukuru.Data;
+using System.Collections.ObjectModel;
+using System.Windows;
 
-namespace Tsukuru.ViewModels
+namespace Tsukuru.SourcePawn.ViewModels
 {
     public class CompilationFileViewModel : ViewModelBase
     {
@@ -13,6 +12,7 @@ namespace Tsukuru.ViewModels
 		private ObservableCollection<CompilationMessage> _messages;
 		private CompilationResult _result = CompilationResult.Unknown;
 		private string _statusIcon = "/Tsukuru;component/Resources/script_code.png";
+        private bool _canShowDetails;
 
         public string File
         {
@@ -37,7 +37,16 @@ namespace Tsukuru.ViewModels
 	        set { Set(() => StatusIcon, ref _statusIcon, value); }
         }
 
-		public RelayCommand ShowDetailsCommand { get; private set; }
+        public bool CanShowDetails
+        {
+            get => _canShowDetails;
+            set
+            {
+                Set(() => CanShowDetails, ref _canShowDetails, value);
+            }
+        }
+
+        public RelayCommand ShowDetailsCommand { get; private set; }
 
 	    public CompilationFileViewModel()
 	    {
@@ -48,7 +57,7 @@ namespace Tsukuru.ViewModels
 	    {
 		    var viewModel = SimpleIoc.Default.GetInstance<ResultsWindowViewModel>();
 
-			viewModel.SetResults(Messages, string.Format("Results - {0} - Total {1} message(s)", File, Messages.Count));
+			viewModel.SetResults(Messages, $"Results - {File} - Total {Messages.Count} message(s)");
 
 		    var info = new ResultsWindow
 		    {

@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Tsukuru.Maps.Compiler.ResourcePackingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DesignHeight="250" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <CheckBox IsChecked="{Binding PerformResourcePacking}" 
+                  Content="Enable Resource Packing?"
+                  VerticalContentAlignment="Center" FontSize="14"
+                  Grid.Row="0" Margin="10" />
+
+        <GroupBox Grid.Row="1"
+                  Header="Folders to pack into BSP">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal">
+                    <Button Content="Add folder" 
+                            Click="btnFoldersToPackAdd_Click" />
+                    <Button Content="Remove folder" 
+                            Click="btnFoldersToPackRemove_Click"/>
+                </StackPanel>
+
+                <ListBox Grid.Row="1" ItemsSource="{Binding FoldersToPack}" x:Name="lbFoldersToPack">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+
+
+    </Grid>
+</UserControl>

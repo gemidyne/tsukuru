@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Tsukuru.ViewModels;
+using Tsukuru.SourcePawn.ViewModels;
 
 namespace Tsukuru
 {
@@ -8,7 +8,7 @@ namespace Tsukuru
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = new SourcePawnCompileViewModel();
         }
     }
 }

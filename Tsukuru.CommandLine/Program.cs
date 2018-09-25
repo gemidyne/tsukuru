@@ -31,7 +31,7 @@ namespace Tsukuru.CommandLine
 
             foreach (string line in File.ReadAllLines(file))
             {
-                fileTxt.AppendLine(line.Replace("{BBVersion}", version.ToString()));
+                fileTxt.AppendLine(line.Replace("{TsukuruVersion}", version.ToString()));
             }
 
             File.WriteAllText(file, fileTxt.ToString());

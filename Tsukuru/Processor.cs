@@ -6,34 +6,34 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows;
-using Tsukuru.Data;
-using Tsukuru.ViewModels;
+using Tsukuru.SourcePawn;
+using Tsukuru.SourcePawn.ViewModels;
 
 namespace Tsukuru
 {
     public class Processor
     {
-        public void CompileBatch(MainWindowViewModel vm)
+        public void CompileBatch(SourcePawnCompileViewModel viewModel)
         {
-            vm.ProgressBarValue = 0;
-            vm.ProgressBarMaximum = vm.FilesToCompile.Count;
+            viewModel.ProgressBarValue = 0;
+            viewModel.ProgressBarMaximum = viewModel.FilesToCompile.Count;
 
-            foreach (var compilationFile in vm.FilesToCompile)
+            foreach (var compilationFile in viewModel.FilesToCompile)
             {
                 UpdateCompilationDataStatus(compilationFile, isCompiling: true);
             }
 
-            foreach (var compilationFile in vm.FilesToCompile)
+            foreach (var compilationFile in viewModel.FilesToCompile)
             {
-                Compile(vm, compilationFile);
-                vm.ProgressBarValue++;
+                Compile(viewModel, compilationFile);
+                viewModel.ProgressBarValue++;
             }
 
-            vm.ProgressBarValue = 0;
+            viewModel.ProgressBarValue = 0;
             SystemSounds.Asterisk.Play();
         }
 
-        public void Compile(MainWindowViewModel vm, CompilationFileViewModel compilationFileViewModel)
+        public void Compile(SourcePawnCompileViewModel vm, CompilationFileViewModel compilationFileViewModel)
         {
             string file = compilationFileViewModel.File;
             compilationFileViewModel.Messages.Clear();
@@ -202,6 +202,7 @@ namespace Tsukuru
             {
                 fileViewModel.Result = CompilationResult.Compiling;
                 fileViewModel.StatusIcon = "/Tsukuru;component/Resources/script_code.png";
+                fileViewModel.CanShowDetails = false;
                 return;
             }
 
@@ -209,6 +210,7 @@ namespace Tsukuru
             {
                 fileViewModel.Result = CompilationResult.Unknown;
 				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/script_code.png";
+                fileViewModel.CanShowDetails = false;
                 return;
             }
 
@@ -216,16 +218,19 @@ namespace Tsukuru
             {
                 fileViewModel.Result = CompilationResult.FailedWithErrors;
 				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/cross.png";
+                fileViewModel.CanShowDetails = true;
             }
             else if (fileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineWarning(m.Prefix)))
             {
                 fileViewModel.Result = CompilationResult.CompletedWithWarnings;
 				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/error.png";
+                fileViewModel.CanShowDetails = true;
             }
             else 
             {
                 fileViewModel.Result = CompilationResult.Completed;
 				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/tick.png";
+                fileViewModel.CanShowDetails = false;
             }
         }
     }

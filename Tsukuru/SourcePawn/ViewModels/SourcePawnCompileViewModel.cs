@@ -1,14 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Shell;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 
-namespace Tsukuru.ViewModels
+namespace Tsukuru.SourcePawn.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class SourcePawnCompileViewModel : ViewModelBase
     {
 		private bool _executePostBuildScripts;
 		private bool _incrementVersion;
@@ -16,16 +15,9 @@ namespace Tsukuru.ViewModels
 
 		private int _progressBarValue;
 		private int _progressBarMaximum = 100;
-		private string _appVersion;
 		private string _sourcePawnCompiler;
 		private ObservableCollection<CompilationFileViewModel> _filesToCompile;
 	    private CompilationFileViewModel _selectedFile;
-
-		public string AppVersion
-		{
-			get { return _appVersion; }
-			set { Set(() => AppVersion, ref _appVersion, value); }
-		}
 
         public string SourcePawnCompiler
         {
@@ -135,13 +127,11 @@ namespace Tsukuru.ViewModels
 		public RelayCommand BuildCommand { get; private set; }
 		public RelayCommand RemoveFileCommand { get; private set; }
 
-	    public MainWindowViewModel()
+	    public SourcePawnCompileViewModel()
         {
             SourcePawnCompiler = SettingsManager.CompilerLocation;
             ExecutePostBuildScripts = SettingsManager.ExecutePostBuildScripts;
             IncrementVersion = SettingsManager.IncrementVersion;
-
-			AppVersion = string.Format("v{0}", Assembly.GetExecutingAssembly().GetName().Version);
 
 			AddFileCommand = new RelayCommand(AddFile);
 			BrowseCompilerCommand = new RelayCommand(BrowseCompiler);

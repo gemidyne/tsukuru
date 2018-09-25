@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
-using Tsukuru.Data;
 
-namespace Tsukuru.ViewModels
+namespace Tsukuru.SourcePawn.ViewModels
 {
     public class ResultsWindowViewModel : ViewModelBase
     {
@@ -59,10 +58,10 @@ namespace Tsukuru.ViewModels
 		    WindowTitle = windowTitle;
 
 			Errors = new ObservableCollection<CompilationMessage>(Messages.Where(m => CompilationMessageHelper.IsLineError(m.Prefix)));
-			ErrorsHeader = string.Format("Errors ({0})", _errors.Count);
+			ErrorsHeader = $"Errors ({_errors.Count})";
 
 			Warnings = new ObservableCollection<CompilationMessage>(Messages.Where(m => CompilationMessageHelper.IsLineWarning(m.Prefix)));
-			WarningsHeader = string.Format("Warnings ({0})", _warnings.Count);
+			WarningsHeader = $"Warnings ({_warnings.Count})";
 
 			RawOutput = string.Join("\r\n", Messages.Except(Errors).Except(Warnings).Select(m => m.RawLine));
 	    }

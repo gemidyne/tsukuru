@@ -1,4 +1,4 @@
-﻿namespace Tsukuru.Data
+﻿namespace Tsukuru.SourcePawn
 {
     public enum CompilationResult
     {

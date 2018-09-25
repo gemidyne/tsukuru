@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tsukuru.Data
+namespace Tsukuru.SourcePawn
 {
     public class CompilationMessageHelper
     {

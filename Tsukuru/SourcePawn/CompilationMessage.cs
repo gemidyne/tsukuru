@@ -1,4 +1,4 @@
-﻿namespace Tsukuru.Data
+﻿namespace Tsukuru.SourcePawn
 {
     public class CompilationMessage
     {
@@ -11,14 +11,8 @@
 
         public string RawLine { get; set; }
 
-        public string LineNumberDisplay
-        {
-            get
-            {
-                return FirstLine.HasValue 
-					? FirstLine + " - " + LastLine 
-					: LastLine.ToString();
-            }
-        }
+        public string LineNumberDisplay => FirstLine.HasValue 
+            ? FirstLine + " - " + LastLine 
+            : LastLine.ToString();
     }
 }

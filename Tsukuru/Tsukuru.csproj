@@ -37,6 +37,9 @@
     <ApplicationIcon>VPN.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dragablz, Version=0.0.3.203, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.203\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.1.1.35049, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -48,6 +51,15 @@
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.1.1.35053, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.1.1101, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.4.1.1101\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -84,27 +96,50 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\CompilationFileViewModel.cs" />
-    <Compile Include="Data\CompilationMessage.cs" />
-    <Compile Include="Data\CompilationMessageHelper.cs" />
-    <Compile Include="Data\CompilationResult.cs" />
+    <Compile Include="ILogReceiver.cs" />
+    <Compile Include="Maps\Compiler\ExecutionWindow.xaml.cs">
+      <DependentUpon>ExecutionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\ICompilationSettings.cs" />
+    <Compile Include="Maps\Compiler\MapCompiler.cs" />
+    <Compile Include="Maps\Compiler\MapDetailsControl.xaml.cs">
+      <DependentUpon>MapDetailsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\ResourcePackingControl.xaml.cs">
+      <DependentUpon>ResourcePackingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\SourceCompilationEngine.cs" />
+    <Compile Include="Maps\Compiler\VBSPCompilationSettings.cs" />
+    <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.cs" />
+    <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.ExecutionWindow.cs" />
+    <Compile Include="Maps\Compiler\VMFFileCopier.cs" />
+    <Compile Include="Maps\Compiler\VradCompilationSettings.cs" />
+    <Compile Include="Maps\Compiler\VvisCompilationSettings.cs" />
+    <Compile Include="Maps\Packer\BspPackEngine.cs" />
+    <Compile Include="Maps\Packer\PackerSessionDetails.cs" />
+    <Compile Include="Maps\Packer\Utilities.cs" />
+    <Compile Include="SourcePawn\ViewModels\CompilationFileViewModel.cs" />
+    <Compile Include="SourcePawn\CompilationMessage.cs" />
+    <Compile Include="SourcePawn\CompilationMessageHelper.cs" />
+    <Compile Include="SourcePawn\CompilationResult.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ResultsWindow.xaml.cs">
       <DependentUpon>ResultsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsManager.cs" />
-    <Compile Include="UserControls\CompilationFilesControl.xaml.cs">
+    <Compile Include="SourcePawn\CompilationFilesControl.xaml.cs">
       <DependentUpon>CompilationFilesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CompilationSettingsControl.xaml.cs">
+    <Compile Include="SourcePawn\CompilationSettingsControl.xaml.cs">
       <DependentUpon>CompilationSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\LogoControl.xaml.cs">
+    <Compile Include="LogoControl.xaml.cs">
       <DependentUpon>LogoControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\ResultsWindowViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="SourcePawn\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="SourcePawn\ViewModels\SourcePawnCompileViewModel.cs" />
+    <Compile Include="SourcePawn\ViewModels\ResultsWindowViewModel.cs" />
+    <Compile Include="ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,19 +152,31 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Maps\Compiler\ExecutionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Maps\Compiler\MapDetailsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Maps\Compiler\ResourcePackingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ResultsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\CompilationFilesControl.xaml">
+    <Page Include="SourcePawn\CompilationFilesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\CompilationSettingsControl.xaml">
+    <Page Include="SourcePawn\CompilationSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\LogoControl.xaml">
+    <Page Include="LogoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +223,9 @@
     <Resource Include="Resources\error.png" />
     <Resource Include="Resources\script_code.png" />
     <Resource Include="Resources\tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UserControls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,9 +1,22 @@
 ﻿<Application x:Class="Tsukuru.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Tsukuru.ViewModels"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
+             xmlns:tsukuru="clr-namespace:Tsukuru"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <vm:ViewModelLocator x:Key="ViewModelLocator" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <tsukuru:ViewModelLocator x:Key="ViewModelLocator" />
+            <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

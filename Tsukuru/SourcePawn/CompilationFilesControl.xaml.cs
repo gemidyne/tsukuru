@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.UserControls
+namespace Tsukuru.SourcePawn
 {
     public partial class CompilationFilesControl : UserControl
     {
