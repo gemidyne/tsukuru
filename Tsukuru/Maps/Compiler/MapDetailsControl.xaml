@@ -6,14 +6,17 @@
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:compiler="clr-namespace:Tsukuru.Maps.Compiler"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
+             Foreground="{DynamicResource MaterialDesignBody}"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              FontFamily="{DynamicResource MaterialDesignFont}"
-             d:DesignHeight="570" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
+             d:DesignHeight="570" d:DesignWidth="800" 
+             d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid>
         <Grid Visibility="{Binding IsVProjectSet, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
@@ -53,12 +56,19 @@
                 
                 <TextBox Text="{Binding VMFPath}" 
                          Grid.Column="0" />
-                <Button Content="..." x:Name="btnVMFPathChooser"
+                <Button x:Name="btnVMFPathChooser"
                         Click="btnVMFPathChooser_Click"
-                        Grid.Column="1" />
+                        Grid.Column="1">
+                    <Button.Content>
+                        <materialDesign:PackIcon Kind="FileFind" />
+                    </Button.Content>
+                </Button>
             </Grid>
 
-            <dragablz:TabablzControl Grid.Row="3" Grid.Column="1" FixedHeaderCount="99">
+            <materialDesign:Card Grid.Row="3" 
+                                 Grid.Column="1"
+                                 Margin="0,4,0,0">
+            <dragablz:TabablzControl FixedHeaderCount="99">
                 <TabItem Header="VBSP">
                     <Grid Margin="10">
                         <Grid.ColumnDefinitions>
@@ -66,32 +76,52 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Foreground="{DynamicResource MaterialDesignBody}"
+                                   TextWrapping="WrapWithOverflow">
+                            VBSP is the command-line tool that compiles a raw VMF file into the Binary Space Partition format. It is followed by VVIS and VRAD.
+                        </TextBlock>
                         
-                        <StackPanel Grid.Row="0" Grid.Column="0">
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10">
                             <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" Content="Only Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" Content="Only Props" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" Content="No Detail Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="1">
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10">
                             <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" Content="No Water Brushes" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" Content="Low Priority Compile" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" Content="Keep Stale Packed Data" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
 
-                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             
-                            <Label Content="Other Arguments:" 
-                                   Grid.Row="1" Grid.Column="0" />
+                            <Label Content="Other Arguments:" Grid.Column="0" />
                             <TextBox Text="{Binding VBSPSettings.OtherArguments}"
-                                     Height="22"
-                                      Grid.Row="1" Grid.Column="1"/>
+                                     Grid.Column="1"/>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Formatted arguments: " Grid.Column="0" />
+                            <TextBox Text="{Binding VBSPSettings.FormattedArguments}"
+                                     IsReadOnly="True"
+                                     Grid.Column="1"/>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -102,26 +132,52 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Foreground="{DynamicResource MaterialDesignBody}"
+                                   TextWrapping="WrapWithOverflow">
+                            VVIS is the command-line tool that takes a compiled BSP map and embeds visibility data into it. VVIS tests which visleaves can see each other, and which cannot.
+                        </TextBlock>
+
+                        <StackPanel Grid.Row="1" 
+                                    Grid.Column="0"
+                                    Margin="0,10">
                             <CheckBox IsChecked="{Binding VVISSettings.Fast}" Content="Fast" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VVISSettings.LowPriority}" Content="Low Priority" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
 
-                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid Grid.Row="2"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
                             <Label Content="Other Arguments:" 
-                                   Grid.Row="1" Grid.Column="0" />
+                                   Grid.Column="0" />
                             <TextBox Text="{Binding VVISSettings.OtherArguments}"
                                      Height="22"
-                                      Grid.Row="1" Grid.Column="1"/>
+                                     Grid.Column="1"/>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Formatted arguments: " Grid.Column="0" />
+                            <TextBox Text="{Binding VVISSettings.FormattedArguments}"
+                                     IsReadOnly="True"
+                                     Grid.Column="1"/>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -133,31 +189,49 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        
-                        <StackPanel Grid.Column="0" Grid.Row="0">
+
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="3"
+                                   Foreground="{DynamicResource MaterialDesignBody}"
+                                   TextWrapping="WrapWithOverflow">
+                            VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.
+                        </TextBlock>
+
+                        <StackPanel Grid.Row="1" 
+                                    Grid.Column="0"
+                                    Margin="0,10">
                             <CheckBox IsChecked="{Binding VRADSettings.LDR}" Content="LDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VRADSettings.HDR}" Content="HDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Grid.Row="0">
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,10">
                             <CheckBox IsChecked="{Binding VRADSettings.Fast}" Content="Fast" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VRADSettings.Final}" Content="Final" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VRADSettings.LowPriority}" Content="Low Priority Compile" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2" Grid.Row="0">
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="0,10">
                             <CheckBox IsChecked="{Binding VRADSettings.StaticPropLighting}" Content="Static Prop Lighting" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VRADSettings.StaticPropPolys}" Content="Static Prop Polys" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                             <CheckBox IsChecked="{Binding VRADSettings.TextureShadows}" Content="Texture Shadows" Style="{StaticResource MaterialDesignDarkCheckBox}" />
                         </StackPanel>
 
-                        <Grid Grid.Row="1" Grid.ColumnSpan="3"
+                        <Grid Grid.Row="2" 
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
                               VerticalAlignment="Bottom">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
@@ -167,18 +241,24 @@
                                      Height="22"
                                      Grid.Column="1"/>
                         </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Formatted arguments: " Grid.Column="0" />
+                            <TextBox Text="{Binding VRADSettings.FormattedArguments}"
+                                     IsReadOnly="True"
+                                     Grid.Column="1"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
                 <TabItem Header="BSPZIP">
                     <compiler:ResourcePackingControl />
                 </TabItem>
-                <TabItem Header="BZip2"
-                         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-                         TextElement.FontWeight="Regular"
-                         TextElement.FontSize="13"
-                         TextOptions.TextFormattingMode="Ideal"
-                         TextOptions.TextRenderingMode="Auto"
-                         FontFamily="{DynamicResource MaterialDesignFont}"
+                <TabItem Header="BZ2"
                          VerticalContentAlignment="Top">
                     <CheckBox VerticalAlignment="Top" 
                               IsChecked="{Binding CompressMapToBZip2}" 
@@ -187,7 +267,7 @@
                               Content="Create .bz2 file of compiled .bsp file" />
                 </TabItem>
             </dragablz:TabablzControl>
-            
+            </materialDesign:Card>
         </Grid>
 
         <StackPanel VerticalAlignment="Center"

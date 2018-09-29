@@ -1,24 +1,18 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System.Text;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public partial class MapCompilerViewModel  : ILogReceiver
+    public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
     {
-        private string _consoleText;
+        private readonly MapCompilerViewModel _mapCompilerViewModel;
+        private readonly StringBuilder _consoleText = new StringBuilder();
+
         private bool _isCloseButtonOnExecutionEnabled;
 
-        public string MapNameDisplay => MapName.Replace("_", "__");
+        public string MapNameDisplay => _mapCompilerViewModel.MapName.Replace("_", "__");
 
-        public string ConsoleText
-        {
-            get => _consoleText;
-            set
-            {
-                Set(() => ConsoleText, ref _consoleText, value);
-            }
-        }
-   
-        public bool IsExecuteButtonEnabled => !string.IsNullOrWhiteSpace(VMFPath);
+        public string ConsoleText => _consoleText.ToString();
 
         public bool IsCloseButtonOnExecutionEnabled
         {
@@ -33,14 +27,27 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public bool IsProgressBarIndeterminate => !_isCloseButtonOnExecutionEnabled;
 
+        public MapCompilerResultsViewModel(MapCompilerViewModel mapCompilerViewModel)
+        {
+            _mapCompilerViewModel = mapCompilerViewModel;
+        }
+
+
         public void Write(string message)
         {
-            ConsoleText += message;
+            _consoleText.Append(message);
+            RaisePropertyChanged("ConsoleText");
         }
 
         public void WriteLine(string category, string message)
         {
-            ConsoleText += $"[{category}]: {message}{Environment.NewLine}";
+            _consoleText.AppendLine($"[{category}]: {message}");
+            RaisePropertyChanged("ConsoleText");
+        }
+
+        public void ClearLog()
+        {
+            _consoleText.Clear();
         }
     }
 }

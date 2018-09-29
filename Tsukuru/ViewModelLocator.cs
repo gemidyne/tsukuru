@@ -18,7 +18,10 @@ namespace Tsukuru
 
 	    public MapCompilerViewModel MapCompilerViewModel => _ioc.GetInstance<MapCompilerViewModel>();
 
-	    public ViewModelLocator()
+	    public MapCompilerResultsViewModel MapCompilerResultsViewModel =>
+	        _ioc.GetInstance<MapCompilerResultsViewModel>();
+
+        public ViewModelLocator()
 		{
 			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
@@ -54,6 +57,11 @@ namespace Tsukuru
 		    if (!_ioc.IsRegistered<MapCompilerViewModel>())
 		    {
                 _ioc.Register<MapCompilerViewModel>();
+		    }
+
+		    if (!_ioc.IsRegistered<MapCompilerResultsViewModel>())
+		    {
+                _ioc.Register<MapCompilerResultsViewModel>();
 		    }
 		}
 	}

@@ -13,6 +13,11 @@ namespace Tsukuru.SourcePawn.ViewModels
 		private CompilationResult _result = CompilationResult.Unknown;
 		private string _statusIcon = "/Tsukuru;component/Resources/script_code.png";
         private bool _canShowDetails;
+        private bool _isSuccessfulCompile;
+        private bool _isBusy;
+        private bool _isCompiledWithErrors;
+        private bool _isCompiledWithWarnings;
+        private bool _isUnknownState;
 
         public string File
         {
@@ -29,6 +34,36 @@ namespace Tsukuru.SourcePawn.ViewModels
         public ObservableCollection<CompilationMessage> Messages
         {
             get { return _messages ?? (_messages = new ObservableCollection<CompilationMessage>()); }
+        }
+
+        public bool IsSuccessfulCompile
+        {
+            get => _isSuccessfulCompile;
+            set => Set(() => IsSuccessfulCompile, ref _isSuccessfulCompile, value);
+        }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => Set(() => IsBusy, ref _isBusy, value);
+        }
+
+        public bool IsCompiledWithErrors
+        {
+            get => _isCompiledWithErrors;
+            set => Set(() => IsCompiledWithErrors, ref _isCompiledWithErrors, value);
+        }
+
+        public bool IsCompiledWithWarnings
+        {
+            get => _isCompiledWithWarnings;
+            set => Set(() => IsCompiledWithWarnings, ref _isCompiledWithWarnings, value);
+        }
+
+        public bool IsUnknownState
+        {
+            get => _isUnknownState;
+            set => Set(() => IsUnknownState, ref _isUnknownState, value);
         }
 
         public string StatusIcon 

@@ -81,6 +81,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public bool IsVProjectNotSet => string.IsNullOrWhiteSpace(VProject);
 
+        public bool IsExecuteButtonEnabled => !string.IsNullOrWhiteSpace(VMFPath);
+
         public MapCompilerViewModel()
         {
             MapName = string.Format("TsukuruMap-{0:yyyyMMdd}", DateTime.Now);
@@ -95,7 +97,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
             await Task.Run(() =>
             {
-                MapCompiler.Execute(this, this);
+                MapCompiler.Execute(this);
             });
 
             SystemSounds.Asterisk.Play();

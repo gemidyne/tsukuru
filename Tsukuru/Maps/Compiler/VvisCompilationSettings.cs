@@ -1,19 +1,47 @@
 ﻿namespace Tsukuru.Maps.Compiler
 {
-    public class VvisCompilationSettings : ICompilationSettings
+    public class VvisCompilationSettings : BaseCompilationSettings, ICompilationSettings
     {
-        public bool Fast { get; set; }
+        private bool _fast;
+        private bool _lowPriority;
+        private string _otherArguments;
 
-        public bool LowPriority { get; set; }
-
-        public string OtherArguments { get; set; }
-
-        public string GetArguments()
+        public bool Fast
         {
-            return string.Format("{0} {1} {2}",
-                Fast ? "-fast" : string.Empty,
-                LowPriority ? "-low" : string.Empty,
-                OtherArguments);
+            get => _fast;
+            set
+            {
+                Set(() => Fast, ref _fast, value);
+                OnArgumentChanged();
+            }
+        }
+
+        public bool LowPriority
+        {
+            get => _lowPriority;
+            set
+            {
+                Set(() => LowPriority, ref _lowPriority, value);
+                OnArgumentChanged();
+            }
+        }
+
+        public string OtherArguments
+        {
+            get => _otherArguments;
+            set
+            {
+                Set(() => OtherArguments, ref _otherArguments, value);
+                OnArgumentChanged();
+            }
+        }
+
+        public override string BuildArguments()
+        {
+            return
+                ConditionalArg(() => Fast, "-fast") +
+                ConditionalArg(() => LowPriority, "-low") +
+                OtherArguments;
         }
     }
 }

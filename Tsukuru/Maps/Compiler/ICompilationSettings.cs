@@ -2,6 +2,6 @@
 {
     public interface ICompilationSettings
     {
-        string GetArguments();
+        string FormattedArguments { get; }
     }
 }

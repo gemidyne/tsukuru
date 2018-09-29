@@ -1,4 +1,5 @@
-﻿using ICSharpCode.SharpZipLib.BZip2;
+﻿using GalaSoft.MvvmLight.Ioc;
+using ICSharpCode.SharpZipLib.BZip2;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,58 +10,60 @@ namespace Tsukuru.Maps.Compiler
 {
     public static class MapCompiler
     {
-        public static bool Execute(MapCompilerViewModel vm, ILogReceiver log)
+        public static bool Execute(MapCompilerViewModel mapCompilerViewModel)
         {
+            var logView = SimpleIoc.Default.GetInstance<MapCompilerResultsViewModel>();
+
             var stopwatch = Stopwatch.StartNew();
-            vm.ConsoleText = null;
 
-            log.WriteLine("Tsukuru", "Preparing VMF...");
+            logView.ClearLog();
+            logView.WriteLine("Tsukuru", "Preparing VMF...");
 
-            var generatedVmfFile = VmfFileCopier.CopyFile(vm.VMFPath, vm.MapName);
+            var generatedVmfFile = VmfFileCopier.CopyFile(mapCompilerViewModel.VMFPath, mapCompilerViewModel.MapName);
 
-            var compilation = new SourceCompilationEngine(log)
+            var compilation = new SourceCompilationEngine(logView)
             {
                 VMFPath = generatedVmfFile
             };
 
-            log.WriteLine("Tsukuru", "Compiling map...");
+            logView.WriteLine("Tsukuru", "Compiling map...");
 
             var mapFile = compilation.DoCompile(
-                vm.VBSPSettings,
-                vm.VVISSettings,
-                vm.VRADSettings);
+                mapCompilerViewModel.VBSPSettings,
+                mapCompilerViewModel.VVISSettings,
+                mapCompilerViewModel.VRADSettings);
 
             if (string.IsNullOrWhiteSpace(mapFile))
             {
                 return false;
             }
 
-            if (vm.PerformResourcePacking)
+            if (mapCompilerViewModel.PerformResourcePacking)
             {
-                log.WriteLine("Tsukuru", "Performing resource packing");
+                logView.WriteLine("Tsukuru", "Performing resource packing");
 
                 var session = new PackerSessionDetails
                 {
                      MapFile = mapFile, 
                      GamePath = compilation.SDKToolsPath,
-                     FoldersToPackIn = vm.FoldersToPack.ToList()
+                     FoldersToPackIn = mapCompilerViewModel.FoldersToPack.ToList()
                 };
 
-                var packer = new BspPackEngine(log, session);
+                var packer = new BspPackEngine(logView, session);
                 packer.Pack();
             }
 
-            if (vm.CompressMapToBZip2)
+            if (mapCompilerViewModel.CompressMapToBZip2)
             {
-                log.WriteLine("Tsukuru", "Compressing map to BZip2...");
+                logView.WriteLine("Tsukuru", "Compressing map to BZip2...");
                 CompressFile(mapFile);
             }
 
             stopwatch.Stop();
 
-            log.WriteLine("Tsukuru", string.Format("Completed in {0}", stopwatch.Elapsed));
+            logView.WriteLine("Tsukuru", string.Format("Completed in {0}", stopwatch.Elapsed));
+            logView.IsCloseButtonOnExecutionEnabled = true;
 
-            vm.IsCloseButtonOnExecutionEnabled = true;
             return true;
         }
 

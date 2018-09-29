@@ -11,7 +11,7 @@
         Title="Map Compiler" 
         Height="500" 
         Width="750"
-        DataContext="{Binding MapCompilerViewModel, Source={StaticResource ViewModelLocator}}">
+        DataContext="{Binding MapCompilerResultsViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -31,7 +31,7 @@
                Grid.Column="1" FontSize="24" />
         </Grid>
         
-        <TextBox Text="{Binding ConsoleText}" 
+        <TextBox Text="{Binding ConsoleText, Mode=OneWay}" 
                  IsReadOnly="True"
                  HorizontalScrollBarVisibility="Visible" 
                  VerticalScrollBarVisibility="Visible"

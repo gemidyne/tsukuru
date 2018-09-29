@@ -170,11 +170,11 @@ namespace Tsukuru.Maps.Compiler
 
         private void GenerateExecutableArguments(ICompilationSettings vbspSettings, ICompilationSettings vvisSettings, ICompilationSettings vradSettings)
         {
-            VBSPArguments = string.Format(" -game \"{0}\" \"{1}\"", VProject, VMFPathWithoutExtension, vbspSettings.GetArguments());
+            VBSPArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vbspSettings.FormattedArguments, VMFPathWithoutExtension);
 
-            VVISArguments = string.Format(" -game \"{0}\" \"{1}\"", VProject, VMFPathWithoutExtension, vvisSettings.GetArguments());
+            VVISArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vvisSettings.FormattedArguments, VMFPathWithoutExtension);
 
-            VRADArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vradSettings.GetArguments(), VMFPathWithoutExtension);
+            VRADArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vradSettings.FormattedArguments, VMFPathWithoutExtension);
         }
 
         private void CleanupLogs()

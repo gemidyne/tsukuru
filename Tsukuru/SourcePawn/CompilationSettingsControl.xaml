@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:uc="clr-namespace:Tsukuru.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
              xmlns:sourcePawn="clr-namespace:Tsukuru.SourcePawn"
@@ -14,11 +13,12 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="300" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance Type=viewModels:SourcePawnCompileViewModel}">
+             d:DataContext="{d:DesignInstance Type=viewModels:SourcePawnCompileViewModel}"
+             DataContext="{Binding SourcePawnCompileViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -26,61 +26,81 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
-            <GroupBox Grid.Column="0" 
-                      Header="Compiler path">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+            <Label Content="SourcePawn Compiler path" 
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="0" />
 
-                    <TextBox Grid.Column="0" 
-                             IsReadOnly="True"
-                             Text="{Binding SourcePawnCompiler}"
-                             VerticalAlignment="Center"/>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="1" 
-                            Command="{Binding BrowseCompilerCommand}" 
-                            Content="..." />
-                </Grid>
-            </GroupBox>
+                <TextBox Grid.Column="0" 
+                         IsReadOnly="True"
+                         Text="{Binding SourcePawnCompiler}"
+                         VerticalAlignment="Center"/>
+
+                <Button Grid.Column="1" 
+                        Command="{Binding BrowseCompilerCommand}">
+                    <Button.Content>
+                        <materialDesign:PackIcon Kind="FileFind" />
+                    </Button.Content>
+                </Button>
+            </Grid>
         </Grid>
 
-        <GroupBox Grid.Row="1" Header="Files to compile">
-            <GroupBox.Content>
-                <sourcePawn:CompilationFilesControl Grid.Row="1" Grid.Column="1" />
-            </GroupBox.Content>
-        </GroupBox>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Vertical" Grid.Row="2" 
-                    Margin="4">
-            <CheckBox Content="Execute post build scripts?" 
-                      IsChecked="{Binding ExecutePostBuildScripts}" />
-            <CheckBox Content="Increment version file?" 
-                      IsChecked="{Binding IncrementVersion}"  />
-        </StackPanel>
+            <Label Content="Files to compile" 
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   Grid.Row="0" Grid.Column="0" />
+
+            <sourcePawn:CompilationFilesControl Grid.Column="1" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Options: " 
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   Grid.Column="0" />
+
+            <StackPanel Orientation="Vertical" 
+                        Grid.Column="1" 
+                        Margin="4">
+                <CheckBox Content="Execute post build scripts?" 
+                          IsChecked="{Binding ExecutePostBuildScripts}" />
+                <CheckBox Content="Increment version file?" 
+                          IsChecked="{Binding IncrementVersion}"  />
+            </StackPanel>
+        </Grid>
 
         <StackPanel Grid.Row="3" 
                     HorizontalAlignment="Right" 
                     Margin="4"
                     Orientation="Horizontal">
-            <Grid
-                Width="124">
-                <Button
-                    Command="{Binding BuildCommand}" 
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    materialDesign:ButtonProgressAssist.Value="{Binding ProgressBarValue}"
-                    materialDesign:ButtonProgressAssist.Maximum="{Binding ProgressBarMaximum}"
-                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                    materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsProgressIndeterminate}"
-                    Content="Build"
-                    IsEnabled="{Binding AreCommandButtonsEnabled}"
-                    Margin="2,0" />
-            </Grid>
-
+            <Button
+                Command="{Binding BuildCommand}" 
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                materialDesign:ButtonProgressAssist.Value="{Binding ProgressBarValue}"
+                materialDesign:ButtonProgressAssist.Maximum="{Binding ProgressBarMaximum}"
+                materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsProgressIndeterminate}"
+                Content="Build"
+                IsEnabled="{Binding AreCommandButtonsEnabled}"
+                Margin="2,0"
+                Width="124"/>
         </StackPanel>
     </Grid>
 </UserControl>

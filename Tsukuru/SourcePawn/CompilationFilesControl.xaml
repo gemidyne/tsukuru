@@ -4,53 +4,103 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Row="0" 
+
+        <materialDesign:Card 
+            Grid.Column="0"
+            
+            VerticalAlignment="Stretch">
+            <!-- Background="{DynamicResource PrimaryHueDarkBrush}"
+            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"-->
+
+            <ListBox 
                  HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding FilesToCompile}"
                  SelectedItem="{Binding SelectedFile}"
                  SelectionMode="Single">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="viewModels:CompilationFileViewModel">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="viewModels:CompilationFileViewModel">
+                        <Grid Height="35">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Image Grid.Column="0" 
-                               Source="{Binding StatusIcon}"
-                               Stretch="None"/>
-                        <TextBlock Text="{Binding File}" 
-                                   Margin="5,0,0,0" 
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1" />
-                        <Button Command="{Binding ShowDetailsCommand}" 
-                                Content="Info" 
-                                HorizontalAlignment="Right" 
-                                Grid.Column="2"
-                                Width="75" 
-                                Visibility="{Binding CanShowDetails}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                            <Grid Grid.Column="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="BlockHelper"
+                                                         Visibility="{Binding IsCompiledWithErrors, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Stretch">
-            <Button Command="{Binding AddFileCommand}"
-                    Content="Add file" />
-            <Button Command="{Binding RemoveFileCommand}" 
-                    Content="Remove file" />
-        </StackPanel>
+                                <materialDesign:PackIcon Kind="Alert"
+                                                         Visibility="{Binding IsCompiledWithWarnings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                <materialDesign:PackIcon Kind="Check"
+                                                         Visibility="{Binding IsSuccessfulCompile, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                <materialDesign:PackIcon Kind="File"
+                                                         Visibility="{Binding IsUnknownState, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                <ProgressBar
+                                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                    Value="0"
+                                    IsIndeterminate="True"
+                                    Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </Grid>
+                            <TextBlock Text="{Binding File}" 
+                                       Margin="5,0,0,0" 
+                                       Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                       VerticalAlignment="Center"
+                                       Grid.Column="1" />
+                            <Button Command="{Binding ShowDetailsCommand}"
+                                    HorizontalAlignment="Right" 
+                                    Grid.Column="2"
+                                    Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                    Visibility="{Binding CanShowDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="InformationOutline" />
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </materialDesign:Card>
+
+        <Grid Grid.Column="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" 
+                    Command="{Binding AddFileCommand}"
+                    Height="Auto"
+                    VerticalAlignment="Stretch">
+                <Button.Content>
+                    <materialDesign:PackIcon Kind="Plus" />
+                </Button.Content>
+            </Button>
+
+            <Button Grid.Row="1" 
+                    Command="{Binding RemoveFileCommand}"
+                    Height="Auto"
+                    VerticalAlignment="Stretch">
+                <Button.Content>
+                    <materialDesign:PackIcon Kind="Minus" />
+                </Button.Content>
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

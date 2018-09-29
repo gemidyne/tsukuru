@@ -201,7 +201,11 @@ namespace Tsukuru
             if (isCompiling)
             {
                 fileViewModel.Result = CompilationResult.Compiling;
-                fileViewModel.StatusIcon = "/Tsukuru;component/Resources/script_code.png";
+                fileViewModel.IsBusy = true;
+                fileViewModel.IsUnknownState = false;
+                fileViewModel.IsSuccessfulCompile = false;
+                fileViewModel.IsCompiledWithWarnings = false;
+                fileViewModel.IsCompiledWithErrors = false;
                 fileViewModel.CanShowDetails = false;
                 return;
             }
@@ -209,7 +213,11 @@ namespace Tsukuru
             if (!fileViewModel.Messages.Any())
             {
                 fileViewModel.Result = CompilationResult.Unknown;
-				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/script_code.png";
+                fileViewModel.IsBusy = false;
+                fileViewModel.IsUnknownState = true;
+                fileViewModel.IsSuccessfulCompile = false;
+                fileViewModel.IsCompiledWithWarnings = false;
+                fileViewModel.IsCompiledWithErrors = false;
                 fileViewModel.CanShowDetails = false;
                 return;
             }
@@ -217,19 +225,31 @@ namespace Tsukuru
             if (fileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineError(m.Prefix)))
             {
                 fileViewModel.Result = CompilationResult.FailedWithErrors;
-				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/cross.png";
+                fileViewModel.IsBusy = false;
+                fileViewModel.IsUnknownState = false;
+                fileViewModel.IsSuccessfulCompile = false;
+                fileViewModel.IsCompiledWithWarnings = false;
+                fileViewModel.IsCompiledWithErrors = true;
                 fileViewModel.CanShowDetails = true;
             }
             else if (fileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineWarning(m.Prefix)))
             {
                 fileViewModel.Result = CompilationResult.CompletedWithWarnings;
-				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/error.png";
+                fileViewModel.IsBusy = false;
+                fileViewModel.IsUnknownState = false;
+                fileViewModel.IsSuccessfulCompile = false;
+                fileViewModel.IsCompiledWithWarnings = true;
+                fileViewModel.IsCompiledWithErrors = false;
                 fileViewModel.CanShowDetails = true;
             }
             else 
             {
                 fileViewModel.Result = CompilationResult.Completed;
-				fileViewModel.StatusIcon = "/Tsukuru;component/Resources/tick.png";
+                fileViewModel.IsBusy = false;
+                fileViewModel.IsUnknownState = false;
+                fileViewModel.IsSuccessfulCompile = true;
+                fileViewModel.IsCompiledWithWarnings = false;
+                fileViewModel.IsCompiledWithErrors = false;
                 fileViewModel.CanShowDetails = false;
             }
         }
