@@ -2,8 +2,10 @@
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Media;
 using System.Threading.Tasks;
+using Tsukuru.Settings;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
@@ -34,6 +36,14 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             set
             {
                 Set(() => VMFPath, ref _vmfPath, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.LastVmfPath = VMFPath;
+                SettingsManager.Save();
+
+                string fileName = Path.GetFileNameWithoutExtension(VMFPath);
+
+                MapName = string.Format("{0}-{1:yyyyMMdd}", fileName, DateTime.Now);
+
                 RaisePropertyChanged("IsExecuteButtonEnabled");
             }
         }
@@ -85,7 +95,13 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public MapCompilerViewModel()
         {
-            MapName = string.Format("TsukuruMap-{0:yyyyMMdd}", DateTime.Now);
+            VMFPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
+
+            if (string.IsNullOrWhiteSpace(VMFPath))
+            {
+                MapName = string.Format("TsukuruMap-{0:yyyyMMdd}", DateTime.Now);
+            }
+
             MapCompileCommand = new RelayCommand(DoMapCompile);
         }
 

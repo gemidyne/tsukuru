@@ -48,7 +48,7 @@ namespace Tsukuru
             {
                 using (var compiler = new Process())
                 {
-                    compiler.StartInfo.FileName = SettingsManager.CompilerLocation;
+                    compiler.StartInfo.FileName = vm.SourcePawnCompiler;
                     compiler.StartInfo.Arguments = string.Format(
 						"{0} -o=\"{1}\"", 
                         rewrittenFilePath,
@@ -78,7 +78,7 @@ namespace Tsukuru
 
                     UpdateCompilationDataStatus(compilationFileViewModel);
 
-                    if (!compilationFileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineError(m.Prefix)) && SettingsManager.ExecutePostBuildScripts)
+                    if (!compilationFileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineError(m.Prefix)) && vm.ExecutePostBuildScripts)
                     {
                         RunPostBuildScript(Path.GetDirectoryName(file));
                     }
@@ -92,8 +92,6 @@ namespace Tsukuru
 
         private static void RunPostBuildScript(string workingDirectory)
         {
-            SettingsManager.ExecutePostBuildScripts = true;
-
             string postBuildFile = Path.Combine(workingDirectory, "post_build.cmd");
 
 	        if (!File.Exists(postBuildFile))
@@ -101,16 +99,13 @@ namespace Tsukuru
 		        return;
 	        }
 
-	        Process process = Process.Start(new ProcessStartInfo(postBuildFile)
+	        var process = Process.Start(new ProcessStartInfo(postBuildFile)
 	        {
 		        WorkingDirectory = workingDirectory,
 		        CreateNoWindow = true
 	        });
 
-	        if (process != null)
-	        {
-		        process.WaitForExit();
-	        }
+            process?.WaitForExit();
         }
 
         private static string RewriteSourceFile(string file, Version version)

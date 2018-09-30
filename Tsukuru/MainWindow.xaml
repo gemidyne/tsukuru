@@ -6,6 +6,7 @@
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         xmlns:sourcePawn="clr-namespace:Tsukuru.SourcePawn"
         xmlns:views="clr-namespace:Tsukuru.Views"
+        xmlns:views1="clr-namespace:Tsukuru.SourcePawn.Views"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -38,7 +39,7 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      Margin="10">
-                <sourcePawn:CompilationSettingsControl />
+                <views1:CompilationSettingsControl />
             </TabItem>
 
             <TabItem Header="Map Compiler"

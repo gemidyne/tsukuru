@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Shell;
+using Tsukuru.Settings;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
@@ -25,7 +26,9 @@ namespace Tsukuru.SourcePawn.ViewModels
             set 
             {
 				Set(() => SourcePawnCompiler, ref _sourcePawnCompiler, value);
-                SettingsManager.CompilerLocation = value;
+
+                SettingsManager.Manifest.SourcePawnCompiler.CompilerPath = value;
+                SettingsManager.Save();
             }
         }
 
@@ -40,7 +43,9 @@ namespace Tsukuru.SourcePawn.ViewModels
             set 
             {
 				Set(() => ExecutePostBuildScripts, ref _executePostBuildScripts, value);
-                SettingsManager.ExecutePostBuildScripts = value;
+
+                SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts = value;
+                SettingsManager.Save();
             }
         }
 
@@ -50,7 +55,9 @@ namespace Tsukuru.SourcePawn.ViewModels
             set 
             {
 				Set(() => IncrementVersion, ref _incrementVersion, value);
-                SettingsManager.IncrementVersion = value;
+
+                SettingsManager.Manifest.SourcePawnCompiler.Versioning = value;
+                SettingsManager.Save();
             }
         }
 
@@ -129,9 +136,9 @@ namespace Tsukuru.SourcePawn.ViewModels
 
 	    public SourcePawnCompileViewModel()
         {
-            SourcePawnCompiler = SettingsManager.CompilerLocation;
-            ExecutePostBuildScripts = SettingsManager.ExecutePostBuildScripts;
-            IncrementVersion = SettingsManager.IncrementVersion;
+            SourcePawnCompiler = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
+            ExecutePostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
+            IncrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
 
 			AddFileCommand = new RelayCommand(AddFile);
 			BrowseCompilerCommand = new RelayCommand(BrowseCompiler);

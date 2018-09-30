@@ -65,6 +65,9 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ookii.Dialogs">
       <HintPath>..\References\Ookii.Dialogs.dll</HintPath>
     </Reference>
@@ -139,13 +142,17 @@
     <Compile Include="Maps\Compiler\SourceCompilationEngine.cs" />
     <Compile Include="Maps\Compiler\VbspCompilationSettings.cs" />
     <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.cs" />
-    <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.ExecutionWindow.cs" />
+    <Compile Include="Maps\Compiler\ViewModels\MapCompilerResultsViewModel.cs" />
     <Compile Include="Maps\Compiler\VMFFileCopier.cs" />
     <Compile Include="Maps\Compiler\VradCompilationSettings.cs" />
     <Compile Include="Maps\Compiler\VvisCompilationSettings.cs" />
     <Compile Include="Maps\Packer\BspPackEngine.cs" />
     <Compile Include="Maps\Packer\PackerSessionDetails.cs" />
     <Compile Include="Maps\Packer\Utilities.cs" />
+    <Compile Include="Settings\MapCompilerSettings.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\SettingsManifest.cs" />
+    <Compile Include="Settings\SourcePawnCompilerSettings.cs" />
     <Compile Include="SourcePawn\ViewModels\CompilationFileViewModel.cs" />
     <Compile Include="SourcePawn\CompilationMessage.cs" />
     <Compile Include="SourcePawn\CompilationMessageHelper.cs" />
@@ -154,11 +161,10 @@
     <Compile Include="ResultsWindow.xaml.cs">
       <DependentUpon>ResultsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsManager.cs" />
-    <Compile Include="SourcePawn\CompilationFilesControl.xaml.cs">
+    <Compile Include="SourcePawn\Views\CompilationFilesControl.xaml.cs">
       <DependentUpon>CompilationFilesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SourcePawn\CompilationSettingsControl.xaml.cs">
+    <Compile Include="SourcePawn\Views\CompilationSettingsControl.xaml.cs">
       <DependentUpon>CompilationSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LogoControl.xaml.cs">
@@ -200,11 +206,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SourcePawn\CompilationFilesControl.xaml">
+    <Page Include="SourcePawn\Views\CompilationFilesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SourcePawn\CompilationSettingsControl.xaml">
+    <Page Include="SourcePawn\Views\CompilationSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,13 +256,7 @@
     <Resource Include="VPN.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\cross.png" />
-    <Resource Include="Resources\error.png" />
-    <Resource Include="Resources\script_code.png" />
-    <Resource Include="Resources\tick.png" />
+    <Resource Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\gemini.jpg" />

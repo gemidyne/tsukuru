@@ -11,7 +11,6 @@ namespace Tsukuru.SourcePawn.ViewModels
 		private string _file;
 		private ObservableCollection<CompilationMessage> _messages;
 		private CompilationResult _result = CompilationResult.Unknown;
-		private string _statusIcon = "/Tsukuru;component/Resources/script_code.png";
         private bool _canShowDetails;
         private bool _isSuccessfulCompile;
         private bool _isBusy;
@@ -64,12 +63,6 @@ namespace Tsukuru.SourcePawn.ViewModels
         {
             get => _isUnknownState;
             set => Set(() => IsUnknownState, ref _isUnknownState, value);
-        }
-
-        public string StatusIcon 
-        {
-            get { return _statusIcon; }
-	        set { Set(() => StatusIcon, ref _statusIcon, value); }
         }
 
         public bool CanShowDetails
