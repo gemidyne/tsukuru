@@ -90,6 +90,12 @@ namespace Tsukuru.Maps.Packer
         private void PackBsp()
         {
             var input = Details.MapFile + ".bak";
+
+            if (File.Exists(input))
+            {
+                File.Delete(input);
+            }
+
             File.Move(Details.MapFile, input);
 
             var args = GetArgumentForBspZip(input, Details.FileListFile, Details.MapFile);

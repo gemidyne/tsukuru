@@ -17,6 +17,12 @@ namespace Tsukuru.Settings
 
         public static void Load()
         {
+            if (ViewModelLocator.IsDesignMode)
+            {
+                Manifest = new SettingsManifest();
+                return;
+            }
+
             if (!_settingsPath.Exists)
             {
                 Manifest = new SettingsManifest();
@@ -41,6 +47,12 @@ namespace Tsukuru.Settings
 
         public static void Save()
         {
+            if (ViewModelLocator.IsDesignMode)
+            {
+                Manifest = new SettingsManifest();
+                return;
+            }
+
             EnsureDirectoryExists();
 
             var serialised = JsonConvert.SerializeObject(Manifest);

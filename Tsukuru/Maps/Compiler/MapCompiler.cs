@@ -13,10 +13,15 @@ namespace Tsukuru.Maps.Compiler
         public static bool Execute(MapCompilerViewModel mapCompilerViewModel)
         {
             var logView = SimpleIoc.Default.GetInstance<MapCompilerResultsViewModel>();
+            var mainWindow = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
 
             var stopwatch = Stopwatch.StartNew();
 
-            logView.ClearLog();
+            logView.StartNewSession(mapCompilerViewModel.MapName);
+            mainWindow.DisplayMapCompilerResultsView = true;
+            mainWindow.DisplayMapCompilerView = false;
+            mainWindow.DisplaySourcePawnCompilerView = false;
+
             logView.WriteLine("Tsukuru", "Preparing VMF...");
 
             var generatedVmfFile = VmfFileCopier.CopyFile(mapCompilerViewModel.VMFPath, mapCompilerViewModel.MapName);
@@ -63,6 +68,10 @@ namespace Tsukuru.Maps.Compiler
 
             logView.WriteLine("Tsukuru", string.Format("Completed in {0}", stopwatch.Elapsed));
             logView.IsCloseButtonOnExecutionEnabled = true;
+
+            mainWindow.DisplayMapCompilerResultsView = true;
+            mainWindow.DisplayMapCompilerView = true;
+            mainWindow.DisplaySourcePawnCompilerView = true;
 
             return true;
         }

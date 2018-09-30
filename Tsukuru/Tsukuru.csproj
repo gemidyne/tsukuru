@@ -125,8 +125,8 @@
     </ApplicationDefinition>
     <Compile Include="ILogReceiver.cs" />
     <Compile Include="Maps\Compiler\BaseCompilationSettings.cs" />
-    <Compile Include="Maps\Compiler\ExecutionWindow.xaml.cs">
-      <DependentUpon>ExecutionWindow.xaml</DependentUpon>
+    <Compile Include="Maps\Compiler\MapCompilerResultsView.xaml.cs">
+      <DependentUpon>MapCompilerResultsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Maps\Compiler\ICompilationSettings.cs" />
     <Compile Include="Maps\Compiler\MapCompiler.cs" />
@@ -141,6 +141,7 @@
     </Compile>
     <Compile Include="Maps\Compiler\SourceCompilationEngine.cs" />
     <Compile Include="Maps\Compiler\VbspCompilationSettings.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.cs" />
     <Compile Include="Maps\Compiler\ViewModels\MapCompilerResultsViewModel.cs" />
     <Compile Include="Maps\Compiler\VMFFileCopier.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="Views\LogoControl.xaml.cs">
       <DependentUpon>LogoControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SourcePawn\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="SourcePawn\ViewModels\SourcePawnCompileViewModel.cs" />
     <Compile Include="SourcePawn\ViewModels\ResultsWindowViewModel.cs" />
     <Compile Include="ViewModelLocator.cs" />
@@ -186,7 +186,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Maps\Compiler\ExecutionWindow.xaml">
+    <Page Include="Maps\Compiler\MapCompilerResultsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

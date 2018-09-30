@@ -21,6 +21,8 @@ namespace Tsukuru
 	    public MapCompilerResultsViewModel MapCompilerResultsViewModel =>
 	        _ioc.GetInstance<MapCompilerResultsViewModel>();
 
+	    public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
+
         public ViewModelLocator()
 		{
 			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);

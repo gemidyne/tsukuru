@@ -1,11 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Tsukuru.Maps.Compiler
 {
-    public partial class ExecutionWindow : Window
+    public partial class MapCompilerResultsView : UserControl
     {
-        public ExecutionWindow()
+        public MapCompilerResultsView()
         {
             InitializeComponent();
         }
@@ -14,11 +13,6 @@ namespace Tsukuru.Maps.Compiler
         {
             var textBox = sender as TextBox;
             textBox?.ScrollToEnd();
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

@@ -9,7 +9,7 @@ using Tsukuru.Settings;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public partial class MapCompilerViewModel : ViewModelBase
+    public class MapCompilerViewModel : ViewModelBase
     {
         private string _mapName;
         private string _vmfPath;
@@ -107,10 +107,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private async void DoMapCompile()
         {
-            var executionWin = new ExecutionWindow();
-
-            executionWin.Show();
-
             await Task.Run(() =>
             {
                 MapCompiler.Execute(this);

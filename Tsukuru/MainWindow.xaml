@@ -21,9 +21,6 @@
         Width="1020"
         ResizeMode="NoResize"
         >
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressValue="{Binding TaskbarProgress}" ProgressState="{Binding TaskbarState}"/>
-    </Window.TaskbarItemInfo>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -34,19 +31,25 @@
         <views:LogoControl Grid.Row="0" materialDesign:ShadowAssist.ShadowDepth="Depth3" />
 
         <dragablz:TabablzControl Grid.Row="1" 
-                                 FixedHeaderCount="99">
+                                 FixedHeaderCount="99"
+                                 DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
             <TabItem Header="SourcePawn Compiler" 
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     Margin="10">
+                     Margin="10"
+                     Visibility="{Binding DisplaySourcePawnCompilerView, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <views1:CompilationSettingsControl />
             </TabItem>
 
             <TabItem Header="Map Compiler"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     Margin="10">
-                <compiler:MapCompilerView />
+                     Margin="10"
+                     >
+                <Grid>
+                    <compiler:MapCompilerView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+                    <compiler:MapCompilerResultsView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerResultsView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
+                </Grid>
             </TabItem>
         </dragablz:TabablzControl>
     </Grid>
