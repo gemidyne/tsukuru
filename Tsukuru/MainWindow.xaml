@@ -15,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         MinWidth="1020"
-        Icon="vpn.ico"
+        Icon="app.ico"
         Title="Tsukuru" 
         Height="600" 
         Width="1020"
