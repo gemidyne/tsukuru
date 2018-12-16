@@ -1,6 +1,8 @@
-﻿namespace Tsukuru.Maps.Compiler
+﻿using Tsukuru.Settings;
+
+namespace Tsukuru.Maps.Compiler
 {
-    public class VvisCompilationSettings : BaseCompilationSettings, ICompilationSettings
+    public class VvisCompilationSettings : BaseCompilationSettings
     {
         private bool _fast;
         private bool _lowPriority;
@@ -13,6 +15,9 @@
             {
                 Set(() => Fast, ref _fast, value);
                 OnArgumentChanged();
+
+                SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast = value;
+                SettingsManager.Save();
             }
         }
 
@@ -23,6 +28,9 @@
             {
                 Set(() => LowPriority, ref _lowPriority, value);
                 OnArgumentChanged();
+
+                SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority = value;
+                SettingsManager.Save();
             }
         }
 
@@ -33,7 +41,17 @@
             {
                 Set(() => OtherArguments, ref _otherArguments, value);
                 OnArgumentChanged();
+
+                SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments = value;
+                SettingsManager.Save();
             }
+        }
+
+        public VvisCompilationSettings()
+        {
+            Fast = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast;
+            LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
+            OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
         }
 
         public override string BuildArguments()

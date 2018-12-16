@@ -2,14 +2,11 @@
 using System.Windows.Controls;
 using Tsukuru.Maps.Compiler.ViewModels;
 
-namespace Tsukuru.Maps.Compiler
+namespace Tsukuru.Maps.Compiler.Views
 {
-    /// <summary>
-    /// Interaction logic for ResourcePackingControl.xaml
-    /// </summary>
-    public partial class ResourcePackingControl : UserControl
+    public partial class ResourcePackingView : UserControl
     {
-        public ResourcePackingControl()
+        public ResourcePackingView()
         {
             InitializeComponent();
         }

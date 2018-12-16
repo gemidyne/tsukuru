@@ -1,95 +1,130 @@
-﻿namespace Tsukuru.Maps.Compiler
+﻿using Tsukuru.Settings;
+
+namespace Tsukuru.Maps.Compiler
 {
-    public class VbspCompilationSettings : BaseCompilationSettings
-    {
-        private bool _onlyEntities;
-        private bool _onlyProps;
-        private bool _noDetailEntities;
-        private bool _noWaterBrushes;
-        private bool _lowPriority;
-        private bool _keepStalePackedData;
-        private string _otherArguments;
+	public class VbspCompilationSettings : BaseCompilationSettings
+	{
+		private bool _onlyEntities;
+		private bool _onlyProps;
+		private bool _noDetailEntities;
+		private bool _noWaterBrushes;
+		private bool _lowPriority;
+		private bool _keepStalePackedData;
+		private string _otherArguments;
 
-        public bool OnlyEntities
-        {
-            get => _onlyEntities;
-            set
-            {
-                Set(() => OnlyEntities, ref _onlyEntities, value);
-                OnArgumentChanged();
-            }
-        }
+		public bool OnlyEntities
+		{
+			get => _onlyEntities;
+			set
+			{
+				Set(() => OnlyEntities, ref _onlyEntities, value);
+				OnArgumentChanged();
 
-        public bool OnlyProps
-        {
-            get => _onlyProps;
-            set
-            {
-                Set(() => OnlyProps, ref _onlyProps, value);
-                OnArgumentChanged();
-            }
-        }
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities = value;
+				SettingsManager.Save();
+			}
+		}
 
-        public bool NoDetailEntities
-        {
-            get => _noDetailEntities;
-            set
-            {
-                Set(() => NoDetailEntities, ref _noDetailEntities, value);
-                OnArgumentChanged();
-            }
-        }
+		public bool OnlyProps
+		{
+			get => _onlyProps;
+			set
+			{
+				Set(() => OnlyProps, ref _onlyProps, value);
+				OnArgumentChanged();
 
-        public bool NoWaterBrushes
-        {
-            get => _noWaterBrushes;
-            set
-            {
-                Set(() => NoWaterBrushes, ref _noWaterBrushes, value);
-                OnArgumentChanged();
-            }
-        }
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps = value;
+				SettingsManager.Save();
+			}
+		}
 
-        public bool LowPriority
-        {
-            get => _lowPriority;
-            set
-            {
-                Set(() => LowPriority, ref _lowPriority, value);
-                OnArgumentChanged();
-            }
-        }
+		public bool NoDetailEntities
+		{
+			get => _noDetailEntities;
+			set
+			{
+				Set(() => NoDetailEntities, ref _noDetailEntities, value);
+				OnArgumentChanged();
 
-        public bool KeepStalePackedData
-        {
-            get => _keepStalePackedData;
-            set
-            {
-                Set(() => KeepStalePackedData, ref _keepStalePackedData, value);
-                OnArgumentChanged();
-            }
-        }
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities = value;
+				SettingsManager.Save();
+			}
+		}
 
-        public string OtherArguments
-        {
-            get => _otherArguments;
-            set
-            {
-                Set(() => OtherArguments, ref _otherArguments, value);
-                OnArgumentChanged();
-            }
-        }
+		public bool NoWaterBrushes
+		{
+			get => _noWaterBrushes;
+			set
+			{
+				Set(() => NoWaterBrushes, ref _noWaterBrushes, value);
+				OnArgumentChanged();
 
-        public override string BuildArguments()
-        {
-            return
-                ConditionalArg(() => OnlyEntities, "-onlyents") +
-                ConditionalArg(() => OnlyProps, "-onlyprops") +
-                ConditionalArg(() => NoDetailEntities, "-nodetail") +
-                ConditionalArg(() => NoWaterBrushes, "-nowater") +
-                ConditionalArg(() => LowPriority, "-low") +
-                ConditionalArg(() => KeepStalePackedData, "-keepstalezip") +
-                OtherArguments;
-        }
-    }
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes = value;
+				SettingsManager.Save();
+			}
+		}
+
+		public bool LowPriority
+		{
+			get => _lowPriority;
+			set
+			{
+				Set(() => LowPriority, ref _lowPriority, value);
+				OnArgumentChanged();
+
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.LowPriority = value;
+				SettingsManager.Save();
+			}
+		}
+
+		public bool KeepStalePackedData
+		{
+			get => _keepStalePackedData;
+			set
+			{
+				Set(() => KeepStalePackedData, ref _keepStalePackedData, value);
+				OnArgumentChanged();
+
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData = value;
+				SettingsManager.Save();
+			}
+		}
+
+		public string OtherArguments
+		{
+			get => _otherArguments;
+			set
+			{
+				Set(() => OtherArguments, ref _otherArguments, value);
+				OnArgumentChanged();
+
+				SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OtherArguments = value;
+				SettingsManager.Save();
+			}
+		}
+
+		public VbspCompilationSettings()
+		{
+			OnlyEntities = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities;
+			OnlyProps = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps;
+			NoDetailEntities = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities;
+			NoWaterBrushes = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes;
+			KeepStalePackedData = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData;
+
+			LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
+			OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
+		}
+
+		public override string BuildArguments()
+		{
+			return
+				ConditionalArg(() => OnlyEntities, "-onlyents") +
+				ConditionalArg(() => OnlyProps, "-onlyprops") +
+				ConditionalArg(() => NoDetailEntities, "-nodetail") +
+				ConditionalArg(() => NoWaterBrushes, "-nowater") +
+				ConditionalArg(() => LowPriority, "-low") +
+				ConditionalArg(() => KeepStalePackedData, "-keepstalezip") +
+				OtherArguments;
+		}
+	}
 }

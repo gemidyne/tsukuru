@@ -17,11 +17,11 @@
         MinWidth="1020"
         Icon="app.ico"
         Title="Tsukuru" 
-        Height="600" 
+        Height="780" 
         Width="1020"
         ResizeMode="NoResize"
         >
-
+<materialDesign:DialogHost>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -32,7 +32,8 @@
 
         <dragablz:TabablzControl Grid.Row="1" 
                                  FixedHeaderCount="99"
-                                 DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
+                                 DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
+                                 Background="{DynamicResource AttentionToActionBrush}">
             <TabItem Header="SourcePawn Compiler" 
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
@@ -44,8 +45,7 @@
             <TabItem Header="Map Compiler"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     Margin="10"
-                     >
+                     Margin="10">
                 <Grid>
                     <compiler:MapCompilerView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
                     <compiler:MapCompilerResultsView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerResultsView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
@@ -53,4 +53,5 @@
             </TabItem>
         </dragablz:TabablzControl>
     </Grid>
+</materialDesign:DialogHost>
 </Window>

@@ -1,11 +1,14 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Media;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using MaterialDesignThemes.Wpf;
+using Tsukuru.Maps.Compiler.Views;
 using Tsukuru.Settings;
+using Tsukuru.Steam;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
@@ -20,8 +23,10 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private VbspCompilationSettings _vbspSettings;
         private VvisCompilationSettings _vvisSettings;
         private VradCompilationSettings _vradSettings;
+        private bool _copyMapToGameMapsFolder;
+	    private bool _launchMapInGame;
 
-        public string MapName
+	    public string MapName
         {
             get => _mapName;
             set 
@@ -72,10 +77,37 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             set
             {
                 Set(() => CompressMapToBZip2, ref _compressMapToBZip2, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2 = value;
+                SettingsManager.Save();
             }
         }
 
-        public ObservableCollection<string> FoldersToPack => _foldersToPack ?? (_foldersToPack = new ObservableCollection<string>());
+        public bool CopyMapToGameMapsFolder
+        {
+            get => _copyMapToGameMapsFolder;
+            set
+            {
+                Set(() => CopyMapToGameMapsFolder, ref _copyMapToGameMapsFolder, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder = value;
+                SettingsManager.Save();
+            }
+        }
+
+	    public bool LaunchMapInGame
+	    {
+		    get => _launchMapInGame;
+		    set
+		    {
+			    Set(() => LaunchMapInGame, ref _launchMapInGame, value);
+
+			    SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame = value;
+			    SettingsManager.Save();
+		    }
+	    }
+
+	    public ObservableCollection<string> FoldersToPack => _foldersToPack ?? (_foldersToPack = new ObservableCollection<string>());
 
         public VbspCompilationSettings VBSPSettings => _vbspSettings ?? (_vbspSettings = new VbspCompilationSettings());
 
@@ -85,9 +117,11 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public RelayCommand MapCompileCommand { get; private set; }
 
-        public string VProject => SourceCompilationEngine.VProject;
+		public RelayCommand LaunchMapCommand { get; }
 
-        public bool IsVProjectSet => !string.IsNullOrWhiteSpace(VProject);
+        public string VProject { get; }
+
+        public bool IsVProjectSet => !IsVProjectNotSet;
 
         public bool IsVProjectNotSet => string.IsNullOrWhiteSpace(VProject);
 
@@ -95,7 +129,19 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public MapCompilerViewModel()
         {
+	        if (IsInDesignMode)
+	        {
+		        VProject = "??";
+	        }
+	        else
+	        {
+		        VProject = SourceCompilationEngine.VProject;
+	        }
+
             VMFPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
+            CompressMapToBZip2 = SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2;
+            CopyMapToGameMapsFolder = SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder;
+	        LaunchMapInGame = SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame;
 
             if (string.IsNullOrWhiteSpace(VMFPath))
             {
@@ -103,9 +149,10 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
 
             MapCompileCommand = new RelayCommand(DoMapCompile);
+	        LaunchMapCommand = new RelayCommand(DoMapLaunch);
         }
 
-        private async void DoMapCompile()
+	    private async void DoMapCompile()
         {
             await Task.Run(() =>
             {
@@ -114,5 +161,16 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
             SystemSounds.Asterisk.Play();
         }
+
+	    private async void DoMapLaunch()
+	    {
+		    SteamHelper.LaunchAppWithMap(MapName);
+		    
+		    await DialogHost.Show(new ProgressView(), async delegate (object sender, DialogOpenedEventArgs args)
+		    {
+			    await Task.Delay(5000);
+			    args.Session.Close(false);
+		    });
+	    }
     }
 }

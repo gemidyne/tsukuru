@@ -138,14 +138,26 @@
     <Compile Include="Maps\Compiler\MapDetailsControl.xaml.cs">
       <DependentUpon>MapDetailsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Maps\Compiler\ResourcePackingControl.xaml.cs">
-      <DependentUpon>ResourcePackingControl.xaml</DependentUpon>
+    <Compile Include="Maps\Compiler\Views\ResourcePackingView.xaml.cs">
+      <DependentUpon>ResourcePackingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Maps\Compiler\SourceCompilationEngine.cs" />
     <Compile Include="Maps\Compiler\VbspCompilationSettings.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.cs" />
     <Compile Include="Maps\Compiler\ViewModels\MapCompilerResultsViewModel.cs" />
+    <Compile Include="Maps\Compiler\Views\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\Views\VbspSettingsView.xaml.cs">
+      <DependentUpon>VbspSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\Views\VradSettingsView.xaml.cs">
+      <DependentUpon>VradSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Maps\Compiler\Views\VvisSettingsView.xaml.cs">
+      <DependentUpon>VvisSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Maps\Compiler\VMFFileCopier.cs" />
     <Compile Include="Maps\Compiler\VradCompilationSettings.cs" />
     <Compile Include="Maps\Compiler\VvisCompilationSettings.cs" />
@@ -156,6 +168,9 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SettingsManifest.cs" />
     <Compile Include="Settings\SourcePawnCompilerSettings.cs" />
+    <Compile Include="Settings\VbspSettings.cs" />
+    <Compile Include="Settings\VradSettings.cs" />
+    <Compile Include="Settings\VvisSettings.cs" />
     <Compile Include="SourcePawn\ViewModels\CompilationFileViewModel.cs" />
     <Compile Include="SourcePawn\CompilationMessage.cs" />
     <Compile Include="SourcePawn\CompilationMessageHelper.cs" />
@@ -170,6 +185,7 @@
     <Compile Include="SourcePawn\Views\CompilationSettingsControl.xaml.cs">
       <DependentUpon>CompilationSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Steam\SteamHelper.cs" />
     <Compile Include="Views\LogoControl.xaml.cs">
       <DependentUpon>LogoControl.xaml</DependentUpon>
     </Compile>
@@ -200,9 +216,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Maps\Compiler\ResourcePackingControl.xaml">
+    <Page Include="Maps\Compiler\Views\ResourcePackingView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Maps\Compiler\Views\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Maps\Compiler\Views\VbspSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Maps\Compiler\Views\VradSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Maps\Compiler\Views\VvisSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResultsWindow.xaml">
       <SubType>Designer</SubType>
@@ -265,6 +297,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Maps\Compiler\ModdedVrad\vrad_dll-optimized.dll" />
+    <EmbeddedResource Include="Maps\Compiler\ModdedVrad\vrad_optimized.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

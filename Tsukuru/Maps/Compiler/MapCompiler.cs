@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight.Ioc;
-using ICSharpCode.SharpZipLib.BZip2;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using GalaSoft.MvvmLight.Ioc;
+using ICSharpCode.SharpZipLib.BZip2;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Maps.Packer;
 
@@ -26,10 +26,12 @@ namespace Tsukuru.Maps.Compiler
 
             var generatedVmfFile = VmfFileCopier.CopyFile(mapCompilerViewModel.VMFPath, mapCompilerViewModel.MapName);
 
-            var compilation = new SourceCompilationEngine(logView)
-            {
-                VMFPath = generatedVmfFile
-            };
+	        var compilation = new SourceCompilationEngine(
+		        log: logView,
+		        useModifiedVrad: mapCompilerViewModel.VRADSettings.UseModifiedVrad,
+		        copyToGameMapsOnComplete: mapCompilerViewModel.CopyMapToGameMapsFolder,
+		        launchMapInGame: mapCompilerViewModel.LaunchMapInGame,
+		        vmfFile: generatedVmfFile);
 
             logView.WriteLine("Tsukuru", "Compiling map...");
 
@@ -40,6 +42,11 @@ namespace Tsukuru.Maps.Compiler
 
             if (string.IsNullOrWhiteSpace(mapFile))
             {
+                stopwatch.Stop();
+
+                logView.WriteLine("Tsukuru", string.Format("An error was encountered in the compilation process. Completed in {0}", stopwatch.Elapsed));
+                logView.IsCloseButtonOnExecutionEnabled = true;
+
                 return false;
             }
 
@@ -50,7 +57,7 @@ namespace Tsukuru.Maps.Compiler
                 var session = new PackerSessionDetails
                 {
                      MapFile = mapFile, 
-                     GamePath = compilation.SDKToolsPath,
+                     GamePath = compilation.SdkToolsPath,
                      FoldersToPackIn = mapCompilerViewModel.FoldersToPack.ToList()
                 };
 

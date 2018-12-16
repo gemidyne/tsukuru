@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using Tsukuru.Steam;
 
 namespace Tsukuru.Maps.Compiler
 {
     public class SourceCompilationEngine
     {
-        private readonly ILogReceiver _log;
         private static string _vProject;
+        private readonly ILogReceiver _log;
+	    private readonly string _vmfFile;
+
+        private readonly bool _useModifiedVrad;
+        private readonly bool _copyToGameMapsOnComplete;
+	    private readonly bool _launchMapInGame;
+
         private string _vBSPPath;
         private string _vVISPath;
         private string _vRADPath;
+        private string _gameMapsFolderPath;
 
-        public string VMFPath { get; set; }
-
-        public string VMFPathWithoutExtension
+        public string VmfPathWithoutExtension
         {
             get
             {
-                return Path.Combine(Path.GetDirectoryName(VMFPath), Path.GetFileNameWithoutExtension(VMFPath));
+                return Path.Combine(Path.GetDirectoryName(_vmfFile), Path.GetFileNameWithoutExtension(_vmfFile));
             }
         }
 
@@ -38,7 +45,7 @@ namespace Tsukuru.Maps.Compiler
             }
         }
 
-        public string SDKToolsPath
+        public string SdkToolsPath
         {
             get
             {
@@ -47,7 +54,7 @@ namespace Tsukuru.Maps.Compiler
             }
         }
 
-        public string VBSPPath
+        public string VbspPath
         {
             get 
             {
@@ -58,11 +65,11 @@ namespace Tsukuru.Maps.Compiler
 
                 if (string.IsNullOrWhiteSpace(_vBSPPath))
                 {
-                    _vBSPPath = Path.Combine(SDKToolsPath, "bin\\vbsp.exe");
+                    _vBSPPath = Path.Combine(SdkToolsPath, "bin\\vbsp.exe");
 
                     if (!File.Exists(_vBSPPath))
                     {
-                        throw new FileNotFoundException("Valve Binary Space Partition Creation executable not found.", _vBSPPath);
+                        throw new FileNotFoundException("VBSP executable not found.", _vBSPPath);
                     }
                 }
 
@@ -70,9 +77,9 @@ namespace Tsukuru.Maps.Compiler
             }
         }
 
-        private string VBSPArguments { get; set; }
+        private string VbspArguments { get; set; }
 
-        public string VVISPath
+        public string VvisPath
         {
             get
             {
@@ -83,11 +90,11 @@ namespace Tsukuru.Maps.Compiler
 
                 if (string.IsNullOrWhiteSpace(_vVISPath))
                 {
-                    _vVISPath = Path.Combine(SDKToolsPath, "bin\\vvis.exe");
+                    _vVISPath = Path.Combine(SdkToolsPath, "bin\\vvis.exe");
 
                     if (!File.Exists(_vVISPath))
                     {
-                        throw new FileNotFoundException("Valve Visibility Embed executable not found.", _vVISPath);
+                        throw new FileNotFoundException("VVIS executable not found.", _vVISPath);
                     }
                 }
 
@@ -95,9 +102,9 @@ namespace Tsukuru.Maps.Compiler
             }
         }
 
-        private string VVISArguments { get; set; }
+        private string VvisArguments { get; set; }
 
-        public string VRADPath
+        public string VradPath
         {
             get
             {
@@ -108,11 +115,15 @@ namespace Tsukuru.Maps.Compiler
 
                 if (string.IsNullOrWhiteSpace(_vRADPath))
                 {
-                    _vRADPath = Path.Combine(SDKToolsPath, "bin\\vrad.exe");
+                    string vradFileName = _useModifiedVrad
+                        ? "vrad_optimized.exe"
+                        : "vrad.exe";
 
-                    if (!File.Exists(_vRADPath))
+                    _vRADPath = Path.Combine(SdkToolsPath, "bin", vradFileName);
+
+                    if (!_useModifiedVrad && !File.Exists(_vRADPath))
                     {
-                        throw new FileNotFoundException("Valve Lighting Radiosity Calculation executable not found.", _vRADPath);
+                        throw new FileNotFoundException("VRAD executable not found.", _vRADPath);
                     }
                 }
 
@@ -120,11 +131,43 @@ namespace Tsukuru.Maps.Compiler
             }
         }
 
-        private string VRADArguments { get; set; }
+        private string VradArguments { get; set; }
 
-        public SourceCompilationEngine(ILogReceiver log)
+        public string GameMapsFolderPath
         {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(VProject))
+                {
+                    throw new NotSupportedException("VProject is not set");
+                }
+
+                if (string.IsNullOrWhiteSpace(_gameMapsFolderPath))
+                {
+                    _gameMapsFolderPath = Path.Combine(VProject, "maps");
+
+                    if (!Directory.Exists(_gameMapsFolderPath))
+                    {
+                        throw new DirectoryNotFoundException("Unable to determine game maps folder. Ensure your VProject is the game folder and not the root folder. (Example: \"SteamApps\\Common\\Team Fortress 2\\tf\")");
+                    }
+                }
+
+                return _gameMapsFolderPath;
+            }
+        }
+
+        public SourceCompilationEngine(
+	        ILogReceiver log,
+			string vmfFile,
+	        bool useModifiedVrad,
+	        bool copyToGameMapsOnComplete, 
+	        bool launchMapInGame)
+        {
+	        _vmfFile = vmfFile;
             _log = log;
+            _useModifiedVrad = useModifiedVrad;
+            _copyToGameMapsOnComplete = copyToGameMapsOnComplete;
+	        _launchMapInGame = launchMapInGame;
         }
 
         /// <summary>
@@ -134,7 +177,10 @@ namespace Tsukuru.Maps.Compiler
         /// <param name="vvisSettings"></param>
         /// <param name="vradSettings"></param>
         /// <returns>Path to BSP.</returns>
-        public string DoCompile(ICompilationSettings vbspSettings, ICompilationSettings vvisSettings, ICompilationSettings vradSettings)
+        public string DoCompile(
+            ICompilationSettings vbspSettings, 
+            ICompilationSettings vvisSettings, 
+            ICompilationSettings vradSettings)
         {
             if (!EnsureRequiredExecutablesExist())
             {
@@ -165,22 +211,36 @@ namespace Tsukuru.Maps.Compiler
                 return null;
             }
 
-            return VMFPathWithoutExtension + ".bsp";
+            string result = VmfPathWithoutExtension + ".bsp";
+
+            if (_copyToGameMapsOnComplete)
+            {
+                _log.WriteLine("SCE", $"Copying map to the game maps folder at: {GameMapsFolderPath}");
+                File.Copy(result, Path.Combine(GameMapsFolderPath, Path.GetFileName(result)), true);
+            }
+
+	        if (_launchMapInGame)
+	        {
+				_log.WriteLine("SCE", "Launching game and loading map...");
+		        SteamHelper.LaunchAppWithMap(Path.GetFileNameWithoutExtension(_vmfFile));
+	        }
+
+            return result;
         }
 
         private void GenerateExecutableArguments(ICompilationSettings vbspSettings, ICompilationSettings vvisSettings, ICompilationSettings vradSettings)
         {
-            VBSPArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vbspSettings.FormattedArguments, VMFPathWithoutExtension);
+            VbspArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vbspSettings.FormattedArguments, VmfPathWithoutExtension);
 
-            VVISArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vvisSettings.FormattedArguments, VMFPathWithoutExtension);
+            VvisArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vvisSettings.FormattedArguments, VmfPathWithoutExtension);
 
-            VRADArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vradSettings.FormattedArguments, VMFPathWithoutExtension);
+            VradArguments = string.Format(" -game \"{0}\" {1} \"{2}\"", VProject, vradSettings.FormattedArguments, VmfPathWithoutExtension);
         }
 
         private void CleanupLogs()
         {
-            string path = VMFPathWithoutExtension + ".log";
-            string oldLog = VMFPathWithoutExtension + "_old.log";
+            string path = VmfPathWithoutExtension + ".log";
+            string oldLog = VmfPathWithoutExtension + "_old.log";
 
             if (File.Exists(oldLog))
             {
@@ -192,12 +252,12 @@ namespace Tsukuru.Maps.Compiler
                 File.Move(path, oldLog);
             }
 
-            string vbspLog = VMFPathWithoutExtension + "_vbsp.log";
-            string vvisLog = VMFPathWithoutExtension + "_vvis.log";
-            string vradLog = VMFPathWithoutExtension + "_vrad.log";
-            string vbspOldLog = VMFPathWithoutExtension + "_vbsp_old.log";
-            string vvisOldLog = VMFPathWithoutExtension + "_vvis_old.log";
-            string vradOldLog = VMFPathWithoutExtension + "_vrad_old.log";
+            string vbspLog = VmfPathWithoutExtension + "_vbsp.log";
+            string vvisLog = VmfPathWithoutExtension + "_vvis.log";
+            string vradLog = VmfPathWithoutExtension + "_vrad.log";
+            string vbspOldLog = VmfPathWithoutExtension + "_vbsp_old.log";
+            string vvisOldLog = VmfPathWithoutExtension + "_vvis_old.log";
+            string vradOldLog = VmfPathWithoutExtension + "_vrad_old.log";
 
             if (File.Exists(vbspOldLog))
             {
@@ -235,9 +295,36 @@ namespace Tsukuru.Maps.Compiler
         {
             try
             {
-                _log.WriteLine("SCE", $"VBSP located at: {VBSPPath}");
-                _log.WriteLine("SCE", $"VVIS located at: {VVISPath}");
-                _log.WriteLine("SCE", $"VRAD located at: {VRADPath}");
+                _log.WriteLine("SCE", $"VBSP located at: {VbspPath}");
+                _log.WriteLine("SCE", $"VVIS located at: {VvisPath}");
+
+                if (_useModifiedVrad)
+                {
+                    string vradLib = Path.Combine(Path.GetDirectoryName(VradPath), "vrad_dll-optimized.dll");
+                    string vradExe = VradPath;
+
+                    if (!File.Exists(vradLib))
+                    {
+                        _log.WriteLine("SCE", "Copying VRAD DLL");
+                        using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_dll-optimized.dll"))
+                        using (var fileStream = new FileStream(vradLib, FileMode.OpenOrCreate))
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+
+                    if (!File.Exists(vradExe))
+                    {
+                        _log.WriteLine("SCE", "Copying VRAD EXE");
+                        using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_optimized.exe"))
+                        using (var fileStream = new FileStream(vradExe, FileMode.OpenOrCreate))
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+                }
+
+                _log.WriteLine("SCE", $"VRAD located at: {VradPath}");
             }
             catch (Exception ex)
             {
@@ -260,8 +347,8 @@ namespace Tsukuru.Maps.Compiler
         {
             var startInfo = new ProcessStartInfo
             {
-                FileName = VBSPPath,
-                Arguments = VBSPArguments,
+                FileName = VbspPath,
+                Arguments = VbspArguments,
                 
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
@@ -316,8 +403,8 @@ namespace Tsukuru.Maps.Compiler
         {
             var startInfo = new ProcessStartInfo
             {
-                FileName = VVISPath,
-                Arguments = VVISArguments,
+                FileName = VvisPath,
+                Arguments = VvisArguments,
 
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
@@ -372,8 +459,8 @@ namespace Tsukuru.Maps.Compiler
         {
             var startInfo = new ProcessStartInfo
             {
-                FileName = VRADPath,
-                Arguments = VRADArguments,
+                FileName = VradPath,
+                Arguments = VradArguments,
 
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,

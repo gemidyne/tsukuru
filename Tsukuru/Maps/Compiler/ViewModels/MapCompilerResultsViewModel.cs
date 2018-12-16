@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Text;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Text;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
@@ -62,6 +62,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         public void StartNewSession(string mapName)
         {
             MapNameDisplay = $"Compiling map: {mapName}";
+            IsCloseButtonOnExecutionEnabled = false;
 
             lock (_door)
             {

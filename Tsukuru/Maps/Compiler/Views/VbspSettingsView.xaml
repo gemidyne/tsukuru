@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Tsukuru.Maps.Compiler.Views.VbspSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Foreground="{DynamicResource MaterialDesignBody}"
+                   TextWrapping="WrapWithOverflow">
+            VBSP is the command-line tool that compiles a raw VMF file into the Binary Space Partition format. It is followed by VVIS and VRAD.
+        </TextBlock>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10">
+            <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" Content="Only Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" Content="Only Props" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" Content="No Detail Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10">
+            <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" Content="No Water Brushes" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" Content="Low Priority Compile" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" Content="Keep Stale Packed Data" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+        </StackPanel>
+
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Label Content="Other Arguments:" Grid.Column="0" />
+            <TextBox Text="{Binding VBSPSettings.OtherArguments}"
+                     Grid.Column="1"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Formatted arguments: " Grid.Column="0" />
+            <TextBox Text="{Binding VBSPSettings.FormattedArguments}"
+                     IsReadOnly="True"
+                     Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

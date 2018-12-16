@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="Tsukuru.Maps.Compiler.Views.VradSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
+    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="3"
+                                   Foreground="{DynamicResource MaterialDesignBody}"
+                                   TextWrapping="WrapWithOverflow">
+                            VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.
+                        </TextBlock>
+
+                        <StackPanel Grid.Row="1" 
+                                    Grid.Column="0"
+                                    Margin="0,10">
+                            <CheckBox IsChecked="{Binding VRADSettings.LDR}" Content="LDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.HDR}" Content="HDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,10">
+                            <CheckBox IsChecked="{Binding VRADSettings.Fast}" Content="Fast" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.Final}" Content="Final" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.LowPriority}" Content="Low Priority Compile" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="0,10">
+                            <CheckBox IsChecked="{Binding VRADSettings.StaticPropLighting}" Content="Static Prop Lighting" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.StaticPropPolys}" Content="Static Prop Polys" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.TextureShadows}" Content="Texture Shadows" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                        </StackPanel>
+
+                        <Grid Grid.Row="2" 
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              VerticalAlignment="Bottom">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Other Arguments:" 
+                                   Grid.Column="0" />
+                            <TextBox Text="{Binding VRADSettings.OtherArguments}"
+                                     Height="22"
+                                     Grid.Column="1"/>
+                        </Grid>
+
+                            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Content="Formatted arguments: " Grid.Column="0" />
+                                <TextBox Text="{Binding VRADSettings.FormattedArguments}"
+                                     IsReadOnly="True"
+                                     Grid.Column="1"/>
+                            </Grid>
+
+                        <StackPanel Grid.Row="4" 
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Margin="0,10">
+
+                            <CheckBox IsChecked="{Binding VRADSettings.UseModifiedVrad}"
+                                      Style="{StaticResource MaterialDesignDarkCheckBox}">
+                                <CheckBox.Content>
+                                    Use multi-core optimised VRAD? (TF2 / Source 2013 games only)
+                                </CheckBox.Content>
+                            </CheckBox>
+
+                            <TextBlock Foreground="{DynamicResource MaterialDesignBody}"
+                                       Margin="23,0,0,0"
+                                       TextWrapping="WrapWithOverflow">
+                                Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines.
+                                For more information, see the following GitHub pull request:
+
+                                <Hyperlink NavigateUri="https://github.com/ValveSoftware/source-sdk-2013/pull/436">
+                                    https://github.com/ValveSoftware/source-sdk-2013/pull/436
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+</UserControl>
