@@ -1,19 +1,18 @@
 ﻿using System.Diagnostics;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace Tsukuru.Views
 {
-    public partial class LogoControl : UserControl
+	public partial class LogoControl : UserControl
     {
         public LogoControl()
         {
             InitializeComponent();
         }
 
-        private void OnChipClick(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://gemini.software/");
-        }
-    }
+		private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			Process.Start("https://www.gemidyne.com/");
+		}
+	}
 }

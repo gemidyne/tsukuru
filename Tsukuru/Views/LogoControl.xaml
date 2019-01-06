@@ -24,6 +24,6 @@
             Source="/Tsukuru;component/Resources/gemidyne-logo.png"
             VerticalAlignment="Center"
             Width="188"
-            Height="49" />
+            Height="49" MouseLeftButtonDown="Image_MouseLeftButtonDown" />
     </Grid>
 </UserControl>
