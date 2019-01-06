@@ -6,7 +6,7 @@ using Tsukuru.SourcePawn.ViewModels;
 
 namespace Tsukuru
 {
-    internal class ViewModelLocator
+	internal class ViewModelLocator
 	{
 		private readonly SimpleIoc _ioc;
 
@@ -20,6 +20,8 @@ namespace Tsukuru
 
 	    public MapCompilerResultsViewModel MapCompilerResultsViewModel =>
 	        _ioc.GetInstance<MapCompilerResultsViewModel>();
+
+	    public ResourcePackingViewModel ResourcePackingViewModel => _ioc.GetInstance<ResourcePackingViewModel>();
 
 	    public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
 
@@ -54,6 +56,11 @@ namespace Tsukuru
 			if (!_ioc.IsRegistered<ResultsWindowViewModel>())
 			{
 				_ioc.Register<ResultsWindowViewModel>();
+			}
+
+			if (!_ioc.IsRegistered<ResourcePackingViewModel>())
+			{
+				_ioc.Register<ResourcePackingViewModel>();
 			}
 
 		    if (!_ioc.IsRegistered<MapCompilerViewModel>())

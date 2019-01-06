@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Media;
 using System.Threading.Tasks;
@@ -12,14 +11,13 @@ using Tsukuru.Steam;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class MapCompilerViewModel : ViewModelBase
+	public class MapCompilerViewModel : ViewModelBase
     {
-        private string _mapName;
+	    private readonly ResourcePackingViewModel _resourcePackingViewModel;
+	    private string _mapName;
         private string _vmfPath;
-        private bool _performResourcePacking;
-        private bool _performMapTextFileGeneration;
         private bool _compressMapToBZip2;
-        private ObservableCollection<string> _foldersToPack;
+
         private VbspCompilationSettings _vbspSettings;
         private VvisCompilationSettings _vvisSettings;
         private VradCompilationSettings _vradSettings;
@@ -50,24 +48,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 MapName = string.Format("{0}-{1:yyyyMMdd}", fileName, DateTime.Now);
 
                 RaisePropertyChanged("IsExecuteButtonEnabled");
-            }
-        }
-
-        public bool PerformResourcePacking
-        {
-            get => _performResourcePacking;
-            set
-            {
-                Set(() => PerformResourcePacking, ref _performResourcePacking, value);
-            }
-        }
-
-        public bool PerformMapTextFileGeneration
-        {
-            get => _performMapTextFileGeneration;
-            set
-            {
-                Set(() => PerformMapTextFileGeneration, ref _performMapTextFileGeneration, value);
             }
         }
 
@@ -107,17 +87,17 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 		    }
 	    }
 
-	    public ObservableCollection<string> FoldersToPack => _foldersToPack ?? (_foldersToPack = new ObservableCollection<string>());
-
         public VbspCompilationSettings VBSPSettings => _vbspSettings ?? (_vbspSettings = new VbspCompilationSettings());
 
         public VvisCompilationSettings VVISSettings => _vvisSettings ?? (_vvisSettings = new VvisCompilationSettings());
 
         public VradCompilationSettings VRADSettings => _vradSettings ?? (_vradSettings = new VradCompilationSettings());
 
-        public RelayCommand MapCompileCommand { get; private set; }
+        public RelayCommand MapCompileCommand { get; }
 
 		public RelayCommand LaunchMapCommand { get; }
+
+		public RelayCommand SelectVmfFileCommand { get; }
 
         public string VProject { get; }
 
@@ -127,8 +107,12 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public bool IsExecuteButtonEnabled => !string.IsNullOrWhiteSpace(VMFPath);
 
-        public MapCompilerViewModel()
+        public string GameInfo => GameHelper.GetGameInfo();
+
+        public MapCompilerViewModel(ResourcePackingViewModel resourcePackingViewModel)
         {
+	        _resourcePackingViewModel = resourcePackingViewModel;
+
 	        if (IsInDesignMode)
 	        {
 		        VProject = "??";
@@ -145,18 +129,19 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
             if (string.IsNullOrWhiteSpace(VMFPath))
             {
-                MapName = string.Format("TsukuruMap-{0:yyyyMMdd}", DateTime.Now);
+                MapName = $"TsukuruMap-{DateTime.Now:yyyyMMdd}";
             }
 
             MapCompileCommand = new RelayCommand(DoMapCompile);
 	        LaunchMapCommand = new RelayCommand(DoMapLaunch);
+	        SelectVmfFileCommand = new RelayCommand(SelectVmfFile);
         }
 
 	    private async void DoMapCompile()
         {
             await Task.Run(() =>
             {
-                MapCompiler.Execute(this);
+                MapCompileInitialiser.Execute(this);
             });
 
             SystemSounds.Asterisk.Play();
@@ -171,6 +156,26 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 			    await Task.Delay(5000);
 			    args.Session.Close(false);
 		    });
+	    }
+
+	    private void SelectVmfFile()
+	    {
+		    var dialog = new Ookii.Dialogs.VistaOpenFileDialog
+		    {
+			    CheckFileExists = true,
+			    CheckPathExists = true,
+			    Multiselect = false,
+			    Filter = "Valve Map File|*.vmf",
+			    InitialDirectory = Directory.GetCurrentDirectory(),
+			    Title = "Tsukuru - Select a VMF file."
+		    };
+
+		    if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+		    {
+			    return;
+		    }
+
+		    VMFPath = dialog.FileName;
 	    }
     }
 }

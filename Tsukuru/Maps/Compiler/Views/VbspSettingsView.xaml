@@ -2,9 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -26,37 +28,52 @@
         </TextBlock>
         
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10">
-            <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" Content="Only Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
-            <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" Content="Only Props" Style="{StaticResource MaterialDesignDarkCheckBox}" />
-            <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" Content="No Detail Entities" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" 
+                      Content="Only Entities"
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Only import the entities from the VMF. Brushes and internal entities are not modified. Conserves existing lighting data."/>
+
+            <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" 
+                      Content="Only Props" 
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Only update static and detail props (i.e. the internal entities). Does not generate a .prt file which will cause VVIS to error."/>
+
+            <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" 
+                      Content="No Detail Entities" 
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Removes func_detail brushes. The geometry left over is what affects visibility."/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10">
-            <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" Content="No Water Brushes" Style="{StaticResource MaterialDesignDarkCheckBox}" />
-            <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" Content="Low Priority Compile" Style="{StaticResource MaterialDesignDarkCheckBox}" />
-            <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" Content="Keep Stale Packed Data" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+            <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" 
+                      Content="No Water Brushes" 
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Removes water brushes." />
+
+            <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" 
+                      Content="Low Priority Compile" 
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Runs VBSP as a low-priority process in Windows."/>
+
+            <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" 
+                      Content="Keep Stale Packed Data" 
+                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                      ToolTip="Keep the BSP pakfile intact but recompile everything else."/>
         </StackPanel>
 
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <Label Content="Other Arguments:" Grid.Column="0" />
-            <TextBox Text="{Binding VBSPSettings.OtherArguments}"
-                     Grid.Column="1"/>
+            <TextBox
+                VerticalAlignment="Top"
+                Text="{Binding VBSPSettings.OtherArguments}"
+                materialDesign:HintAssist.IsFloating="True"
+                materialDesign:HintAssist.Hint="Other VBSP arguments" />
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Label Content="Formatted arguments: " Grid.Column="0" />
-            <TextBox Text="{Binding VBSPSettings.FormattedArguments}"
-                     IsReadOnly="True"
-                     Grid.Column="1"/>
+            <TextBox 
+                materialDesign:HintAssist.IsFloating="True"
+                materialDesign:HintAssist.Hint="Formatted arguments" 
+                Text="{Binding VBSPSettings.FormattedArguments}"
+                IsReadOnly="True" />
         </Grid>
     </Grid>
 </UserControl>

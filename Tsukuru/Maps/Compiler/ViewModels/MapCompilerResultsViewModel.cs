@@ -1,22 +1,45 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
+	public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private static readonly object _door = new object();
         private readonly StringBuilder _consoleText = new StringBuilder();
 
         private bool _isCloseButtonOnExecutionEnabled;
-        private string _mapNameDisplay;
+        private string _heading;
+        private string _mapName;
+        private string _subtitle;
+        private int _progressValue;
+        private int _progressMaximum;
 
-        public string MapNameDisplay
+        public string Heading
         {
-            get => _mapNameDisplay;
-            set => Set(() => MapNameDisplay, ref _mapNameDisplay, value);
+            get => _heading;
+            set => Set(() => Heading, ref _heading, value);
+        }
+
+        public string Subtitle
+        {
+	        get => _subtitle;
+	        set => Set(() => Subtitle, ref _subtitle, value);
+        }
+
+        public int ProgressValue
+        {
+	        get => _progressValue;
+	        set => Set(() => ProgressValue, ref _progressValue, value);
+        }
+
+        public int ProgressMaximum
+        {
+	        get => _progressMaximum;
+	        set => Set(() => ProgressMaximum, ref _progressMaximum, value);
         }
 
         public string ConsoleText
@@ -32,18 +55,18 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public bool IsCloseButtonOnExecutionEnabled
         {
-            get { return _isCloseButtonOnExecutionEnabled; }
+            get => _isCloseButtonOnExecutionEnabled;
             set
             {
                 _isCloseButtonOnExecutionEnabled = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged("IsProgressBarIndeterminate");
+                RaisePropertyChanged(nameof(IsProgressBarIndeterminate));
             }
         }
 
-        public bool IsProgressBarIndeterminate => !_isCloseButtonOnExecutionEnabled;
+        public bool IsProgressBarIndeterminate => false;
 
-        public RelayCommand CloseCommand { get; private set; }
+        public RelayCommand CloseCommand { get; }
 
         public MapCompilerResultsViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -57,11 +80,15 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             _mainWindowViewModel.DisplayMapCompilerResultsView = false;
             _mainWindowViewModel.DisplayMapCompilerView = true;
             _mainWindowViewModel.DisplaySourcePawnCompilerView = true;
+            
         }
 
-        public void StartNewSession(string mapName)
+        public void Initialise(string mapName)
         {
-            MapNameDisplay = $"Compiling map: {mapName}";
+	        _mapName = mapName;
+
+	        Heading = $"Map Compiler: {_mapName}";
+	        Subtitle = "Please wait...";
             IsCloseButtonOnExecutionEnabled = false;
 
             lock (_door)
@@ -70,12 +97,22 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
+        public void NotifyComplete(TimeSpan timeElapsed)
+        {
+	        Heading = $"Map Compiler {_mapName}";
+	        Subtitle = $"Completed in {timeElapsed}";
+	        WriteLine("Tsukuru", $"Completed in {timeElapsed}");
+
+	        IsCloseButtonOnExecutionEnabled = true;
+	        ProgressValue = ProgressMaximum;
+        }
+
         public void Write(string message)
         {
             lock (_door)
             {
                 _consoleText.Append(message);
-                RaisePropertyChanged("ConsoleText");
+                RaisePropertyChanged(nameof(ConsoleText));
             }
         }
 
@@ -84,7 +121,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             lock (_door)
             {
                 _consoleText.AppendLine($"[{category}]: {message}");
-                RaisePropertyChanged("ConsoleText");
+                RaisePropertyChanged(nameof(ConsoleText));
             }
         }
     }

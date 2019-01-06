@@ -20,7 +20,8 @@
 
         <local:MapDetailsControl
             Grid.Row="1" 
-            Grid.ColumnSpan="2" />
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,10"/>
 
         <StackPanel Grid.Column="1" 
                     Grid.Row="2"
@@ -29,14 +30,13 @@
             <Button Content="Launch map" 
                     Command="{Binding LaunchMapCommand}"
                     IsEnabled="{Binding IsExecuteButtonEnabled}"
-                    Margin="2,0"
                     Width="124"
                     HorizontalAlignment="Right" />
 
             <Button Content="Compile" 
                     Command="{Binding MapCompileCommand}"
                     IsEnabled="{Binding IsExecuteButtonEnabled}"
-                    Margin="2,0"
+                    Margin="5,0,0,0"
                     Width="124"
                     HorizontalAlignment="Right" />
         </StackPanel>

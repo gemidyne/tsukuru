@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
-using Tsukuru.Maps.Compiler;
 
 namespace Tsukuru.Steam
 {
@@ -43,22 +41,14 @@ namespace Tsukuru.Steam
 
 		public static bool LaunchAppWithMap(string map)
 		{
-			var appIdInfo = new FileInfo($"{SourceCompilationEngine.VProject}\\..\\steam_appid.txt");
+			int? appId = GameHelper.GetAppId();
 
-			if (!appIdInfo.Exists)
+			if (!appId.HasValue)
 			{
 				return false;
 			}
 
-			string text = File.ReadAllText(appIdInfo.FullName).Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
-			int appId;
-
-			if (string.IsNullOrWhiteSpace(text) || !int.TryParse(text, out appId))
-			{
-				return false;
-			}
-
-			return LaunchAppByIdWithMap(appId, map);
+			return LaunchAppByIdWithMap(appId.Value, map);
 		}
 	}
 }

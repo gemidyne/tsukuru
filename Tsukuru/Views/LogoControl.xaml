@@ -6,7 +6,8 @@
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="600">
+             d:DesignHeight="80" d:DesignWidth="600"
+             UseLayoutRounding="True">
     <Grid>
         <svgc:SvgViewbox Source="/Resources/background.svg" Stretch="Fill" />
 
@@ -16,20 +17,13 @@
             Margin="10"
             Source="/Tsukuru;component/Resources/logo.png" />
 
-        <materialDesign:Chip
-            ClickMode="Press"
-            Click="OnChipClick"
-            Content="GEMINI Developments"
-            IconBackground="{DynamicResource PrimaryHueDarkBrush}"
-            IconForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+        <Image             
+            Cursor="Hand"
             HorizontalAlignment="Right"
             Margin="10,0"
-            VerticalAlignment="Center">
-            <materialDesign:Chip.Icon>
-                <Image Source="/Tsukuru;component/Resources/gemini.jpg"
-                       Stretch="UniformToFill"/>
-            </materialDesign:Chip.Icon>
-        </materialDesign:Chip>
+            Source="/Tsukuru;component/Resources/gemidyne-logo.png"
+            VerticalAlignment="Center"
+            Width="188"
+            Height="49" />
     </Grid>
 </UserControl>

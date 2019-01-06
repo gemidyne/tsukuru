@@ -6,7 +6,13 @@
              xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:SourcePawnCompileViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -14,12 +20,33 @@
         </Grid.ColumnDefinitions>
 
 
-        <materialDesign:Card 
-            Grid.Column="0"
-            
-            VerticalAlignment="Stretch">
-            <!-- Background="{DynamicResource PrimaryHueDarkBrush}"
-            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"-->
+        <GroupBox>
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" 
+                               VerticalAlignment="Center"
+                               Text="SourcePawn files to compile" />
+
+                    <StackPanel Grid.Column="1" 
+                                HorizontalAlignment="Right" 
+                                Orientation="Horizontal">
+                        <Button Content="Add file" 
+                                Command="{Binding AddFileCommand}"
+                                FontSize="12"
+                                Height="Auto"
+                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                        <Button Content="Remove file" 
+                                Command="{Binding RemoveFileCommand}"
+                                FontSize="12"
+                                Height="Auto"
+                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox.Header>
 
             <ListBox 
                  HorizontalContentAlignment="Stretch"
@@ -74,33 +101,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </materialDesign:Card>
-
-        <Grid Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <Button Grid.Row="0" 
-                    Command="{Binding AddFileCommand}"
-                    Height="Auto"
-                    VerticalAlignment="Stretch">
-                <Button.Content>
-                    <materialDesign:PackIcon Kind="Plus" />
-                </Button.Content>
-            </Button>
-
-            <Button Grid.Row="1" 
-                    Command="{Binding RemoveFileCommand}"
-                    Height="Auto"
-                    VerticalAlignment="Stretch">
-                <Button.Content>
-                    <materialDesign:PackIcon Kind="Minus" />
-                </Button.Content>
-            </Button>
-        </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

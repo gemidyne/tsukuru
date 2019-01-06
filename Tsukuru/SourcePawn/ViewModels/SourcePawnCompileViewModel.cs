@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Shell;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Tsukuru.Settings;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
-    public class SourcePawnCompileViewModel : ViewModelBase
+	public class SourcePawnCompileViewModel : ViewModelBase
     {
 		private bool _executePostBuildScripts;
 		private bool _incrementVersion;
@@ -19,10 +22,13 @@ namespace Tsukuru.SourcePawn.ViewModels
 		private string _sourcePawnCompiler;
 		private ObservableCollection<CompilationFileViewModel> _filesToCompile;
 	    private CompilationFileViewModel _selectedFile;
+	    private bool _copySmxToClipboardOnCompile;
+	    private FileSystemWatcher watcher;
+	    private bool _isWatchingOrBuilding;
 
-        public string SourcePawnCompiler
+	    public string SourcePawnCompiler
         {
-            get { return _sourcePawnCompiler; }
+            get => _sourcePawnCompiler;
             set 
             {
 				Set(() => SourcePawnCompiler, ref _sourcePawnCompiler, value);
@@ -32,14 +38,11 @@ namespace Tsukuru.SourcePawn.ViewModels
             }
         }
 
-        public ObservableCollection<CompilationFileViewModel> FilesToCompile
-        {
-            get { return _filesToCompile ?? (_filesToCompile = new ObservableCollection<CompilationFileViewModel>()); }
-        }
+        public ObservableCollection<CompilationFileViewModel> FilesToCompile => _filesToCompile ?? (_filesToCompile = new ObservableCollection<CompilationFileViewModel>());
 
         public bool ExecutePostBuildScripts
         {
-            get { return _executePostBuildScripts; }
+            get => _executePostBuildScripts;
             set 
             {
 				Set(() => ExecutePostBuildScripts, ref _executePostBuildScripts, value);
@@ -51,7 +54,7 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public bool IncrementVersion
         {
-            get { return _incrementVersion; }
+            get => _incrementVersion;
             set 
             {
 				Set(() => IncrementVersion, ref _incrementVersion, value);
@@ -63,37 +66,35 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public bool AreCommandButtonsEnabled
         {
-            get { return _areCommandButtonsEnabled; }
+            get => _areCommandButtonsEnabled;
             set
             {
 				Set(() => AreCommandButtonsEnabled, ref _areCommandButtonsEnabled, value);
-                RaisePropertyChanged("TaskbarProgress");
-                RaisePropertyChanged("TaskbarState");
+                RaisePropertyChanged(nameof(TaskbarProgress));
+                RaisePropertyChanged(nameof(TaskbarState));
+                RaisePropertyChanged(nameof(IsProgressIndeterminate));
             }
         }
 
         public int ProgressBarValue
         {
-            get { return _progressBarValue; }
+            get => _progressBarValue;
             set 
             {
 				Set(() => ProgressBarValue, ref _progressBarValue, value);
-                RaisePropertyChanged("TaskbarProgress");
-                RaisePropertyChanged("TaskbarState");
-				RaisePropertyChanged("IsProgressIndeterminate");
+				RaisePropertyChanged(nameof(TaskbarProgress));
+				RaisePropertyChanged(nameof(TaskbarState));
+				RaisePropertyChanged(nameof(IsProgressIndeterminate));
             }
         }
 
         public int ProgressBarMaximum
         {
-            get { return _progressBarMaximum; }
+            get => _progressBarMaximum;
             set { Set(() => ProgressBarMaximum, ref _progressBarMaximum, value); }
         }
 
-        public double TaskbarProgress
-        {
-            get { return ((double)ProgressBarValue / ProgressBarMaximum); }
-        }
+        public double TaskbarProgress => ((double)ProgressBarValue / ProgressBarMaximum);
 
         public TaskbarItemProgressState TaskbarState
         {
@@ -125,16 +126,36 @@ namespace Tsukuru.SourcePawn.ViewModels
 
 	    public CompilationFileViewModel SelectedFile
 	    {
-		    get { return _selectedFile; }
+		    get => _selectedFile;
 		    set { Set(() => SelectedFile, ref _selectedFile, value); }
 	    }
 
-		public RelayCommand AddFileCommand { get; private set; }
+	    public bool CopySmxToClipboardOnCompile
+	    {
+		    get => _copySmxToClipboardOnCompile;
+		    set => Set(() => CopySmxToClipboardOnCompile, ref _copySmxToClipboardOnCompile, value);
+	    }
+
+	    public bool IsWatchingOrBuilding
+	    {
+		    get => _isWatchingOrBuilding;
+		    set
+		    {
+			    Set(() => IsWatchingOrBuilding, ref _isWatchingOrBuilding, value);
+				RaisePropertyChanged(nameof(CanClickWatchButton));
+		    }
+	    }
+
+	    public bool CanClickWatchButton => !IsWatchingOrBuilding;
+
+	    public RelayCommand AddFileCommand { get; private set; }
 		public RelayCommand BrowseCompilerCommand { get; private set; }
 		public RelayCommand BuildCommand { get; private set; }
 		public RelayCommand RemoveFileCommand { get; private set; }
 
-	    public SourcePawnCompileViewModel()
+		public RelayCommand WatchCommand { get; }
+
+		public SourcePawnCompileViewModel()
         {
             SourcePawnCompiler = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
             ExecutePostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
@@ -142,24 +163,85 @@ namespace Tsukuru.SourcePawn.ViewModels
 
 			AddFileCommand = new RelayCommand(AddFile);
 			BrowseCompilerCommand = new RelayCommand(BrowseCompiler);
-			BuildCommand = new RelayCommand(Build);
 			RemoveFileCommand = new RelayCommand(RemoveFile);
+			BuildCommand = new RelayCommand(Build);
+			WatchCommand = new RelayCommand(Watch);
         }
 
-	    private async void Build()
+		private async void Build()
 	    {
+		    AreCommandButtonsEnabled = false;
+
 			await Task.Run(() =>
 			{
-				AreCommandButtonsEnabled = false;
-
-				var proc = new Processor();
+				var proc = new SourcePawnCompiler();
 				proc.CompileBatch(this);
-
-				AreCommandButtonsEnabled = true;
 			});
+
+			AreCommandButtonsEnabled = true;
+
+			if (CopySmxToClipboardOnCompile && FilesToCompile.All(x => x.IsSuccessfulCompile || x.IsCompiledWithWarnings))
+			{
+				var files = FilesToCompile
+					.Where(f => f != null && !string.IsNullOrWhiteSpace(f.File))
+					.Select(f => Path.ChangeExtension(f.File, ".smx"))
+					.ToArray();
+
+				if (files.Any())
+				{
+					var fileDropList = new StringCollection();
+
+					fileDropList.AddRange(files);
+
+					Clipboard.SetFileDropList(fileDropList);
+				}
+			}
 	    }
 
-	    private void BrowseCompiler()
+		private void Watch()
+		{
+			if (watcher != null)
+			{
+				IsWatchingOrBuilding = false;
+				watcher.EnableRaisingEvents = false;
+				watcher.Dispose();
+				watcher = null;
+				return;
+			}
+
+			if (!FilesToCompile.Any())
+			{
+				return;
+			}
+
+			IsWatchingOrBuilding = true;
+
+			watcher = new FileSystemWatcher(Path.GetDirectoryName(FilesToCompile.First().File), "*.sp")
+			{
+				IncludeSubdirectories = true
+			};
+
+			watcher.Changed += WatcherOnChanged;
+			watcher.Created += WatcherOnChanged;
+			watcher.Deleted += WatcherOnChanged;
+			watcher.Renamed += WatcherOnChanged;
+			watcher.EnableRaisingEvents = true;
+		}
+
+		private async void WatcherOnChanged(object sender, FileSystemEventArgs e)
+		{
+			AreCommandButtonsEnabled = false;
+
+			await Task.Run(() =>
+			{
+				var proc = new SourcePawnCompiler();
+				proc.Compile(this, FilesToCompile.First());
+			});
+
+			AreCommandButtonsEnabled = true;
+		}
+
+		private void BrowseCompiler()
 	    {
 		    var dialog = new Ookii.Dialogs.VistaOpenFileDialog
 		    {
@@ -200,11 +282,21 @@ namespace Tsukuru.SourcePawn.ViewModels
 			{
 				FilesToCompile.Add(new CompilationFileViewModel { File = dialog.FileName });
 			}
+
+			if (FilesToCompile.Count > 1)
+			{
+				CopySmxToClipboardOnCompile = false;
+			}
 	    }
 
 	    private void RemoveFile()
 	    {
 			FilesToCompile.Remove(SelectedFile);
+
+			if (FilesToCompile.Count > 1)
+			{
+				CopySmxToClipboardOnCompile = false;
+			}
 	    }
     }
 }

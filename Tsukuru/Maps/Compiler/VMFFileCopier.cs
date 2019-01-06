@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Maps.Compiler
 {
-    public static class VmfFileCopier
+	public static class VmfFileCopier
     {
         public static string CopyFile(string sourceVMF, string destinationFileName)
         {

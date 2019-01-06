@@ -1,12 +1,13 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using System.Collections.ObjectModel;
-using System.Windows;
+using Tsukuru.SourcePawn.Views;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
-    public class CompilationFileViewModel : ViewModelBase
+	public class CompilationFileViewModel : ViewModelBase
     {
 		private string _file;
 		private ObservableCollection<CompilationMessage> _messages;
@@ -87,7 +88,7 @@ namespace Tsukuru.SourcePawn.ViewModels
 
 			viewModel.SetResults(Messages, $"Results - {File} - Total {Messages.Count} message(s)");
 
-		    var info = new ResultsWindow
+		    var info = new SourcePawnResultsWindow
 		    {
 			    Owner = Application.Current.MainWindow
 		    };

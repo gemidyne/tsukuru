@@ -34,15 +34,15 @@
                                  FixedHeaderCount="99"
                                  DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
                                  Background="{DynamicResource AttentionToActionBrush}">
-            <TabItem Header="SourcePawn Compiler" 
+            <TabItem Header="SourcePawn Plugin Compiler" 
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      Margin="10"
                      Visibility="{Binding DisplaySourcePawnCompilerView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <views1:CompilationSettingsControl />
+                <views1:SourcePawnCompilerView />
             </TabItem>
 
-            <TabItem Header="Map Compiler"
+            <TabItem Header="Source Map Compiler"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      Margin="10">
@@ -50,6 +50,11 @@
                     <compiler:MapCompilerView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
                     <compiler:MapCompilerResultsView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerResultsView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
                 </Grid>
+            </TabItem>
+
+            <TabItem Header="About"
+                     Margin="10">
+                <views:AboutView />
             </TabItem>
         </dragablz:TabablzControl>
     </Grid>
