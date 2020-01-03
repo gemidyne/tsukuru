@@ -14,6 +14,7 @@ namespace Tsukuru.Maps.Compiler
         private bool _lowPriority;
         private string _otherArguments;
         private bool _useModifiedVrad;
+        private bool _largeDispSampleRadius;
 
         public bool LDR
         {
@@ -23,7 +24,7 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => LDR, ref _ldr, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr = value;
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr = value;
                 SettingsManager.Save();
             }
         }
@@ -36,8 +37,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => HDR, ref _hdr, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr = value;
+                SettingsManager.Save();
             }
         }
 
@@ -49,8 +50,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => Fast, ref _fast, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast = value;
+                SettingsManager.Save();
             }
         }
 
@@ -62,8 +63,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => Final, ref _final, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final = value;
+                SettingsManager.Save();
             }
         }
 
@@ -75,8 +76,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => StaticPropLighting, ref _staticPropLighting, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting = value;
+                SettingsManager.Save();
             }
         }
 
@@ -88,8 +89,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => StaticPropPolys, ref _staticPropPolys, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys = value;
+                SettingsManager.Save();
             }
         }
 
@@ -101,8 +102,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => TextureShadows, ref _textureShadows, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows = value;
+                SettingsManager.Save();
             }
         }
 
@@ -114,8 +115,8 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => LowPriority, ref _lowPriority, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority = value;
+                SettingsManager.Save();
             }
         }
 
@@ -126,8 +127,8 @@ namespace Tsukuru.Maps.Compiler
             {
                 Set(() => UseModifiedVrad, ref _useModifiedVrad, value);
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad = value;
+                SettingsManager.Save();
             }
         }
 
@@ -139,25 +140,39 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => OtherArguments, ref _otherArguments, value);
                 OnArgumentChanged();
 
-	            SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments = value;
-	            SettingsManager.Save();
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments = value;
+                SettingsManager.Save();
             }
         }
 
-	    public VradCompilationSettings()
-	    {
-		    LDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr;
-		    HDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr;
-		    Fast = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast;
-		    Final = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final;
-		    StaticPropLighting = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting;
-		    StaticPropPolys = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys;
-		    TextureShadows = SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows;
+        public bool LargeDispSampleRadius
+        {
+            get => _largeDispSampleRadius;
+            set
+            {
+                Set(() => LargeDispSampleRadius, ref _largeDispSampleRadius, value);
+                OnArgumentChanged();
 
-		    LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
-		    UseModifiedVrad = SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad;
-		    OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
-	    }
+                SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius = value;
+                SettingsManager.Save();
+            }
+        }
+
+        public VradCompilationSettings()
+        {
+            LDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr;
+            HDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr;
+            Fast = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast;
+            Final = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final;
+            StaticPropLighting = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting;
+            StaticPropPolys = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys;
+            TextureShadows = SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows;
+
+            LowPriority = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority;
+            UseModifiedVrad = SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad;
+            OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments;
+            LargeDispSampleRadius = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius;
+        }
 
         public override string BuildArguments()
         {
@@ -171,6 +186,7 @@ namespace Tsukuru.Maps.Compiler
                 ConditionalArg(() => StaticPropPolys, "-StaticPropPolys") +
                 ConditionalArg(() => TextureShadows, "-TextureShadows") +
                 ConditionalArg(() => LowPriority, "-low") +
+                ConditionalArg(() => LargeDispSampleRadius, "-LargeDispSampleRadius") +
                 OtherArguments;
         }
     }

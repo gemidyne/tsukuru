@@ -72,7 +72,12 @@
                                       Content="Texture Shadows" 
                                       Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Generates lightmap shadows from $translucent surfaces of models (NOT brushes) that are specified in a lights file and being used with prop_static. It is recommended that you also enable Static Prop Polys setting when using Texture Shadows."/>
-                        </StackPanel>
+
+                            <CheckBox IsChecked="{Binding VRADSettings.LargeDispSampleRadius}"
+                                      Content="Large Displacement Sample Radius" 
+                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
+                                      ToolTip="This can be used if there are splotches of bounced light on terrain. This will cause the VRAD process to take longer, but it will gather light across a wider area."/>
+        </StackPanel>
 
         <StackPanel Grid.Row="2" 
                     Grid.Column="0"
