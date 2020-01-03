@@ -138,3 +138,5 @@ App_Data/*.ldf
 
 # VS2017+ metadata
 .vs/
+
+rel/
