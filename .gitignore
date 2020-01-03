@@ -140,3 +140,4 @@ App_Data/*.ldf
 .vs/
 
 rel/
+sm-env/
