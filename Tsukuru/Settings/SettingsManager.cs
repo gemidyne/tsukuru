@@ -55,7 +55,7 @@ namespace Tsukuru.Settings
 
             EnsureDirectoryExists();
 
-            var serialised = JsonConvert.SerializeObject(Manifest);
+            var serialised = JsonConvert.SerializeObject(Manifest, Formatting.Indented);
 
             File.WriteAllText(_settingsPath.FullName, serialised);
         }

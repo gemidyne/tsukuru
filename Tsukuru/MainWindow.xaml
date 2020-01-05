@@ -19,7 +19,8 @@
         Title="Tsukuru" 
         Height="780" 
         Width="1020"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
+        
         >
 <materialDesign:DialogHost>
     <Grid>
@@ -28,7 +29,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <views:LogoControl Grid.Row="0" materialDesign:ShadowAssist.ShadowDepth="Depth3" />
+        <views:LogoControl Grid.Row="0" />
 
         <dragablz:TabablzControl Grid.Row="1" 
                                  FixedHeaderCount="99"

@@ -5,48 +5,47 @@ using Tsukuru.Maps.Packer;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
-	internal class ResourcePackingStep : ICompileStep
-	{
-		public string StepName => "Pack resources into BSP";
+    internal class ResourcePackingStep : BaseVProjectStep
+    {
+        public override string StepName => "Pack resources into BSP";
 
-		public bool Run(ILogReceiver log)
-		{
-			var viewModel = SimpleIoc.Default.GetInstance<ResourcePackingViewModel>();
+        public override bool Run(ILogReceiver log)
+        {
+            var viewModel = SimpleIoc.Default.GetInstance<ResourcePackingViewModel>();
 
-			var session = new PackerSessionDetails
-			{
-				MapFile = MapCompileSessionInfo.Instance.GeneratedBspFile, 
-				GamePath = MapCompileSessionInfo.Instance.SdkToolsPath,
-				CompleteFoldersToAdd = viewModel.FoldersToPack.Where(x => !x.Intelligent).Select(x => x.Folder).ToList(),
-				IntelligentFoldersToAdd = viewModel.FoldersToPack.Where(x => x.Intelligent).Select(x => x.Folder).ToList()
-			};
+            var session = new PackerSessionDetails
+            {
+                MapFile = MapCompileSessionInfo.Instance.GeneratedBspFile.FullName,
+                GamePath = SdkToolsPath,
+                CompleteFoldersToAdd = viewModel.FoldersToPack.Where(x => !x.Intelligent).Select(x => x.Folder).ToList(),
+                IntelligentFoldersToAdd = viewModel.FoldersToPack.Where(x => x.Intelligent).Select(x => x.Folder).ToList()
+            };
 
-			var packer = new BspPackEngine(log, session);
+            var packer = new BspPackEngine(log, session);
 
-			if (viewModel.GenerateMapSpecificFiles)
-			{
-				using (var mapSpecificFileGenerator = new MapSpecificFileGenerator(session.CompleteFoldersToAdd))
-				{
-					log.WriteLine("ResourcePackingStep", "Scanning and generating map specific files...");
-					mapSpecificFileGenerator.Generate(mapName: MapCompileSessionInfo.Instance.MapName);
+            if (viewModel.GenerateMapSpecificFiles)
+            {
+                using (var mapSpecificFileGenerator = new TemplatingEngine(log, session.CompleteFoldersToAdd, MapCompileSessionInfo.Instance.MapName))
+                {
+                    mapSpecificFileGenerator.Generate();
 
-					log.WriteLine("ResourcePackingStep", "Performing resource packing...");
-					packer.PackData();
-				}
-			}
-			else
-			{
-				log.WriteLine("ResourcePackingStep", "Performing resource packing...");
-				packer.PackData();
-			}
+                    log.WriteLine("ResourcePackingStep", "Performing resource packing...");
+                    packer.PackData();
+                }
+            }
+            else
+            {
+                log.WriteLine("ResourcePackingStep", "Performing resource packing...");
+                packer.PackData();
+            }
 
-			if (viewModel.PerformRepack)
-			{
-				log.WriteLine("ResourcePackingStep", "Repacking with compression for better BSP file size...");
-				packer.RepackCompressBsp();
-			}
+            if (viewModel.PerformRepack)
+            {
+                log.WriteLine("ResourcePackingStep", "Repacking with compression for better BSP file size...");
+                packer.RepackCompressBsp();
+            }
 
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 }

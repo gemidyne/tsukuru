@@ -1,24 +1,29 @@
-﻿namespace Tsukuru.Maps.Compiler.Business
+﻿using System.IO;
+using Chiaki;
+
+namespace Tsukuru.Maps.Compiler.Business
 {
-	public class MapCompileSessionInfo
-	{
-		private static MapCompileSessionInfo _instance;
+    public class MapCompileSessionInfo
+    {
+        private static MapCompileSessionInfo _instance;
 
-		public string MapName { get; set; }
+        public string MapName { get; set; }
 
-		public string GeneratedVmfFile { get; set; }
+        public FileInfo GeneratedVmfFile { get; set; }
 
-		public string GeneratedBspFile { get; set; }
+        public string GeneratedFileNameNoExtension => GeneratedVmfFile.FullName.TrimEnd(".vmf");
 
-		public string SdkToolsPath { get; set; }
+        public FileInfo GeneratedBspFile => new FileInfo(GeneratedFileNameNoExtension + ".bsp");
 
-		public string GameMapsPath { get; set; }
+        public string SdkToolsPath { get; set; }
 
-		public static MapCompileSessionInfo Instance => _instance ?? (_instance = new MapCompileSessionInfo());
+        public string GameMapsPath { get; set; }
 
-		public static void Clear()
-		{
-			_instance = new MapCompileSessionInfo();
-		}
-	}
+        public static MapCompileSessionInfo Instance => _instance ?? (_instance = new MapCompileSessionInfo());
+
+        public static void Clear()
+        {
+            _instance = new MapCompileSessionInfo();
+        }
+    }
 }

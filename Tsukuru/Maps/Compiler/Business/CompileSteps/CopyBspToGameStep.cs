@@ -3,28 +3,26 @@ using System.IO;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
-	internal class CopyBspToGameStep : ICompileStep
-	{
-		public string StepName => "Copy map to game";
+    internal class CopyBspToGameStep : BaseVProjectStep
+    {
+        public override string StepName => "Copy map to game";
 
-		public bool Run(ILogReceiver log)
-		{
-			string mapsFolder = MapCompileSessionInfo.Instance.GameMapsPath;
-			string bspFile = MapCompileSessionInfo.Instance.GeneratedBspFile;
+        public override bool Run(ILogReceiver log)
+        {
+            var bspFile = MapCompileSessionInfo.Instance.GeneratedBspFile;
 
-			log.WriteLine("CopyBspToGameStep", $"Copying BSP to the game maps folder at: {mapsFolder}");
+            log.WriteLine("CopyBspToGameStep", $"Copying BSP to the game maps folder at: {GameMapsFolderPath}");
 
-			try
-			{
-				File.Copy(bspFile, Path.Combine(mapsFolder, Path.GetFileName(bspFile)), true);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				log.WriteLine("CopyBspToGameStep", $"Exception thrown: {ex}");
-
-				return false;
-			}
-		}
-	}
+            try
+            {
+                bspFile.CopyTo(Path.Combine(GameMapsFolderPath, bspFile.Name), overwrite: true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.WriteLine("CopyBspToGameStep", $"Exception thrown: {ex}");
+                return false;
+            }
+        }
+    }
 }

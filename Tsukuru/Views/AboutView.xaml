@@ -18,11 +18,23 @@
         <TextBlock 
             Margin="0,0,0,10"
             Style="{StaticResource MaterialDesignHeadlineTextBlock}"
-            Text="About Tsukuru" />
+            Text="About this app" />
+
+        <TextBlock 
+            Margin="0,10"
+            Style="{StaticResource MaterialDesignBody1TextBlock}"
+            Text="This app can be used to compile plugins for SourceMod and compile maps for Valve's Source Engine. It has been designed to be easy to use and not hinder your development flow."
+            TextWrapping="WrapWithOverflow" />
 
         <TextBlock 
             Style="{StaticResource MaterialDesignBody1TextBlock}"
-            Text="Tsukuru is an open-source project brought to you by Gemidyne Softworks." />
+            Text="Tsukuru is an project brought to you by Gemidyne Softworks. It is open-source software, and the source code is available on GitHub."
+            TextWrapping="WrapWithOverflow" />
+
+        <TextBlock 
+            Margin="0,50,0,10"
+            Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+            Text="Authors" />
 
         <Image             
             HorizontalAlignment="Left"

@@ -5,7 +5,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-	public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
+    public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private static readonly object _door = new object();
@@ -26,20 +26,20 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Subtitle
         {
-	        get => _subtitle;
-	        set => Set(() => Subtitle, ref _subtitle, value);
+            get => _subtitle;
+            set => Set(() => Subtitle, ref _subtitle, value);
         }
 
         public int ProgressValue
         {
-	        get => _progressValue;
-	        set => Set(() => ProgressValue, ref _progressValue, value);
+            get => _progressValue;
+            set => Set(() => ProgressValue, ref _progressValue, value);
         }
 
         public int ProgressMaximum
         {
-	        get => _progressMaximum;
-	        set => Set(() => ProgressMaximum, ref _progressMaximum, value);
+            get => _progressMaximum;
+            set => Set(() => ProgressMaximum, ref _progressMaximum, value);
         }
 
         public string ConsoleText
@@ -80,15 +80,15 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             _mainWindowViewModel.DisplayMapCompilerResultsView = false;
             _mainWindowViewModel.DisplayMapCompilerView = true;
             _mainWindowViewModel.DisplaySourcePawnCompilerView = true;
-            
+
         }
 
         public void Initialise(string mapName)
         {
-	        _mapName = mapName;
+            _mapName = mapName;
 
-	        Heading = $"Map Compiler: {_mapName}";
-	        Subtitle = "Please wait...";
+            Heading = $"Map Compiler: {_mapName}";
+            Subtitle = "Please wait...";
             IsCloseButtonOnExecutionEnabled = false;
 
             lock (_door)
@@ -99,12 +99,12 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public void NotifyComplete(TimeSpan timeElapsed)
         {
-	        Heading = $"Map Compiler {_mapName}";
-	        Subtitle = $"Completed in {timeElapsed}";
-	        WriteLine("Tsukuru", $"Completed in {timeElapsed}");
+            Heading = $"Map Compiler {_mapName}";
+            Subtitle = $"Completed in {timeElapsed}";
+            WriteLine("Tsukuru", $"Completed in {timeElapsed}");
 
-	        IsCloseButtonOnExecutionEnabled = true;
-	        ProgressValue = ProgressMaximum;
+            IsCloseButtonOnExecutionEnabled = true;
+            ProgressValue = ProgressMaximum;
         }
 
         public void Write(string message)

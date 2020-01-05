@@ -35,7 +35,7 @@
         </StackPanel>
         
 
-        <ProgressBar Height="5" 
+        <ProgressBar Height="10" 
                      IsIndeterminate="{Binding IsProgressBarIndeterminate}" 
                      Margin="0,2"
                      Value="{Binding ProgressValue}"

@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:views="clr-namespace:Tsukuru.Maps.Compiler.Views"
              mc:Ignorable="d" 
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
@@ -26,84 +28,19 @@
                 IsChecked="{Binding PerformResourcePacking}" 
                 Content="Enable Resource Packing?" />
 
-            <CheckBox
-                IsChecked="{Binding GenerateMapSpecificFiles}" 
-                Content="Scan and generate map specific files (files with names containing {Tsukuru.MapName})" />
-
-            <CheckBox
-                IsChecked="{Binding PerformRepack}" 
-                Content="Repack and compress using BSPZIP for optimal bsp file size" />
         </StackPanel>
 
-        <GroupBox Grid.Row="1">
-            <GroupBox.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0" 
-                               VerticalAlignment="Center"
-                               Text="Folders to pack into the BSP file" />
-
-                    <StackPanel Grid.Column="1" 
-                                HorizontalAlignment="Right" 
-                                Orientation="Horizontal">
-                        <Button Content="Add folder" 
-                                Command="{Binding AddFolderCommand}"
-                                FontSize="12"
-                                Height="Auto"
-                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
-                        <Button Content="Remove folder" 
-                                Command="{Binding RemoveFolderCommand}"
-                                FontSize="12"
-                                Height="Auto"
-                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
-                    </StackPanel>
-                </Grid>
-            </GroupBox.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <StackPanel Grid.Row="0"
-                            Orientation="Horizontal">
-                    
-                </StackPanel>
-
-                <ListBox Grid.Row="1" ItemsSource="{Binding FoldersToPack}" Name="FoldersToPackList"
-                         SelectedItem="{Binding SelectedFolder}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <CheckBox
-                                    VerticalAlignment="Center"
-                                    IsChecked="{Binding Intelligent}" />
-
-                                <StackPanel
-                                    Margin="8 0 0 0"
-                                    Grid.Column="1">
-                                    <TextBlock
-                                        FontWeight="Bold"
-                                        Text="{Binding File}" />
-                                    <TextBlock
-                                        Text="{Binding Folder}" />
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </GroupBox>
-
+        <dragablz:TabablzControl Grid.Row="1" FixedHeaderCount="99">
+            <TabItem Header="Folders to pack">
+                <views:ResourcePackFolderSectionView />
+            </TabItem>
+            <TabItem Header="Templating">
+                <views:TemplatingSettingsView />
+            </TabItem>
+            <TabItem Header="BSP Repack">
+                <views:BspRepackSettingsView />
+            </TabItem>
+        </dragablz:TabablzControl>
 
     </Grid>
 </UserControl>

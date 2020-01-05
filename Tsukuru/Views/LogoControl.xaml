@@ -6,10 +6,37 @@
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="600"
+             d:DesignHeight="80" d:DesignWidth="1020"
              UseLayoutRounding="True">
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetName="TranslateTransform"
+                        Storyboard.TargetProperty="X"
+                        From="0"
+                        To="450" 
+                        Duration="0:3:0" 
+                        AutoReverse="True"
+                        IsAdditive="True"
+                        RepeatBehavior="Forever" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
     <Grid>
-        <svgc:SvgViewbox Source="/Resources/background.svg" Stretch="Fill" />
+        <svgc:SvgViewbox Name="BackgroundSvg" Source="/Resources/background.svg" Stretch="Fill" RenderTransformOrigin="0.5,0.5">
+            <svgc:SvgViewbox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="1.5" ScaleX="1.5"/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="180"/>
+                    <TranslateTransform X="-200" x:Name="TranslateTransform" />
+                </TransformGroup>
+            </svgc:SvgViewbox.RenderTransform>
+        </svgc:SvgViewbox>
 
         <Image 
             Height="40"
