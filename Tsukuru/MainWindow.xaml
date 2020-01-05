@@ -53,10 +53,17 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="About"
+            <TabItem Header="Options"
+                     Margin="10">
+                <views:OptionsView />
+            </TabItem>
+
+                <TabItem Header="About"
                      Margin="10">
                 <views:AboutView />
             </TabItem>
+
+
         </dragablz:TabablzControl>
     </Grid>
 </materialDesign:DialogHost>

@@ -2,9 +2,9 @@
 
 namespace Tsukuru.Views
 {
-    public partial class AboutView : UserControl
+    public partial class OptionsView : UserControl
     {
-        public AboutView()
+        public OptionsView()
         {
             InitializeComponent();
         }
