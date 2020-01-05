@@ -5,6 +5,8 @@ Tsukuru is a multi-tool Windows app which allows developers to do the following,
 - Batch compile SourceMod plugins, with automated incremental versioning support.
 - Compile Source Engine maps and pack resources into BSPs with an easy to use interface
 
+## Download
+The latest release can be downloaded from here: https://github.com/gemidyne/tsukuru/releases/latest. Click on the Tsukuru zip file to start the download. Once downloaded, double click Tsukuru.exe.
 
 ## License
 Licensed under the [GNU GPL License](LICENSE.md)
