@@ -252,6 +252,10 @@
     <Compile Include="Translator\TranslationImportTransformer.cs" />
     <Compile Include="Translator\TranslationSerialization.cs" />
     <Compile Include="Translator\TranslatorEngine.cs" />
+    <Compile Include="Translator\ViewModels\TranslatorImportViewModel.cs" />
+    <Compile Include="Translator\Views\TranslatorImportView.xaml.cs">
+      <DependentUpon>TranslatorImportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="SourcePawn\Views\SourcePawnResultsWindow.xaml.cs">
       <DependentUpon>SourcePawnResultsWindow.xaml</DependentUpon>
@@ -356,6 +360,10 @@
     <Page Include="SourcePawn\Views\SourcePawnCompilerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Translator\Views\TranslatorImportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\OptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>

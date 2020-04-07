@@ -6,7 +6,8 @@
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         xmlns:sourcePawn="clr-namespace:Tsukuru.SourcePawn"
         xmlns:views="clr-namespace:Tsukuru.Views"
-        xmlns:views1="clr-namespace:Tsukuru.SourcePawn.Views"
+        xmlns:sourcePawnViews="clr-namespace:Tsukuru.SourcePawn.Views"
+        xmlns:translatorViews="clr-namespace:Tsukuru.Translator.Views"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -40,7 +41,7 @@
                      VerticalAlignment="Stretch"
                      Margin="10"
                      Visibility="{Binding DisplaySourcePawnCompilerView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <views1:SourcePawnCompilerView />
+                <sourcePawnViews:SourcePawnCompilerView />
             </TabItem>
 
             <TabItem Header="Source Map Compiler"
@@ -53,7 +54,12 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Options"
+            <TabItem Header="SourceMod Translator Import"
+                     Margin="10">
+                <translatorViews:TranslatorImportView />
+            </TabItem>
+
+                <TabItem Header="Options"
                      Margin="10">
                 <views:OptionsView />
             </TabItem>

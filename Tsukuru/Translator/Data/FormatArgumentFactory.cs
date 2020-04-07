@@ -8,6 +8,7 @@ namespace Tsukuru.Translator.Data
         public static List<IFormatArgument> CreateFromString(string input)
         {
             var split = input.Split(',');
+            var orderedChars = new List<char>();
             var result = new List<IFormatArgument>();
 
             foreach (var part in split)
@@ -43,7 +44,7 @@ namespace Tsukuru.Translator.Data
                     return null;
                 }
 
-                result.Insert(index, argument);
+                result.Add(argument);
             }
 
             return result;

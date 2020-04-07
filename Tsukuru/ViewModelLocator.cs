@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.SourcePawn.ViewModels;
+using Tsukuru.Translator.ViewModels;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru
@@ -27,6 +28,8 @@ namespace Tsukuru
         public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
 
         public OptionsViewModel OptionsViewModel => _ioc.GetInstance<OptionsViewModel>();
+
+        public TranslatorImportViewModel TranslatorImportViewModel => _ioc.GetInstance<TranslatorImportViewModel>();
 
         public ViewModelLocator()
         {
@@ -79,6 +82,11 @@ namespace Tsukuru
             if (!_ioc.IsRegistered<OptionsViewModel>())
             {
                 _ioc.Register<OptionsViewModel>();
+            }
+
+            if (!_ioc.IsRegistered<TranslatorImportViewModel>())
+            {
+                _ioc.Register<TranslatorImportViewModel>();
             }
         }
     }
