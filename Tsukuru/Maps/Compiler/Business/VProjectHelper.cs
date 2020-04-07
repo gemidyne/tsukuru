@@ -12,7 +12,7 @@ namespace Tsukuru.Maps.Compiler.Business
             {
                 if (string.IsNullOrWhiteSpace(_path))
                 {
-                    _path = Environment.GetEnvironmentVariable("VPROJECT", EnvironmentVariableTarget.User);
+                    _path = Environment.GetEnvironmentVariable("VPROJECT", EnvironmentVariableTarget.User) ?? Environment.GetEnvironmentVariable("VPROJECT");
                 }
 
                 return _path;

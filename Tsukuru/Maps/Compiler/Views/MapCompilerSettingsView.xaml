@@ -75,14 +75,20 @@
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2" VerticalAlignment="Stretch">
                 <dragablz:TabablzControl FixedHeaderCount="99">
-                    <TabItem Header="VBSP Settings">
+                <TabItem Header="VBSP Settings">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <local:VbspSettingsView />
-                    </TabItem>
-                    <TabItem Header="VVIS Settings">
-                        <local:VvisSettingsView />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="VVIS Settings">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <local:VvisSettingsView />
+                        </ScrollViewer>
                     </TabItem>
                     <TabItem Header="VRAD Settings">
-                        <local:VradSettingsView />
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <local:VradSettingsView />
+                        </ScrollViewer>
                     </TabItem>
                     <TabItem Header="Resource Packing">
                         <local:ResourcePackingView />
