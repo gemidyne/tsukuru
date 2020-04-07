@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Tsukuru.Translator.Data
 {
-    internal class TranslatorProjectSchema
+    public class TranslatorProjectSchema
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }

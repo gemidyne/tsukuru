@@ -3,7 +3,7 @@ using Chiaki;
 
 namespace Tsukuru.Translator.Data
 {
-    internal static class FormatArgumentFactory
+    public static class FormatArgumentFactory
     {
         public static List<IFormatArgument> CreateFromString(string input)
         {

@@ -8,7 +8,7 @@ using Tsukuru.Translator.Data;
 
 namespace Tsukuru.Translator
 {
-    internal class TranslationImportTransformer
+    public class TranslationImportTransformer
     {
         private readonly FileInfo _sourceFile;
         private KeyValue _baseTranslationSet;

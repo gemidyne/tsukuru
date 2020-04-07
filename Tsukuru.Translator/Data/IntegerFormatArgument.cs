@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Translator.Data
 {
-    internal class IntegerFormatArgument : IFormatArgument
+    public class IntegerFormatArgument : IFormatArgument
     {
         [JsonProperty("description")]
         public string Description { get; set; }

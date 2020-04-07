@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Translator.Data
 {
-    internal class Language
+    public class Language
     {
         [JsonProperty("code")]
         public string Code { get; set; }

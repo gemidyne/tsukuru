@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Translator
 {
-    internal static class TranslationSerialization
+    public static class TranslationSerialization
     {
         public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings
         {

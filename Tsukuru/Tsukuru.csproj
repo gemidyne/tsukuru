@@ -424,7 +424,7 @@
       <Project>{1be0a902-30e1-4186-ac0e-24fdc09121d4}</Project>
       <Name>Tsukuru.SourceEngineTools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tsukuru.Translator.Common\Tsukuru.Translator.csproj">
+    <ProjectReference Include="..\Tsukuru.Translator\Tsukuru.Translator.csproj">
       <Project>{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}</Project>
       <Name>Tsukuru.Translator</Name>
     </ProjectReference>

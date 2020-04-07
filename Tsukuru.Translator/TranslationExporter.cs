@@ -7,7 +7,7 @@ using Tsukuru.Translator.Data;
 
 namespace Tsukuru.Translator
 {
-    internal class TranslationExporter
+    public class TranslationExporter
     {
         private readonly FileInfo _projectFilePath;
         private TranslatorProjectSchema _project;

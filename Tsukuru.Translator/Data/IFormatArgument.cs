@@ -1,6 +1,6 @@
 ﻿namespace Tsukuru.Translator.Data
 {
-    internal interface IFormatArgument
+    public interface IFormatArgument
     {
         string Render(int index);
     }

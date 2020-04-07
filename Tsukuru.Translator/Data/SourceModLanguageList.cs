@@ -3,7 +3,7 @@ using Chiaki;
 
 namespace Tsukuru.Translator.Data
 {
-    internal class SourceModLanguageList : Singleton<SourceModLanguageList>
+    public class SourceModLanguageList : Singleton<SourceModLanguageList>
     {
         private readonly string[] _codes = new[]
         {

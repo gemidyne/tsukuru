@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Tsukuru.Translator.Data
 {
-    internal class Phrase
+    public class Phrase
     {
         [JsonProperty("key")]
         public string Key { get; set; }
