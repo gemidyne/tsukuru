@@ -77,6 +77,8 @@ namespace Tsukuru.Translator
 
                     phrase.FormatArguments.AddRange(arguments);
                 }
+
+                _project.Phrases.Add(phrase);
             }
 
             return true;
@@ -94,6 +96,8 @@ namespace Tsukuru.Translator
                 {
                     continue;
                 }
+
+                _project.Languages.Add(new Language { Code = pair.Key });
 
                 foreach (var item in kv.Children)
                 {
