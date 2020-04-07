@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Translator
 {
-    internal class TranslatorEngine
+    public class TranslatorEngine
     {
         public EProjectGenerateResult ImportFromSourceMod(string translationFileName)
         {

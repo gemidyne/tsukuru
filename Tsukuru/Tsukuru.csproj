@@ -239,20 +239,11 @@
     <Compile Include="SourcePawn\CompilationMessageHelper.cs" />
     <Compile Include="SourcePawn\CompilationResult.cs" />
     <Compile Include="SourcePawn\SourcePawnCompiler.cs" />
-    <Compile Include="Translator\Data\FormatArgumentFactory.cs" />
-    <Compile Include="Translator\Data\IFormatArgument.cs" />
-    <Compile Include="Translator\Data\IntegerFormatArgument.cs" />
-    <Compile Include="Translator\Data\Language.cs" />
-    <Compile Include="Translator\Data\Phrase.cs" />
-    <Compile Include="Translator\Data\SourceModLanguageList.cs" />
-    <Compile Include="Translator\Data\StringFormatArgument.cs" />
-    <Compile Include="Translator\Data\TranslatorProjectSchema.cs" />
-    <Compile Include="Translator\EProjectGenerateResult.cs" />
-    <Compile Include="Translator\TranslationExporter.cs" />
-    <Compile Include="Translator\TranslationImportTransformer.cs" />
-    <Compile Include="Translator\TranslationSerialization.cs" />
-    <Compile Include="Translator\TranslatorEngine.cs" />
+    <Compile Include="Translator\ViewModels\TranslatorExportViewModel.cs" />
     <Compile Include="Translator\ViewModels\TranslatorImportViewModel.cs" />
+    <Compile Include="Translator\Views\TranslatorExportView.xaml.cs">
+      <DependentUpon>TranslatorExportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Translator\Views\TranslatorImportView.xaml.cs">
       <DependentUpon>TranslatorImportView.xaml</DependentUpon>
     </Compile>
@@ -361,6 +352,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Translator\Views\TranslatorExportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Translator\Views\TranslatorImportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -428,6 +423,10 @@
     <ProjectReference Include="..\Tsukuru.SourceEngineTools\Tsukuru.SourceEngineTools.csproj">
       <Project>{1be0a902-30e1-4186-ac0e-24fdc09121d4}</Project>
       <Name>Tsukuru.SourceEngineTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tsukuru.Translator.Common\Tsukuru.Translator.csproj">
+      <Project>{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}</Project>
+      <Name>Tsukuru.Translator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

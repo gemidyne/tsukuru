@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsukuru", "Tsukuru\Tsukuru.csproj", "{F8B6939F-ACCC-4E9D-900C-E91279E2DAE8}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsukuru.SourceEngineTools", "Tsukuru.SourceEngineTools\Tsukuru.SourceEngineTools.csproj", "{1BE0A902-30E1-4186-AC0E-24FDC09121D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsukuru.SourceEngineTools.TestApp", "Tsukuru.SourceEngineTools.TestApp\Tsukuru.SourceEngineTools.TestApp.csproj", "{4E192A3C-12D3-4D87-9777-0199DE994A29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsukuru.Translator", "Tsukuru.Translator\Tsukuru.Translator.csproj", "{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +68,18 @@ Global
 		{4E192A3C-12D3-4D87-9777-0199DE994A29}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4E192A3C-12D3-4D87-9777-0199DE994A29}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E192A3C-12D3-4D87-9777-0199DE994A29}.Release|x86.Build.0 = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

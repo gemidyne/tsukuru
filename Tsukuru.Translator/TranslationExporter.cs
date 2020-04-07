@@ -28,7 +28,7 @@ namespace Tsukuru.Translator
         {
             DoRootExport();
 
-            foreach (var language in SourceModLanguageList.Instance.Languages)
+            foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
             {
                 DoLanguageExport(language);
             }
@@ -44,7 +44,7 @@ namespace Tsukuru.Translator
 
                 if (phrase.FormatArguments.Any())
                 {
-                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx)).ToArray();
+                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
 
                     string combined = string.Join(",", arguments);
 
@@ -77,7 +77,7 @@ namespace Tsukuru.Translator
 
                 if (phrase.FormatArguments.Any())
                 {
-                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx)).ToArray();
+                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
 
                     string combined = string.Join(",", arguments);
 
@@ -100,10 +100,7 @@ namespace Tsukuru.Translator
                 outputFile.Directory.Create();
             }
 
-            using (var stream = outputFile.OpenWrite())
-            {
-                root.SaveToStream(stream, asBinary: false);
-            }
+            root.SaveToFile(outputFile.FullName, asBinary: false);
         }
     }
 }

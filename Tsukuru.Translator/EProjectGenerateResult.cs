@@ -1,6 +1,6 @@
 ﻿namespace Tsukuru.Translator
 {
-    internal enum EProjectGenerateResult
+    public enum EProjectGenerateResult
     {
         CompleteNoErrors = 0,
         SourceFileNotFound,

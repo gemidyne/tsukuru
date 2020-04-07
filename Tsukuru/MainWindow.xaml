@@ -59,6 +59,11 @@
                 <translatorViews:TranslatorImportView />
             </TabItem>
 
+            <TabItem Header="SourceMod Translator Export"
+                     Margin="10">
+                <translatorViews:TranslatorExportView />
+            </TabItem>
+
                 <TabItem Header="Options"
                      Margin="10">
                 <views:OptionsView />

@@ -31,6 +31,8 @@ namespace Tsukuru
 
         public TranslatorImportViewModel TranslatorImportViewModel => _ioc.GetInstance<TranslatorImportViewModel>();
 
+        public TranslatorExportViewModel TranslatorExportViewModel => _ioc.GetInstance<TranslatorExportViewModel>();
+
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
@@ -87,6 +89,11 @@ namespace Tsukuru
             if (!_ioc.IsRegistered<TranslatorImportViewModel>())
             {
                 _ioc.Register<TranslatorImportViewModel>();
+            }
+
+            if (!_ioc.IsRegistered<TranslatorExportViewModel>())
+            {
+                _ioc.Register<TranslatorExportViewModel>();
             }
         }
     }
