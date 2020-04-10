@@ -8,6 +8,9 @@ namespace Tsukuru.Translator.Data
         [JsonProperty("key")]
         public string Key { get; set; }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("text")]
         public string EnglishText { get; set; }
 
