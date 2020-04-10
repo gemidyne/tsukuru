@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Chiaki;
 using Newtonsoft.Json;
@@ -9,32 +10,59 @@ namespace Tsukuru.Translator
 {
     public class TranslationExporter
     {
-        private readonly FileInfo _projectFilePath;
+        private FileInfo _projectFilePath;
         private TranslatorProjectSchema _project;
 
-        public TranslationExporter(FileInfo projectFilePath)
+        public void Load(FileInfo projectFilePath)
         {
             _projectFilePath = projectFilePath;
-        }
 
-        public void Load()
-        {
             string json = File.ReadAllText(_projectFilePath.FullName);
 
+            LoadString(json);
+        }
+
+        public void LoadString(string json)
+        {
             _project = JsonConvert.DeserializeObject<TranslatorProjectSchema>(json, TranslationSerialization.Settings);
         }
 
-        public void Export()
+        public void ExportToFileSystem()
         {
-            DoRootExport();
+            string englishTxtFile = _projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName;
+
+            GenerateExportEnglish()
+                .SaveToFile(englishTxtFile, asBinary: false);
 
             foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
             {
-                DoLanguageExport(language);
+                DoLanguageExportToFileSystem(language);
             }
         }
 
-        private void DoRootExport()
+        public Dictionary<string, KeyValue> GetLanguageExports()
+        {
+            var result = new Dictionary<string, KeyValue>
+            {
+                ["en"] = GenerateExportEnglish()
+            };
+
+            foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
+            {
+                var kv = GenerateExportForLanguage(language);
+
+                if (kv == null)
+                {
+                    continue;
+                }
+
+                result[language] = kv;
+            }
+
+            return result;
+        }
+
+        private KeyValue GenerateExportEnglish()
         {
             var root = new KeyValue("Phrases");
 
@@ -56,17 +84,34 @@ namespace Tsukuru.Translator
                 root.Children.Add(kv);
             }
 
-            string outputFile = _projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName;
-
-            root.SaveToFile(outputFile, asBinary: false);
+            return root;
         }
 
-        private void DoLanguageExport(string languageCode)
+        private void DoLanguageExportToFileSystem(string languageCode)
         {
-            if (_project.Phrases.Select(x => x.Translations.ContainsKey(languageCode)).All(x => !x))
+            var kv = GenerateExportForLanguage(languageCode);
+
+            if (kv == null)
+            {
+                return;
+            }
+
+            var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
+
+            if (!outputFile.Directory.Exists)
+            {
+                outputFile.Directory.Create();
+            }
+
+            kv.SaveToFile(outputFile.FullName, asBinary: false);
+        }
+
+        private KeyValue GenerateExportForLanguage(string languageCode)
+        {
+            if (_project.Phrases.Select(x => x.Translations.ContainsKey(languageCode) && !string.IsNullOrWhiteSpace(x.Translations[languageCode])).All(x => !x))
             {
                 // If all text for this language is not set, don't output file
-                return;
+                return null;
             }
 
             var root = new KeyValue("Phrases");
@@ -85,7 +130,7 @@ namespace Tsukuru.Translator
                 }
 
                 string value = phrase.Translations.ContainsKey(languageCode)
-                    ? phrase.Translations[languageCode]
+                    ? phrase.Translations[languageCode] ?? string.Empty
                     : string.Empty;
 
                 kv.Children.Add(new KeyValue(languageCode, value));
@@ -93,14 +138,7 @@ namespace Tsukuru.Translator
                 root.Children.Add(kv);
             }
 
-            var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
-
-            if (!outputFile.Directory.Exists)
-            {
-                outputFile.Directory.Create();
-            }
-
-            root.SaveToFile(outputFile.FullName, asBinary: false);
+            return root;
         }
     }
 }

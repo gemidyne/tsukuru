@@ -27,10 +27,10 @@ namespace Tsukuru.Translator
                 return;
             }
 
-            var exporter = new TranslationExporter(file);
+            var exporter = new TranslationExporter();
 
-            exporter.Load();
-            exporter.Export();
+            exporter.Load(file);
+            exporter.ExportToFileSystem();
         }
     }
 }
