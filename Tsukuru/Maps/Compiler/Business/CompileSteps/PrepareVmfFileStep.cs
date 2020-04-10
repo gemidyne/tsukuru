@@ -12,6 +12,12 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             var viewModel = SimpleIoc.Default.GetInstance<MapCompilerViewModel>();
 
+            if (!File.Exists(viewModel.VMFPath))
+            {
+                log.WriteLine("PrepareVmf", $"File not found at location: {viewModel.VMFPath}");
+                return false;
+            }
+
             var generatedVmfFile = VmfFileCopier.CopyFile(viewModel.VMFPath, viewModel.MapName);
 
             if (string.IsNullOrWhiteSpace(generatedVmfFile))

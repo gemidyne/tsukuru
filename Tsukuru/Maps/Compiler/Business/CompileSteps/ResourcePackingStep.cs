@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Maps.Packer;
@@ -20,6 +21,12 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                 CompleteFoldersToAdd = viewModel.FoldersToPack.Where(x => !x.Intelligent).Select(x => x.Folder).ToList(),
                 IntelligentFoldersToAdd = viewModel.FoldersToPack.Where(x => x.Intelligent).Select(x => x.Folder).ToList()
             };
+
+            if (viewModel.FoldersToPack.Select(x => x.Folder).Any(x => !Directory.Exists(x)))
+            {
+                log.WriteLine("ResourcePackingStep", "Unable to start packing. A directory specified does not exist.");
+                return false;
+            }
 
             var packer = new BspPackEngine(log, session);
 
