@@ -28,20 +28,8 @@
             <CheckBox 
                 IsChecked="{Binding PerformResourcePacking}" 
                 Content="Enable Resource Packing?" />
-
         </StackPanel>
 
-        <dragablz:TabablzControl Grid.Row="1" FixedHeaderCount="99">
-            <TabItem Header="Folders to pack">
-                <local:ResourceFolderSelectionView />
-            </TabItem>
-            <TabItem Header="Templating">
-                <local:TemplatingSettingsView />
-            </TabItem>
-            <TabItem Header="Repack">
-                <local:BspRepackSettingsView />
-            </TabItem>
-        </dragablz:TabablzControl>
-
+        <local:ResourceFolderSelectionView  Grid.Row="1" />
     </Grid>
 </UserControl>

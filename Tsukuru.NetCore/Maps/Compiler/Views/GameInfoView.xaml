@@ -4,36 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <GroupBox Header="Game information">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="4*" />
-            </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label Content="VProject path" 
-                   HorizontalAlignment="Right" VerticalAlignment="Center"
-                   Grid.Column="0"
-                   Grid.Row="0"/>
             <TextBox Text="{Binding VProject, Mode=OneWay}"
                      IsReadOnly="True"
-                     Grid.Column="1"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Hint="VProject Path"
                      Grid.Row="0"/>
 
-            <Label Content="Game" 
-                   HorizontalAlignment="Right" VerticalAlignment="Center"
-                   Grid.Column="0"
-                   Grid.Row="1"/>
             <TextBox Text="{Binding GameInfo, Mode=OneWay}"
                      IsReadOnly="True"
-                     Grid.Column="1"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Hint="Game information"
                      Grid.Row="1"/>
         </Grid>
     </GroupBox>

@@ -29,21 +29,12 @@
                       Grid.Column="1"
                       Header="Map information">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="4*" />
-                </Grid.ColumnDefinitions>
-
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Content="VMF path" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Grid.Row="0" Grid.Column="0" />
-
-                <Grid Grid.Row="0" Grid.Column="1">
+                <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
@@ -51,7 +42,9 @@
 
                     <TextBox Text="{Binding VMFPath}" 
                                  Grid.Column="0"
-                                 IsReadOnly="True"/>
+                                 IsReadOnly="True"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:HintAssist.Hint="VMF File Path"/>
                     <Button Command="{Binding SelectVmfFileCommand}"
                                 Grid.Column="1">
                         <Button.Content>
@@ -63,11 +56,10 @@
                     </Button>
                 </Grid>
 
-                <Label Content="Map name" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Grid.Row="2" Grid.Column="0" />
                 <TextBox Text="{Binding MapName}" 
-                             Grid.Row="2" Grid.Column="1" />
+                         Grid.Row="1"
+                         materialDesign:HintAssist.IsFloating="True"
+                         materialDesign:HintAssist.Hint="Generated map name"/>
             </Grid>
         </GroupBox>
 
@@ -90,8 +82,16 @@
                         <local:RadCompilerSettingsView />
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Resource Packing">
+                <TabItem Header="Resource Packing: Folders">
                     <local:ResourcePackingView />
+                </TabItem>
+                <TabItem Header="Resource Packing: Templating" 
+                         Visibility="{Binding ResourcePackingViewModel.PerformResourcePacking, Source={StaticResource ViewModelLocator}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <local:TemplatingSettingsView />
+                </TabItem>
+                <TabItem Header="Resource Package: Repack" 
+                         Visibility="{Binding ResourcePackingViewModel.PerformResourcePacking, Source={StaticResource ViewModelLocator}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <local:BspRepackSettingsView />
                 </TabItem>
             </dragablz:TabablzControl>
         </materialDesign:Card>
