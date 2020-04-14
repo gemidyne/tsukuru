@@ -153,7 +153,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         {
             SteamHelper.LaunchAppWithMap(MapName);
 
-            await DialogHost.Show(new ProgressView(), async delegate (object sender, DialogOpenedEventArgs args)
+            await DialogHost.Show(new ProgressSpinner(), async delegate (object sender, DialogOpenedEventArgs args)
             {
                 await Task.Delay(5000);
                 args.Session.Close(false);

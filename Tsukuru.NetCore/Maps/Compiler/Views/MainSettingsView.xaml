@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="Tsukuru.Maps.Compiler.Views.MapCompilerSettingsView"
+﻿<UserControl x:Class="Tsukuru.Maps.Compiler.Views.MainSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
+             xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
-             xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid>
@@ -15,114 +15,114 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <local:GameInformationView 
+        <local:GameInfoView 
                 Grid.Row="0"
                 Grid.Column="0"/>
 
-    
-            <GroupBox Grid.Row="0"
+
+        <GroupBox Grid.Row="0"
                       Grid.Column="1"
                       Header="Map information">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="4*" />
-                    </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-                    <Label Content="VMF path" 
+                <Label Content="VMF path" 
                            HorizontalAlignment="Right" VerticalAlignment="Center"
                            Grid.Row="0" Grid.Column="0" />
-            
-                    <Grid Grid.Row="0" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                
-                        <TextBox Text="{Binding VMFPath}" 
+
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding VMFPath}" 
                                  Grid.Column="0"
                                  IsReadOnly="True"/>
-                        <Button Command="{Binding SelectVmfFileCommand}"
+                    <Button Command="{Binding SelectVmfFileCommand}"
                                 Grid.Column="1">
-                            <Button.Content>
-                                <materialDesign:PackIcon 
+                        <Button.Content>
+                            <materialDesign:PackIcon 
                                     Height="20"
                                     Width="20" 
                                     Kind="FileFind" />
-                            </Button.Content>
-                        </Button>
-                    </Grid>
+                        </Button.Content>
+                    </Button>
+                </Grid>
 
-                    <Label Content="Map name" 
+                <Label Content="Map name" 
                            HorizontalAlignment="Right" VerticalAlignment="Center"
                            Grid.Row="2" Grid.Column="0" />
-                    <TextBox Text="{Binding MapName}" 
+                <TextBox Text="{Binding MapName}" 
                              Grid.Row="2" Grid.Column="1" />
-                </Grid>
-            </GroupBox>
+            </Grid>
+        </GroupBox>
 
-            <materialDesign:Card Grid.Row="1" 
+        <materialDesign:Card Grid.Row="1" 
                                  Grid.Column="0"
                                  Grid.ColumnSpan="2" VerticalAlignment="Stretch">
-                <dragablz:TabablzControl FixedHeaderCount="99">
+            <dragablz:TabablzControl FixedHeaderCount="99">
                 <TabItem Header="VBSP Settings">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:VbspSettingsView />
+                        <local:BspCompilerSettingsView />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="VVIS Settings">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <local:VvisSettingsView />
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem Header="VRAD Settings">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <local:VradSettingsView />
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem Header="Resource Packing">
-                        <local:ResourcePackingView />
-                    </TabItem>
-                </dragablz:TabablzControl>
-            </materialDesign:Card>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <local:VisCompilerSettingsView />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="VRAD Settings">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <local:RadCompilerSettingsView />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Resource Packing">
+                    <local:ResourcePackingView />
+                </TabItem>
+            </dragablz:TabablzControl>
+        </materialDesign:Card>
 
-            <GroupBox
+        <GroupBox
                 Grid.Row="2" 
                 Grid.Column="0"
                 Background="{DynamicResource MaterialDesignCardBackground}"
                 Header="Before compile tasks">
 
-            </GroupBox>
+        </GroupBox>
 
-            <GroupBox
+        <GroupBox
                 Grid.Row="2" 
                 Grid.Column="1"
                 Background="{DynamicResource MaterialDesignCardBackground}"
                 Header="After compile tasks">
-                <StackPanel>
-                    <CheckBox
+            <StackPanel>
+                <CheckBox
                         IsChecked="{Binding CopyMapToGameMapsFolder}" 
                         Content="Copy compiled map to game maps folder" />
 
-                    <CheckBox 
+                <CheckBox 
                         IsChecked="{Binding LaunchMapInGame}" 
                         Content="Launch compiled map in game" />
 
-                    <CheckBox 
+                <CheckBox 
                         IsChecked="{Binding CompressMapToBZip2}" 
                         Content="Compress compiled map to BZip2 for fast download server" />
 
-                </StackPanel>    
-            </GroupBox>
-        </Grid>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
 </UserControl>

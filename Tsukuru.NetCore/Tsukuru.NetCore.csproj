@@ -104,39 +104,6 @@
     <Page Update="Maps\Compiler\MapDetailsControl.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Maps\Compiler\Views\BspRepackSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\GameInformationView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\MapCompilerSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\ProgressView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\ResourcePackFolderSelectionView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\ResourcePackingView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\TemplatingSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\VbspSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\VProjectNotSetView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\VradSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\Views\VvisSettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="SourcePawn\Views\CompilationFilesControl.xaml">
       <SubType>Designer</SubType>
     </Page>
