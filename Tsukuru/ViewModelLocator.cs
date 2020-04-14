@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommonServiceLocator;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.SourcePawn.ViewModels;
 using Tsukuru.Translator.ViewModels;
