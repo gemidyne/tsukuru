@@ -37,7 +37,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Chiaki, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -146,227 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BrowserHyperlink.cs" />
-    <Compile Include="Converters\InvertedBooleanConverter.cs" />
-    <Compile Include="Converters\WatchButtonTextConverter.cs" />
-    <Compile Include="ILogReceiver.cs" />
-    <Compile Include="Maps\Compiler\BaseCompilationSettings.cs" />
-    <Compile Include="Maps\Compiler\Business\BaseVProjectStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileStepRunner.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\CompressBspToBzip2Step.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\CopyBspToGameStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\LaunchMapInGameStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\PrepareVmfFileStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\ResourcePackingStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\RunVBspStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\RunVRadStep.cs" />
-    <Compile Include="Maps\Compiler\Business\CompileSteps\RunVVisStep.cs" />
-    <Compile Include="Maps\Compiler\Business\ICompileStep.cs" />
-    <Compile Include="Maps\Compiler\Business\MapCompileSessionInfo.cs" />
-    <Compile Include="Maps\Compiler\Business\VProjectHelper.cs" />
-    <Compile Include="Maps\Compiler\MapCompilerResultsView.xaml.cs">
-      <DependentUpon>MapCompilerResultsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\ICompilationSettings.cs" />
-    <Compile Include="Maps\Compiler\MapCompileInitialiser.cs" />
-    <Compile Include="Maps\Compiler\MapCompilerView.xaml.cs">
-      <DependentUpon>MapCompilerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\MapDetailsControl.xaml.cs">
-      <DependentUpon>MapDetailsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\ViewModels\ResourceFolderViewModel.cs" />
-    <Compile Include="Maps\Compiler\ViewModels\ResourcePackingViewModel.cs" />
-    <Compile Include="Maps\Compiler\Views\ResourcePackFolderSelectionView.xaml.cs">
-      <DependentUpon>ResourcePackFolderSelectionView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\GameInformationView.xaml.cs">
-      <DependentUpon>GameInformationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\MapCompilerSettingsView.xaml.cs">
-      <DependentUpon>MapCompilerSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\BspRepackSettingsView.xaml.cs">
-      <DependentUpon>BspRepackSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\TemplatingSettingsView.xaml.cs">
-      <DependentUpon>TemplatingSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\ResourcePackingView.xaml.cs">
-      <DependentUpon>ResourcePackingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\VbspCompilationSettings.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="Maps\Compiler\ViewModels\MapCompilerViewModel.cs" />
-    <Compile Include="Maps\Compiler\ViewModels\MapCompilerResultsViewModel.cs" />
-    <Compile Include="Maps\Compiler\Views\ProgressView.xaml.cs">
-      <DependentUpon>ProgressView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\VbspSettingsView.xaml.cs">
-      <DependentUpon>VbspSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\VProjectNotSetView.xaml.cs">
-      <DependentUpon>VProjectNotSetView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\VradSettingsView.xaml.cs">
-      <DependentUpon>VradSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\Views\VvisSettingsView.xaml.cs">
-      <DependentUpon>VvisSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Maps\Compiler\VMFFileCopier.cs" />
-    <Compile Include="Maps\Compiler\VradCompilationSettings.cs" />
-    <Compile Include="Maps\Compiler\VvisCompilationSettings.cs" />
-    <Compile Include="Maps\Packer\BspPackEngine.cs" />
-    <Compile Include="Maps\Packer\TemplatingEngine.cs" />
-    <Compile Include="Maps\Packer\PackerSessionDetails.cs" />
-    <Compile Include="Settings\MapCompilerSettings.cs" />
-    <Compile Include="Settings\ResourcePackingFolderSetting.cs" />
-    <Compile Include="Settings\ResourcePackingSettings.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\SettingsManifest.cs" />
-    <Compile Include="Settings\SourcePawnCompilerSettings.cs" />
-    <Compile Include="Settings\VbspSettings.cs" />
-    <Compile Include="Settings\VradSettings.cs" />
-    <Compile Include="Settings\VvisSettings.cs" />
-    <Compile Include="SourcePawn\ViewModels\CompilationFileViewModel.cs" />
-    <Compile Include="SourcePawn\CompilationMessage.cs" />
-    <Compile Include="SourcePawn\CompilationMessageHelper.cs" />
-    <Compile Include="SourcePawn\CompilationResult.cs" />
-    <Compile Include="SourcePawn\SourcePawnCompiler.cs" />
-    <Compile Include="Translator\ViewModels\TranslatorExportViewModel.cs" />
-    <Compile Include="Translator\ViewModels\TranslatorImportViewModel.cs" />
-    <Compile Include="Translator\Views\TranslatorExportView.xaml.cs">
-      <DependentUpon>TranslatorExportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Translator\Views\TranslatorImportView.xaml.cs">
-      <DependentUpon>TranslatorImportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\OptionsViewModel.cs" />
-    <Compile Include="SourcePawn\Views\SourcePawnResultsWindow.xaml.cs">
-      <DependentUpon>SourcePawnResultsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SourcePawn\Views\CompilationFilesControl.xaml.cs">
-      <DependentUpon>CompilationFilesControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SourcePawn\Views\SourcePawnCompilerView.xaml.cs">
-      <DependentUpon>SourcePawnCompilerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Steam\GameHelper.cs" />
-    <Compile Include="Steam\SteamHelper.cs" />
-    <Compile Include="UpdateManager.cs" />
-    <Compile Include="Views\OptionsView.xaml.cs">
-      <DependentUpon>OptionsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AboutView.xaml.cs">
-      <DependentUpon>AboutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LogoControl.xaml.cs">
-      <DependentUpon>LogoControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SourcePawn\ViewModels\SourcePawnCompileViewModel.cs" />
-    <Compile Include="SourcePawn\ViewModels\ResultsWindowViewModel.cs" />
-    <Compile Include="ViewModelLocator.cs" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Maps\Compiler\MapCompilerResultsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\MapCompilerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\MapDetailsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\Views\ResourcePackFolderSelectionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\Views\GameInformationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\MapCompilerSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\BspRepackSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\Views\TemplatingSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\Views\ResourcePackingView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Maps\Compiler\Views\ProgressView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\VbspSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\VProjectNotSetView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\VradSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Maps\Compiler\Views\VvisSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SourcePawn\Views\SourcePawnResultsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SourcePawn\Views\CompilationFilesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SourcePawn\Views\SourcePawnCompilerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Translator\Views\TranslatorExportView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Translator\Views\TranslatorImportView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\OptionsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\AboutView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LogoControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -399,33 +183,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\bg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\background.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="app.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Maps\Compiler\ModdedVrad\vrad_dll-optimized.dll" />
-    <EmbeddedResource Include="Maps\Compiler\ModdedVrad\vrad_optimized.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tsukuru.SourceEngineTools\Tsukuru.SourceEngineTools.csproj">
-      <Project>{1be0a902-30e1-4186-ac0e-24fdc09121d4}</Project>
-      <Name>Tsukuru.SourceEngineTools</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tsukuru.Translator\Tsukuru.Translator.csproj">
       <Project>{DC8CD403-C679-4CD2-9BF9-1A1E3C13D4BF}</Project>
       <Name>Tsukuru.Translator</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\gemidyne-logo.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
