@@ -134,8 +134,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="ValveKeyValue, Version=0.2.1.107, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ValveKeyValue.0.2.1.107\lib\netstandard2.0\ValveKeyValue.dll</HintPath>
+    <Reference Include="ValveKeyValue, Version=0.3.0.144, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ValveKeyValue.0.3.0.144\lib\netstandard2.0\ValveKeyValue.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
