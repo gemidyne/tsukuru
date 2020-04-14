@@ -1,13 +1,12 @@
-﻿using System.Globalization;
-using System.IO;
-using Tsukuru.Maps.Compiler.Business;
-using ValveKeyValue;
+﻿using System.IO;
+using SteamKit2;
+using Tsukuru.Core.SourceEngine;
 
 namespace Tsukuru.Steam
 {
     internal static class GameHelper
     {
-        private static KVObject _gameInfoKeyValues;
+        private static KeyValue _gameInfoKeyValues;
 
         public static int? GetAppId()
         {
@@ -18,7 +17,7 @@ namespace Tsukuru.Steam
                 return null;
             }
 
-            int appId = gameInfo["FileSystem"]["SteamAppId"].ToInt32(CultureInfo.InvariantCulture);
+            int appId = gameInfo["FileSystem"]["SteamAppId"].AsInteger();
 
             return appId;
         }
@@ -32,10 +31,10 @@ namespace Tsukuru.Steam
                 return null;
             }
 
-            return $"{gameInfo["game"]} (App ID {GetAppId()})";
+            return $"{gameInfo["game"].Value} (App ID {GetAppId()})";
         }
 
-        private static KVObject TryGetGameInfo()
+        private static KeyValue TryGetGameInfo()
         {
             if (_gameInfoKeyValues != null)
             {
@@ -49,10 +48,7 @@ namespace Tsukuru.Steam
                 return null;
             }
 
-            var serialiser = KVSerializer.Create(KVSerializationFormat.KeyValues1Text);
-
-            using (var stream = file.OpenRead())
-                _gameInfoKeyValues = serialiser.Deserialize(stream, KVSerializerOptions.DefaultOptions);
+            _gameInfoKeyValues = KeyValue.LoadAsText(file.FullName);
 
             return _gameInfoKeyValues;
         }

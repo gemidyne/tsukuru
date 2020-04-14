@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MaterialDesignThemes.Wpf;
 using Ookii.Dialogs.Wpf;
+using Tsukuru.Core.SourceEngine;
 using Tsukuru.Maps.Compiler.Business;
 using Tsukuru.Maps.Compiler.Views;
 using Tsukuru.Settings;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tsukuru.Maps.Compiler.Business
+namespace Tsukuru.Core.SourceEngine
 {
     public static class VProjectHelper
     {
