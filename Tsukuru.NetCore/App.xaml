@@ -14,17 +14,20 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.LightBlue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.checkbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <FontFamily x:Key="AppFont">/Resources/font.ttf#Montserrat</FontFamily>
 
             <tsukuru:ViewModelLocator x:Key="ViewModelLocator" />
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
 
-            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
-                <Setter Property="Foreground" Value="{StaticResource MaterialDesignDarkForeground}" />
+            <Style TargetType="{x:Type Control}">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
             </Style>
 
-            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignCheckBox}">
-                <Setter Property="Foreground" Value="{StaticResource MaterialDesignDarkForeground}" />
+            <Style TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

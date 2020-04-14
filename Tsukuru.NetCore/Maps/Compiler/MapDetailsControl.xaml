@@ -15,7 +15,6 @@
              Foreground="{DynamicResource MaterialDesignBody}"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="570" d:DesignWidth="800" 
              d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid>

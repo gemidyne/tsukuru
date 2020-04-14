@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+            Foreground="{DynamicResource MaterialDesignBody}">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -22,7 +23,6 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Foreground="{DynamicResource MaterialDesignBody}"
                    TextWrapping="WrapWithOverflow">
             VBSP is the command-line tool that compiles a raw VMF file into the Binary Space Partition format. It is followed by VVIS and VRAD.
         </TextBlock>

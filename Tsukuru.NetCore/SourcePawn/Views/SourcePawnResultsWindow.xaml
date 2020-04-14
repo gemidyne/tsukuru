@@ -11,7 +11,7 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        FontFamily="{DynamicResource MaterialDesignFont}"
+        FontFamily="{DynamicResource AppFont}"
         DataContext="{Binding ResultsWindowViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid>
         <dragablz:TabablzControl BorderThickness="0" FixedHeaderCount="9999">

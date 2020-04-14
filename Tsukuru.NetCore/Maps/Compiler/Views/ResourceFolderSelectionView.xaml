@@ -13,7 +13,6 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}"
              DataContext="{Binding ResourcePackingViewModel, Source={StaticResource ViewModelLocator}}">

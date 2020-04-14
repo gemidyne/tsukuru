@@ -9,19 +9,19 @@
         xmlns:sourcePawnViews="clr-namespace:Tsukuru.SourcePawn.Views"
         xmlns:translatorViews="clr-namespace:Tsukuru.Translator.Views"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontFamily="{StaticResource AppFont}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
         MinWidth="1020"
         Icon="app.ico"
         Title="Tsukuru" 
         Height="780" 
         Width="1020"
         ResizeMode="CanMinimize"
-        
+        FontFamily="{StaticResource AppFont}"
         >
 <materialDesign:DialogHost>
     <Grid>
