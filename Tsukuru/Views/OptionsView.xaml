@@ -20,7 +20,7 @@
     <StackPanel Margin="15">
         <TextBlock 
             Margin="0,0,0,10"
-            Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
             Text="Options" />
 
         <GroupBox Header="Update settings">

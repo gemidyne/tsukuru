@@ -33,12 +33,10 @@
                 Margin="0,10">
         <CheckBox IsChecked="{Binding VVISSettings.Fast}" 
                   Content="Fast" 
-                  Style="{StaticResource MaterialDesignDarkCheckBox}"
                   ToolTip="Only do a quick first pass. Using this setting, VVIS will not actually test visibility."/>
 
         <CheckBox IsChecked="{Binding VVISSettings.LowPriority}" 
                   Content="Low Priority" 
-                  Style="{StaticResource MaterialDesignDarkCheckBox}"
                   ToolTip="Runs VVIS as a low-priority process in Windows."/>
     </StackPanel>
 

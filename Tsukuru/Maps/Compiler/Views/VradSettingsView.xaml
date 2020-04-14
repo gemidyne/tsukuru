@@ -33,8 +33,8 @@
                         <StackPanel Grid.Row="1" 
                                     Grid.Column="0"
                                     Margin="0,10">
-                            <CheckBox IsChecked="{Binding VRADSettings.LDR}" Content="LDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
-                            <CheckBox IsChecked="{Binding VRADSettings.HDR}" Content="HDR" Style="{StaticResource MaterialDesignDarkCheckBox}" />
+                            <CheckBox IsChecked="{Binding VRADSettings.LDR}" Content="LDR" />
+                            <CheckBox IsChecked="{Binding VRADSettings.HDR}" Content="HDR" />
                         </StackPanel>
 
                         <StackPanel Grid.Row="1"
@@ -42,16 +42,13 @@
                                     Margin="0,10">
                             <CheckBox IsChecked="{Binding VRADSettings.Fast}" 
                                       Content="Fast" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Quick lighting tests only. If shipping your map, use Final instead of Fast."/>
                             <CheckBox IsChecked="{Binding VRADSettings.Final}" 
                                       Content="Final" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Increases the quality of lighting by spending more time firing rays."/>
 
                             <CheckBox IsChecked="{Binding VRADSettings.LowPriority}" 
                                       Content="Low Priority Compile"
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Runs VRAD as a low-priority process in Windows."/>
                         </StackPanel>
 
@@ -60,22 +57,18 @@
                                     Margin="0,10">
                             <CheckBox IsChecked="{Binding VRADSettings.StaticPropLighting}" 
                                       Content="Static Prop Lighting" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Generate per-vertex prop_static lighting."/>
 
                             <CheckBox IsChecked="{Binding VRADSettings.StaticPropPolys}" 
                                       Content="Static Prop Polys" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}" 
                                       ToolTip="Perform shadow tests of prop_static entities at polygon precision."/>
 
                             <CheckBox IsChecked="{Binding VRADSettings.TextureShadows}"
                                       Content="Texture Shadows" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="Generates lightmap shadows from $translucent surfaces of models (NOT brushes) that are specified in a lights file and being used with prop_static. It is recommended that you also enable Static Prop Polys setting when using Texture Shadows."/>
 
                             <CheckBox IsChecked="{Binding VRADSettings.LargeDispSampleRadius}"
                                       Content="Large Displacement Sample Radius" 
-                                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                                       ToolTip="This can be used if there are splotches of bounced light on terrain. This will cause the VRAD process to take longer, but it will gather light across a wider area."/>
         </StackPanel>
 
@@ -84,8 +77,7 @@
                     Grid.ColumnSpan="3"
                     Margin="0,10">
 
-            <CheckBox IsChecked="{Binding VRADSettings.UseModifiedVrad}"
-                      Style="{StaticResource MaterialDesignDarkCheckBox}">
+            <CheckBox IsChecked="{Binding VRADSettings.UseModifiedVrad}">
                 <CheckBox.Content>
                     Use multi-core optimised VRAD? (TF2 / Source 2013 games only)
                 </CheckBox.Content>

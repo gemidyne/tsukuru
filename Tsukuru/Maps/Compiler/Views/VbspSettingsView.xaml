@@ -30,33 +30,27 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10">
             <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" 
                       Content="Only Entities"
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Only import the entities from the VMF. Brushes and internal entities are not modified. Conserves existing lighting data."/>
 
             <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" 
                       Content="Only Props" 
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Only update static and detail props (i.e. the internal entities). Does not generate a .prt file which will cause VVIS to error."/>
 
             <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" 
                       Content="No Detail Entities" 
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Removes func_detail brushes. The geometry left over is what affects visibility."/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10">
             <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" 
                       Content="No Water Brushes" 
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Removes water brushes." />
 
             <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" 
                       Content="Low Priority Compile" 
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Runs VBSP as a low-priority process in Windows."/>
 
             <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" 
                       Content="Keep Stale Packed Data" 
-                      Style="{StaticResource MaterialDesignDarkCheckBox}"
                       ToolTip="Keep the BSP pakfile intact but recompile everything else."/>
         </StackPanel>
 

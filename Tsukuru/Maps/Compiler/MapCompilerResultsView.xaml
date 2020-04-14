@@ -26,11 +26,11 @@
             Grid.Row="0"
             Margin="0,5">
             <TextBlock
-                Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+                Style="{StaticResource  MaterialDesignHeadline6TextBlock}"
                 Text="{Binding Heading}" />
 
             <TextBlock
-                Style="{StaticResource MaterialDesignSubheadingTextBlock}"
+                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                 Text="{Binding Subtitle}" />
         </StackPanel>
         
