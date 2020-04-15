@@ -24,7 +24,6 @@
                 Grid.Row="0"
                 Grid.Column="0"/>
 
-
         <GroupBox Grid.Row="0"
                       Grid.Column="1"
                       Header="Map information">
@@ -40,33 +39,38 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Text="{Binding VMFPath}" 
-                                 Grid.Column="0"
-                                 IsReadOnly="True"
-                                 materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:HintAssist.Hint="VMF File Path"/>
+                    <StackPanel Grid.Column="0">
+                        <Label>
+                            VMF File Path
+                        </Label>
+
+                        <TextBox Text="{Binding VMFPath}" 
+                                 IsReadOnly="True" />
+                    </StackPanel>
+
+
                     <Button Command="{Binding SelectVmfFileCommand}"
-                                Grid.Column="1">
+                            Grid.Column="1">
                         <Button.Content>
-                            <materialDesign:PackIcon 
-                                    Height="20"
-                                    Width="20" 
-                                    Kind="FileFind" />
+                            Open...
                         </Button.Content>
                     </Button>
                 </Grid>
 
-                <TextBox Text="{Binding MapName}" 
-                         Grid.Row="1"
-                         materialDesign:HintAssist.IsFloating="True"
-                         materialDesign:HintAssist.Hint="Generated map name"/>
+                <StackPanel Grid.Row="1">
+                    <Label>
+                        Generated map name
+                    </Label>
+
+                    <TextBox Text="{Binding MapName}" />
+                </StackPanel>
+
             </Grid>
         </GroupBox>
 
-        <materialDesign:Card Grid.Row="1" 
-                                 Grid.Column="0"
-                                 Grid.ColumnSpan="2" VerticalAlignment="Stretch">
-            <dragablz:TabablzControl FixedHeaderCount="99">
+            <TabControl  Grid.Row="1" 
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2" VerticalAlignment="Stretch">
                 <TabItem Header="VBSP Settings">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <local:BspCompilerSettingsView />
@@ -93,13 +97,11 @@
                          Visibility="{Binding ResourcePackingViewModel.PerformResourcePacking, Source={StaticResource ViewModelLocator}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <local:BspRepackSettingsView />
                 </TabItem>
-            </dragablz:TabablzControl>
-        </materialDesign:Card>
+            </TabControl>
 
         <GroupBox
                 Grid.Row="2" 
                 Grid.Column="0"
-                Background="{DynamicResource MaterialDesignCardBackground}"
                 Header="Before compile tasks">
 
         </GroupBox>
@@ -107,7 +109,6 @@
         <GroupBox
                 Grid.Row="2" 
                 Grid.Column="1"
-                Background="{DynamicResource MaterialDesignCardBackground}"
                 Header="After compile tasks">
             <StackPanel>
                 <CheckBox

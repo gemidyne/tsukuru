@@ -4,14 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:SourcePawnCompileViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,13 +35,11 @@
                         <Button Content="Add file" 
                                 Command="{Binding AddFileCommand}"
                                 FontSize="12"
-                                Height="Auto"
-                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                                Height="Auto"/>
                         <Button Content="Remove file" 
                                 Command="{Binding RemoveFileCommand}"
                                 FontSize="12"
-                                Height="Auto"
-                                Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                                Height="Auto"/>
                     </StackPanel>
                 </Grid>
             </GroupBox.Header>
@@ -65,36 +61,30 @@
                             <Grid Grid.Column="0"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center">
-                                <materialDesign:PackIcon Kind="BlockHelper"
-                                                         Visibility="{Binding IsCompiledWithErrors, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <Grid>
+                                    <Label Visibility="{Binding IsCompiledWithErrors, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled with errors.</Label>
+                                    <Label Visibility="{Binding IsCompiledWithWarnings, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled with warnings.</Label>
+                                    <Label Visibility="{Binding IsSuccessfulCompile, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled successfully.</Label>
+                                    <Label Visibility="{Binding IsUnknownState, Converter={StaticResource BooleanToVisibilityConverter}}">Waiting.</Label>
+                                </Grid>
 
-                                <materialDesign:PackIcon Kind="Alert"
-                                                         Visibility="{Binding IsCompiledWithWarnings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                                <materialDesign:PackIcon Kind="Check"
-                                                         Visibility="{Binding IsSuccessfulCompile, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                                <materialDesign:PackIcon Kind="File"
-                                                         Visibility="{Binding IsUnknownState, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                                <ProgressBar
-                                    Style="{StaticResource MaterialDesignCircularProgressBar}"
-                                    Value="0"
-                                    IsIndeterminate="True"
-                                    Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <ContentControl ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingBars}}"
+                                                Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
+                                                Width="24"
+                                                Height="24"
+                                                Focusable="False" 
+                                                Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </Grid>
                             <TextBlock Text="{Binding File}" 
                                        Margin="5,0,0,0" 
-                                       Style="{StaticResource MaterialDesignBody1TextBlock}"
                                        VerticalAlignment="Center"
                                        Grid.Column="1" />
                             <Button Command="{Binding ShowDetailsCommand}"
                                     HorizontalAlignment="Right" 
                                     Grid.Column="2"
-                                    Style="{StaticResource MaterialDesignRaisedLightButton}"
                                     Visibility="{Binding CanShowDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Button.Content>
-                                    <materialDesign:PackIcon Kind="InformationOutline" />
+                                    Info
                                 </Button.Content>
                             </Button>
                         </Grid>

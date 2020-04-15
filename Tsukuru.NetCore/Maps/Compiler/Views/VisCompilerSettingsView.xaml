@@ -3,12 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}"
-            Foreground="{DynamicResource MaterialDesignBody}">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -24,7 +21,6 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Foreground="{DynamicResource MaterialDesignBody}"
                    TextWrapping="WrapWithOverflow">
             VVIS is the command-line tool that takes a compiled BSP map and embeds visibility data into it. VVIS tests which visleaves can see each other, and which cannot.
         </TextBlock>
@@ -44,19 +40,19 @@
         <Grid Grid.Row="2"
               Grid.Column="0"
               Grid.ColumnSpan="2">
-
-            <TextBox
-                Text="{Binding VVISSettings.OtherArguments}"
-                materialDesign:HintAssist.IsFloating="True"
-                materialDesign:HintAssist.Hint="Other VVIS arguments" />
+            <StackPanel>
+                <Label>Other VVIS arguments</Label>
+                <TextBox Text="{Binding VVISSettings.OtherArguments}" />
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <TextBox 
-                IsReadOnly="True"
-                Text="{Binding VVISSettings.FormattedArguments}"
-                materialDesign:HintAssist.IsFloating="True"
-                materialDesign:HintAssist.Hint="Formatted arguments"/>
+            <StackPanel>
+                <Label>Formatted arguments</Label>
+                <TextBox 
+                    IsReadOnly="True"
+                    Text="{Binding VVISSettings.FormattedArguments}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

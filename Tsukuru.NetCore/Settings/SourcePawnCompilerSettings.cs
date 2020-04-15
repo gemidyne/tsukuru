@@ -12,5 +12,8 @@ namespace Tsukuru.Settings
 
         [JsonProperty("versioning")]
         public bool Versioning { get; set; }
+
+        [JsonProperty("copyToClipboard")]
+        public bool CopySmxOnSuccess { get; set; }
     }
 }

@@ -14,7 +14,7 @@
         FontFamily="{DynamicResource AppFont}"
         DataContext="{Binding ResultsWindowViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid>
-        <dragablz:TabablzControl BorderThickness="0" FixedHeaderCount="9999">
+        <TabControl>
             <TabItem Header="{Binding ErrorsHeader, FallbackValue=Errors}">
                 <DataGrid ItemsSource="{Binding Errors}" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
@@ -42,6 +42,6 @@
                          Text="{Binding RawOutput, Mode=OneTime}" 
                          IsReadOnly="True" />
             </TabItem>
-        </dragablz:TabablzControl>
+        </TabControl>
     </Grid>
 </Window>

@@ -77,9 +77,10 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private void CloseResults()
         {
-            _mainWindowViewModel.DisplayMapCompilerResultsView = false;
-            _mainWindowViewModel.DisplayMapCompilerView = true;
-            _mainWindowViewModel.DisplaySourcePawnCompilerView = true;
+#warning TODO AMEND THIS
+            //_mainWindowViewModel.DisplayMapCompilerResultsView = false;
+            //_mainWindowViewModel.DisplayMapCompilerView = true;
+            //_mainWindowViewModel.DisplaySourcePawnCompilerView = true;
 
         }
 

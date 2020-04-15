@@ -3,24 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tsukuru.Views"
-             xmlns:tsukuru="clr-namespace:Tsukuru"
              xmlns:viewModels="clr-namespace:Tsukuru.ViewModels"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=viewModels:OptionsViewModel}"
              DataContext="{Binding OptionsViewModel, Source={StaticResource ViewModelLocator}}">
     <StackPanel Margin="15">
         <TextBlock 
             Margin="0,0,0,10"
-            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+            FontSize="18"
             Text="Options" />
 
         <GroupBox Header="Update settings">

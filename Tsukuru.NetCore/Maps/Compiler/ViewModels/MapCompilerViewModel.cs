@@ -4,11 +4,8 @@ using System.Media;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using MaterialDesignThemes.Wpf;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Core.SourceEngine;
-using Tsukuru.Maps.Compiler.Business;
-using Tsukuru.Maps.Compiler.Views;
 using Tsukuru.Settings;
 using Tsukuru.Steam;
 
@@ -154,11 +151,12 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         {
             SteamHelper.LaunchAppWithMap(MapName);
 
-            await DialogHost.Show(new ProgressSpinner(), async delegate (object sender, DialogOpenedEventArgs args)
-            {
-                await Task.Delay(5000);
-                args.Session.Close(false);
-            });
+#warning  TODO Update to use something else
+            //await DialogHost.Show(new ProgressSpinner(), async delegate (object sender, DialogOpenedEventArgs args)
+            //{
+            //    await Task.Delay(5000);
+            //    args.Session.Close(false);
+            //});
         }
 
         private void SelectVmfFile()

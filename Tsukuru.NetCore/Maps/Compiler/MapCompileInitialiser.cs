@@ -15,9 +15,10 @@ namespace Tsukuru.Maps.Compiler
 
             logView.Initialise(mapCompilerViewModel.MapName);
 
-            mainWindow.DisplayMapCompilerResultsView = true;
-            mainWindow.DisplayMapCompilerView = false;
-            mainWindow.DisplaySourcePawnCompilerView = false;
+#warning TODO amend this
+            //mainWindow.DisplayMapCompilerResultsView = true;
+            //mainWindow.DisplayMapCompilerView = false;
+            //mainWindow.DisplaySourcePawnCompilerView = false;
 
             MapCompileSessionInfo.Clear();
             MapCompileSessionInfo.Instance.MapName = mapCompilerViewModel.MapName;
@@ -51,9 +52,10 @@ namespace Tsukuru.Maps.Compiler
 
             stepRunner.Run();
 
-            mainWindow.DisplayMapCompilerResultsView = true;
-            mainWindow.DisplayMapCompilerView = true;
-            mainWindow.DisplaySourcePawnCompilerView = true;
+#warning TODO amend this
+            //mainWindow.DisplayMapCompilerResultsView = true;
+            //mainWindow.DisplayMapCompilerView = true;
+            //mainWindow.DisplaySourcePawnCompilerView = true;
 
             return true;
         }

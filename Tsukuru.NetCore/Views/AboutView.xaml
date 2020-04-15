@@ -6,34 +6,29 @@
              xmlns:local="clr-namespace:Tsukuru.Views"
              xmlns:tsukuru="clr-namespace:Tsukuru"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Margin="15">
         <TextBlock 
             Margin="0,0,0,10"
-            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+            FontSize="18"
             Text="About this app" />
 
         <TextBlock 
             Margin="0,10"
-            Style="{StaticResource MaterialDesignBody1TextBlock}"
             Text="This app can be used to compile plugins for SourceMod and compile maps for Valve's Source Engine. It has been designed to be easy to use and not hinder your development flow."
             TextWrapping="WrapWithOverflow" />
 
         <TextBlock 
-            Style="{StaticResource MaterialDesignBody1TextBlock}"
             Text="Tsukuru is an project brought to you by Gemidyne Softworks. It is open-source software, and the source code is available on GitHub."
             TextWrapping="WrapWithOverflow" />
 
         <TextBlock 
             Margin="0,50,0,10"
-            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+            FontSize="16"
             Text="Authors" />
 
         <Image             
@@ -43,18 +38,15 @@
             Height="49" />
 
         <Label 
-            Margin="0,0,0,50"
-            Style="{StaticResource MaterialDesignLabel}">
+            Margin="0,0,0,50">
             <tsukuru:BrowserHyperlink NavigateUri="https://www.gemidyne.com">https://www.gemidyne.com/</tsukuru:BrowserHyperlink>
         </Label>
 
         <TextBlock 
-            Style="{StaticResource MaterialDesignBody1TextBlock}"
             Text="Tsukuru reuses portions of code from the following repositories. Credit to the authors/contributors of these repositories." />
 
         <StackPanel>
-            <Label 
-                Style="{StaticResource MaterialDesignLabel}">
+            <Label>
                 <tsukuru:BrowserHyperlink NavigateUri="https://github.com/K0bin/sourceloader">sourceloader, by K0bin</tsukuru:BrowserHyperlink>
             </Label>
         </StackPanel>

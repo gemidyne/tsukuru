@@ -3,13 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
              xmlns:tsukuru="clr-namespace:Tsukuru"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}"
-            Foreground="{DynamicResource MaterialDesignBody}">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -25,11 +22,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
-                                   Grid.Column="0"
-                                   Grid.ColumnSpan="3"
-                                   Foreground="{DynamicResource MaterialDesignBody}"
-                                   TextWrapping="WrapWithOverflow">
-                            VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   TextWrapping="WrapWithOverflow">
+            VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.
         </TextBlock>
 
         <StackPanel Grid.Row="1" 
@@ -85,8 +81,7 @@
                 </CheckBox.Content>
             </CheckBox>
 
-            <TextBlock Foreground="{DynamicResource MaterialDesignBody}"
-                       Margin="23,0,0,0"
+            <TextBlock Margin="23,0,0,0"
                        TextWrapping="WrapWithOverflow">
                 Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines.
                 For more information, see the following GitHub pull request:
@@ -98,19 +93,23 @@
         </StackPanel>
 
         <Grid Grid.Row="3" 
-                              Grid.Column="0"
-                              Grid.ColumnSpan="3"
-                              VerticalAlignment="Bottom">
-            <TextBox Text="{Binding VRADSettings.OtherArguments}"
-                                     materialDesign:HintAssist.IsFloating="True"
-                                     materialDesign:HintAssist.Hint="Other VRAD arguments"/>
+              Grid.Column="0"
+              Grid.ColumnSpan="3"
+              VerticalAlignment="Bottom">
+            <StackPanel>
+                <Label>Other VRAD arguments</Label>
+                <TextBox Text="{Binding VRADSettings.OtherArguments}"/>
+            </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
-            <TextBox Text="{Binding VRADSettings.FormattedArguments}"
-                                     IsReadOnly="True"
-                                     materialDesign:HintAssist.IsFloating="True"
-                                     materialDesign:HintAssist.Hint="Formatted arguments"/>
+        <Grid Grid.Row="4" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="3">
+            <StackPanel>
+                <Label>Formatted arguments</Label>
+                <TextBox Text="{Binding VRADSettings.FormattedArguments}"
+                         IsReadOnly="True"/>
+            </StackPanel>
         </Grid>
 
 

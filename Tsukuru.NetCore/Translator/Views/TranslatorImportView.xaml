@@ -3,12 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:Tsukuru.Translator.ViewModels"
-             xmlns:views="clr-namespace:Tsukuru.SourcePawn.Views"
              xmlns:converters="clr-namespace:Tsukuru.Converters"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
@@ -35,20 +32,18 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" 
-                         materialDesign:HintAssist.IsFloating="True"
-                         materialDesign:HintAssist.Hint="SourceMod root translation file (xxx.phrases.txt)"
-                         IsReadOnly="True"
-                         Text="{Binding SelectedFile}"
-                         VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0">
+                    <Label>SourceMod root translation file (xxx.phrases.txt)</Label>
+                    <TextBox 
+                        IsReadOnly="True"
+                        Text="{Binding SelectedFile}"
+                        VerticalAlignment="Center"/>
+                </StackPanel>
 
                 <Button Grid.Column="1" 
                         Command="{Binding BrowseFileCommand}">
                     <Button.Content>
-                        <materialDesign:PackIcon  
-                            Height="20"
-                            Width="20" 
-                            Kind="FileFind" />
+                        Open...
                     </Button.Content>
                 </Button>
             </Grid>
@@ -59,7 +54,6 @@
                     Orientation="Horizontal">
             <Button
                 Command="{Binding ImportCommand}" 
-                Style="{StaticResource MaterialDesignRaisedButton}"
                 Content="Import"
                 Margin="5,0,0,0"
                 Width="124"/>

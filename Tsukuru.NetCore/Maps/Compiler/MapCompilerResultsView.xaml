@@ -5,15 +5,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     mc:Ignorable="d" 
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Auto"
-        d:DesignWidth="600"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
-        DataContext="{Binding MapCompilerResultsViewModel, Source={StaticResource ViewModelLocator}}">
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    d:DesignWidth="600"
+    DataContext="{Binding MapCompilerResultsViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,11 +23,11 @@
             Grid.Row="0"
             Margin="0,5">
             <TextBlock
-                Style="{StaticResource  MaterialDesignHeadline6TextBlock}"
+                FontSize="16"
                 Text="{Binding Heading}" />
 
             <TextBlock
-                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                FontSize="12"
                 Text="{Binding Subtitle}" />
         </StackPanel>
         
@@ -42,20 +39,18 @@
                      Maximum="{Binding ProgressMaximum}"
                      Grid.Row="1" />
 
-        <materialDesign:Card Grid.Row="2"
-                             VerticalAlignment="Stretch">
-            <TextBox 
-                FontFamily="Consolas"
-                Text="{Binding ConsoleText, Mode=OneWay}" 
-                IsReadOnly="True"
-                HorizontalScrollBarVisibility="Visible" 
-                VerticalAlignment="Stretch"
-                VerticalContentAlignment="Stretch"
-                VerticalScrollBarVisibility="Visible"
-                TextChanged="tbConsole_TextChanged" 
-                Height="Auto"
-            />
-        </materialDesign:Card>
+        <TextBox 
+            Grid.Row="2"
+            FontFamily="Consolas"
+            Text="{Binding ConsoleText, Mode=OneWay}" 
+            IsReadOnly="True"
+            HorizontalScrollBarVisibility="Visible" 
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            VerticalScrollBarVisibility="Visible"
+            TextChanged="tbConsole_TextChanged" 
+            Height="Auto"
+        />
 
         <Grid Grid.Row="3"
               Margin="0,2,0,0">

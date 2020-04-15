@@ -3,7 +3,7 @@ using Tsukuru.Settings;
 
 namespace Tsukuru.ViewModels
 {
-    public class OptionsViewModel : ViewModelBase
+    public class OptionsViewModel : ViewModelBase, IApplicationContentView
     {
         private bool _checkForUpdatesOnStartup;
 
@@ -22,6 +22,16 @@ namespace Tsukuru.ViewModels
         public OptionsViewModel()
         {
             CheckForUpdatesOnStartup = SettingsManager.Manifest.CheckForUpdatesOnStartup;
+        }
+
+        public string Name => "Settings";
+
+        public EShellNavigationPage Group => EShellNavigationPage.Settings;
+
+        public bool IsLoading { get; set; }
+
+        public void Init()
+        {
         }
     }
 }

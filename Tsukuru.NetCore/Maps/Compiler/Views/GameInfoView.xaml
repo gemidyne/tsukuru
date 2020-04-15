@@ -14,17 +14,20 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding VProject, Mode=OneWay}"
-                     IsReadOnly="True"
-                     materialDesign:HintAssist.IsFloating="True"
-                     materialDesign:HintAssist.Hint="VProject Path"
-                     Grid.Row="0"/>
+            <StackPanel Grid.Row="0">
+                <Label>VProject Path</Label>
 
-            <TextBox Text="{Binding GameInfo, Mode=OneWay}"
-                     IsReadOnly="True"
-                     materialDesign:HintAssist.IsFloating="True"
-                     materialDesign:HintAssist.Hint="Game information"
-                     Grid.Row="1"/>
+                <TextBox Text="{Binding VProject, Mode=OneWay}"
+                         IsReadOnly="True" />
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1">
+                <Label>Game information</Label>
+                <TextBox Text="{Binding GameInfo, Mode=OneWay}"
+                         IsReadOnly="True" />
+            </StackPanel>
+
+            
         </Grid>
     </GroupBox>
 </UserControl>

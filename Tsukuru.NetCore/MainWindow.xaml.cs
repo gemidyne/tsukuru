@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
+using AdonisUI.Controls;
 using Tsukuru.Settings;
-using Tsukuru.SourcePawn.ViewModels;
 
 namespace Tsukuru
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : AdonisWindow
     {
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new SourcePawnCompileViewModel();
-
             Title = $"Tsukuru - v{UpdateManager.Instance.AppVersion}";
 
             if (SettingsManager.Manifest.CheckForUpdatesOnStartup)
@@ -35,9 +32,9 @@ namespace Tsukuru
 
                 var prompt =
                     MessageBox.Show(
-                        messageBoxText: "An update for Tsukuru is available for download. Do you want to open the update page?",
+                        text: "An update for Tsukuru is available for download. Do you want to open the update page?",
                         caption: "Update Available",
-                        button: MessageBoxButton.YesNo,
+                        buttons: MessageBoxButton.YesNo,
                         icon: MessageBoxImage.Information);
 
                 if (prompt == MessageBoxResult.Yes)

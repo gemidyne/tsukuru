@@ -9,61 +9,23 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
-    public class SourcePawnCompileViewModel : ViewModelBase
+    public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
     {
-        private bool _executePostBuildScripts;
-        private bool _incrementVersion;
         private bool _areCommandButtonsEnabled = true;
 
         private int _progressBarValue;
         private int _progressBarMaximum = 100;
-        private string _sourcePawnCompiler;
         private ObservableCollection<CompilationFileViewModel> _filesToCompile;
         private CompilationFileViewModel _selectedFile;
-        private bool _copySmxToClipboardOnCompile;
         private FileSystemWatcher watcher;
         private bool _isWatchingOrBuilding;
-
-        public string SourcePawnCompiler
-        {
-            get => _sourcePawnCompiler;
-            set
-            {
-                Set(() => SourcePawnCompiler, ref _sourcePawnCompiler, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.CompilerPath = value;
-                SettingsManager.Save();
-            }
-        }
+        private bool _isLoading;
 
         public ObservableCollection<CompilationFileViewModel> FilesToCompile => _filesToCompile ?? (_filesToCompile = new ObservableCollection<CompilationFileViewModel>());
-
-        public bool ExecutePostBuildScripts
-        {
-            get => _executePostBuildScripts;
-            set
-            {
-                Set(() => ExecutePostBuildScripts, ref _executePostBuildScripts, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts = value;
-                SettingsManager.Save();
-            }
-        }
-
-        public bool IncrementVersion
-        {
-            get => _incrementVersion;
-            set
-            {
-                Set(() => IncrementVersion, ref _incrementVersion, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.Versioning = value;
-                SettingsManager.Save();
-            }
-        }
 
         public bool AreCommandButtonsEnabled
         {
@@ -131,11 +93,7 @@ namespace Tsukuru.SourcePawn.ViewModels
             set { Set(() => SelectedFile, ref _selectedFile, value); }
         }
 
-        public bool CopySmxToClipboardOnCompile
-        {
-            get => _copySmxToClipboardOnCompile;
-            set => Set(() => CopySmxToClipboardOnCompile, ref _copySmxToClipboardOnCompile, value);
-        }
+
 
         public bool IsWatchingOrBuilding
         {
@@ -150,20 +108,24 @@ namespace Tsukuru.SourcePawn.ViewModels
         public bool CanClickWatchButton => !IsWatchingOrBuilding;
 
         public RelayCommand AddFileCommand { get; private set; }
-        public RelayCommand BrowseCompilerCommand { get; private set; }
         public RelayCommand BuildCommand { get; private set; }
         public RelayCommand RemoveFileCommand { get; private set; }
 
         public RelayCommand WatchCommand { get; }
 
+        public string Name => "Compile plugins";
+
+        public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
         public SourcePawnCompileViewModel()
         {
-            SourcePawnCompiler = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
-            ExecutePostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
-            IncrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
-
             AddFileCommand = new RelayCommand(AddFile);
-            BrowseCompilerCommand = new RelayCommand(BrowseCompiler);
             RemoveFileCommand = new RelayCommand(RemoveFile);
             BuildCommand = new RelayCommand(Build);
             WatchCommand = new RelayCommand(Watch);
@@ -181,7 +143,7 @@ namespace Tsukuru.SourcePawn.ViewModels
 
             AreCommandButtonsEnabled = true;
 
-            if (CopySmxToClipboardOnCompile && FilesToCompile.All(x => x.IsSuccessfulCompile || x.IsCompiledWithWarnings))
+            if (SettingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess && FilesToCompile.All(x => x.IsSuccessfulCompile || x.IsCompiledWithWarnings))
             {
                 var files = FilesToCompile
                     .Where(f => f != null && !string.IsNullOrWhiteSpace(f.File))
@@ -242,25 +204,7 @@ namespace Tsukuru.SourcePawn.ViewModels
             AreCommandButtonsEnabled = true;
         }
 
-        private void BrowseCompiler()
-        {
-            var dialog = new VistaOpenFileDialog
-            {
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Multiselect = false,
-                Filter = "SourcePawn Compiler|*.exe",
-                InitialDirectory = System.IO.Directory.GetCurrentDirectory(),
-                Title = "Choose a SourcePawn Compiler."
-            };
 
-            if (!dialog.ShowDialog().GetValueOrDefault())
-            {
-                return;
-            }
-
-            SourcePawnCompiler = dialog.FileName;
-        }
 
         private void AddFile()
         {
@@ -283,21 +227,16 @@ namespace Tsukuru.SourcePawn.ViewModels
             {
                 FilesToCompile.Add(new CompilationFileViewModel { File = dialog.FileName });
             }
-
-            if (FilesToCompile.Count > 1)
-            {
-                CopySmxToClipboardOnCompile = false;
-            }
         }
 
         private void RemoveFile()
         {
             FilesToCompile.Remove(SelectedFile);
+        }
 
-            if (FilesToCompile.Count > 1)
-            {
-                CopySmxToClipboardOnCompile = false;
-            }
+
+        public void Init()
+        {
         }
     }
 }

@@ -3,12 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
-             xmlns:converters="clr-namespace:Tsukuru.Converters"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
@@ -16,10 +12,6 @@
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}"
              DataContext="{Binding ResourcePackingViewModel, Source={StaticResource ViewModelLocator}}">
-    <UserControl.Resources>
-        <converters:InvertedBooleanConverter x:Key="InvertedBooleanConverter" />
-    </UserControl.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,8 +24,7 @@
             <Button Content="Add folder" 
                         Command="{Binding AddFolderCommand}"
                         FontSize="12"
-                        Height="Auto"
-                        Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                        Height="Auto"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
@@ -52,8 +43,10 @@
                                 Grid.Column="0">
                                 <TextBlock
                                     FontWeight="Bold"
+                                    Foreground="White"
                                     Text="{Binding File}" />
                                 <TextBlock
+                                    Foreground="White"
                                     Text="{Binding Folder}" />
                             </StackPanel>
 
@@ -67,10 +60,7 @@
                             <Button Grid.Column="2" 
                                     Command="{Binding RemoveFolderCommand}">
                                 <Button.Content>
-                                    <materialDesign:PackIcon  
-                                        Height="20"
-                                        Width="20" 
-                                        Kind="DeleteForever" />
+                                    Delete
                                 </Button.Content>
                             </Button>
                         </Grid>

@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
@@ -14,8 +13,7 @@
              d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}"
              DataContext="{Binding ResourcePackingViewModel, Source={StaticResource ViewModelLocator}}">
     <StackPanel Margin="10">
-        <TextBlock Foreground="{DynamicResource MaterialDesignBody}"
-                   Margin="0,0,0,10"
+        <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">
             Repacking your map can significantly decrease the file size. This will compress data within the map.
         </TextBlock>

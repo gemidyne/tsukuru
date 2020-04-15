@@ -6,13 +6,14 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows;
+using Tsukuru.Settings;
 using Tsukuru.SourcePawn.ViewModels;
 
 namespace Tsukuru.SourcePawn
 {
-	public class SourcePawnCompiler
-	{
-		private static readonly object _door = new object();
+    public class SourcePawnCompiler
+    {
+        private static readonly object _door = new object();
 
         public void CompileBatch(SourcePawnCompileViewModel viewModel)
         {
@@ -34,100 +35,103 @@ namespace Tsukuru.SourcePawn
 
             if (viewModel.FilesToCompile.Any(f => f.IsCompiledWithErrors || f.IsCompiledWithWarnings))
             {
-	            SystemSounds.Exclamation.Play();
+                SystemSounds.Exclamation.Play();
             }
             else
             {
-	            SystemSounds.Asterisk.Play();
+                SystemSounds.Asterisk.Play();
             }
         }
 
         public void Compile(SourcePawnCompileViewModel vm, CompilationFileViewModel compilationFileViewModel)
         {
-	        lock (_door)
-	        {
-		        string file = compilationFileViewModel.File;
-		        compilationFileViewModel.Messages.Clear();
+            lock (_door)
+            {
+                string file = compilationFileViewModel.File;
+                compilationFileViewModel.Messages.Clear();
 
-		        string rewrittenFilePath;
+                string rewrittenFilePath;
 
-		        if (vm.IncrementVersion)
-		        {
-			        Version ver;
+                bool incrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
+                bool runPostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
 
-			        GetAndIncrementVersionFile(Path.GetDirectoryName(compilationFileViewModel.File),
-				        vm.IncrementVersion, out ver);
+                if (incrementVersion)
+                {
+                    Version ver;
 
-			        rewrittenFilePath = RewriteSourceFile(compilationFileViewModel.File, ver);
-		        }
-		        else
-		        {
-			        rewrittenFilePath = file;
-		        }
+                    GetAndIncrementVersionFile(Path.GetDirectoryName(compilationFileViewModel.File),
+                        incrementVersion, out ver);
+
+                    rewrittenFilePath = RewriteSourceFile(compilationFileViewModel.File, ver);
+                }
+                else
+                {
+                    rewrittenFilePath = file;
+                }
 
 
-		        try
-		        {
-			        using (var compiler = new Process())
-			        {
-				        compiler.StartInfo.FileName = vm.SourcePawnCompiler;
-				        compiler.StartInfo.Arguments = string.Format(
-					        "{0} -o=\"{1}\"",
-					        rewrittenFilePath,
-					        Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file)));
+                try
+                {
+                    using (var compiler = new Process())
+                    {
+                        compiler.StartInfo.FileName = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
+                        compiler.StartInfo.Arguments = string.Format(
+                            "{0} -o=\"{1}\"",
+                            rewrittenFilePath,
+                            Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file)));
 
-				        compiler.StartInfo.UseShellExecute = false;
-				        compiler.StartInfo.RedirectStandardOutput = true;
-				        compiler.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-				        compiler.StartInfo.CreateNoWindow = true;
-				        compiler.EnableRaisingEvents = true;
-				        compiler.Start();
+                        compiler.StartInfo.UseShellExecute = false;
+                        compiler.StartInfo.RedirectStandardOutput = true;
+                        compiler.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        compiler.StartInfo.CreateNoWindow = true;
+                        compiler.EnableRaisingEvents = true;
+                        compiler.Start();
 
-				        string output = compiler.StandardOutput.ReadToEnd();
+                        string output = compiler.StandardOutput.ReadToEnd();
 
-				        if (vm.IncrementVersion && File.Exists(rewrittenFilePath))
-				        {
-					        File.Delete(rewrittenFilePath);
-				        }
+                        if (incrementVersion && File.Exists(rewrittenFilePath))
+                        {
+                            File.Delete(rewrittenFilePath);
+                        }
 
-				        if (!string.IsNullOrWhiteSpace(output))
-				        {
-					        foreach (CompilationMessage message in GetCompilationMessagesFromOutput(output.Split('\n')))
-					        {
-						        compilationFileViewModel.Messages.Add(message);
-					        }
-				        }
+                        if (!string.IsNullOrWhiteSpace(output))
+                        {
+                            foreach (CompilationMessage message in GetCompilationMessagesFromOutput(output.Split('\n')))
+                            {
+                                compilationFileViewModel.Messages.Add(message);
+                            }
+                        }
 
-				        UpdateCompilationDataStatus(compilationFileViewModel);
+                        UpdateCompilationDataStatus(compilationFileViewModel);
 
-				        if (!compilationFileViewModel.Messages.Any(m =>
-					            CompilationMessageHelper.IsLineError(m.Prefix)) && vm.ExecutePostBuildScripts)
-				        {
-					        RunPostBuildScript(Path.GetDirectoryName(file));
-				        }
-			        }
-		        }
-		        catch (Exception ex)
-		        {
-			        MessageBox.Show(ex.ToString());
-		        }
-	        }
+                        if (!compilationFileViewModel.Messages.Any(m =>
+                                CompilationMessageHelper.IsLineError(m.Prefix)) && runPostBuildScripts)
+                        {
+                            RunPostBuildScript(Path.GetDirectoryName(file));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
         }
 
         private static void RunPostBuildScript(string workingDirectory)
         {
             string postBuildFile = Path.Combine(workingDirectory, "post_build.cmd");
 
-	        if (!File.Exists(postBuildFile))
-	        {
-		        return;
-	        }
+            if (!File.Exists(postBuildFile))
+            {
+                return;
+            }
 
-	        var process = Process.Start(new ProcessStartInfo(postBuildFile)
-	        {
-		        WorkingDirectory = workingDirectory,
-		        CreateNoWindow = true
-	        });
+            var process = Process.Start(new ProcessStartInfo(postBuildFile)
+            {
+                WorkingDirectory = workingDirectory,
+                CreateNoWindow = true
+            });
 
             process?.WaitForExit();
         }
@@ -261,7 +265,7 @@ namespace Tsukuru.SourcePawn
                 fileViewModel.IsCompiledWithErrors = false;
                 fileViewModel.CanShowDetails = true;
             }
-            else 
+            else
             {
                 fileViewModel.Result = CompilationResult.Completed;
                 fileViewModel.IsBusy = false;
