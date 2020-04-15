@@ -5,20 +5,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PostCompileActionsViewModel}">
     <StackPanel Margin="32">
-        <CheckBox
-            IsChecked="{Binding CopyMapToGameMapsFolder}" 
-            Content="Copy compiled map to game maps folder" />
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox
+                IsChecked="{Binding CopyMapToGameMapsFolder}" 
+                Content="Copy compiled BSP to VPROJECT maps folder?" />
 
-        <CheckBox 
-            IsChecked="{Binding LaunchMapInGame}" 
-            Content="Launch compiled map in game" />
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0">
+                If selected, the compiled BSP file will be copied to your game's maps folder.
+            </TextBlock>
+        </StackPanel>
 
-        <CheckBox 
-            IsChecked="{Binding CompressMapToBZip2}" 
-            Content="Compress compiled map to BZip2 for fast download server" />
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox 
+                IsChecked="{Binding LaunchMapInGame}" 
+                Content="Load compiled BSP in game" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0">
+                If selected, Tsukuru will launch the game and load your compiled map immediately.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox 
+                IsChecked="{Binding CompressMapToBZip2}" 
+                Content="Compress compiled BSP to BZip2" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+                       TextWrapping="WrapWithOverflow">
+                If selected, Tsukuru will also compress the BSP file into the BZip2 format. This is useful for serving to players via a fast download mirror. Note, that if you use the Repack feature you may not see much of a difference in terms of file size.
+            </TextBlock>
+        </StackPanel>
+
+
 
     </StackPanel>
 </UserControl>

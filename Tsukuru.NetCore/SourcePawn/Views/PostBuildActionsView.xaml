@@ -9,14 +9,36 @@
              d:DesignHeight="450" d:DesignWidth="800" 
              d:DataContext="{d:DesignInstance viewModels:PostBuildActionsViewModel}">
     <StackPanel Margin="32" Orientation="Vertical">
-        <CheckBox Content="Execute post__build.cmd?" 
-                  IsChecked="{Binding ExecutePostBuildScripts}"
-                  Margin="{adonisUi:Space 2}" />
-        <CheckBox Content="Increment version file?" 
-                  IsChecked="{Binding IncrementVersion}" 
-                  Margin="{adonisUi:Space 2}" />
-        <CheckBox Content="Copy smx file to clipboard on successful compile" 
-                  IsChecked="{Binding CopySmxToClipboardOnCompile}" 
-                  Margin="{adonisUi:Space 2}" />
+
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox Content="Execute post__build.cmd?" 
+                      IsChecked="{Binding ExecutePostBuildScripts}" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+                       TextWrapping="WrapWithOverflow">
+                If selected and a post_build.cmd file exists in the same folder as the SourcePawn file, it will be executed after the file is compiled.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox Content="Increment version file?" 
+                      IsChecked="{Binding IncrementVersion}" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+                       TextWrapping="WrapWithOverflow">
+                If selected, a version file will be created and incremented after every compile.
+            </TextBlock>
+        </StackPanel>
+
+
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox Content="Copy smx file to clipboard on successful compile" 
+                      IsChecked="{Binding CopySmxToClipboardOnCompile}" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+                       TextWrapping="WrapWithOverflow">
+                If selected, the compiled plugin SMX files will be copied to your clipboard.
+            </TextBlock>
+        </StackPanel>
     </StackPanel>
 </UserControl>
