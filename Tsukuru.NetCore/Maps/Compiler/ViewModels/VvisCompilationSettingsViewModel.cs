@@ -1,12 +1,14 @@
 ﻿using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler
+namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class VvisCompilationSettings : BaseCompilationSettings
+    public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplicationContentView
     {
         private bool _fast;
         private bool _lowPriority;
         private string _otherArguments;
+        private bool _isLoading;
 
         public bool Fast
         {
@@ -17,7 +19,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -30,7 +36,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -43,11 +53,25 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
-        public VvisCompilationSettings()
+        public string Name => "VVIS Settings";
+
+        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
+        public void Init()
         {
             Fast = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast;
             LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
@@ -61,5 +85,6 @@ namespace Tsukuru.Maps.Compiler
                 ConditionalArg(() => LowPriority, "-low") +
                 OtherArguments;
         }
+
     }
 }

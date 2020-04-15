@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
+using GalaSoft.MvvmLight;
 
 namespace Tsukuru.Maps.Compiler
 {
-    public abstract class BaseCompilationSettings : ObservableObject, ICompilationSettings
+    public abstract class BaseCompilationSettings : ViewModelBase, ICompilationSettings
     {
         private string _formattedArguments;
 

@@ -2,7 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Tsukuru"
                     xmlns:sourcePawnViewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
-                    xmlns:sourcePawnViews="clr-namespace:Tsukuru.SourcePawn.Views">
+                    xmlns:sourcePawnViews="clr-namespace:Tsukuru.SourcePawn.Views"
+                    xmlns:compiler="clr-namespace:Tsukuru.Maps.Compiler"
+                    xmlns:views="clr-namespace:Tsukuru.Maps.Compiler.Views"
+                    xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels">
     <DataTemplate DataType="{x:Type sourcePawnViewModels:SourcePawnCompileViewModel}">
         <sourcePawnViews:SourcePawnCompilerView />
     </DataTemplate>
@@ -14,4 +17,30 @@
     <DataTemplate DataType="{x:Type sourcePawnViewModels:PostBuildActionsViewModel}">
         <sourcePawnViews:PostBuildActionsView />
     </DataTemplate>
+
+    <!-- Map Compiler -->
+    <DataTemplate DataType="{x:Type viewModels:VbspCompilationSettingsViewModel}">
+        <views:BspCompilerSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:VvisCompilationSettingsViewModel}">
+        <views:VisCompilerSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:VradCompilationSettingsViewModel}">
+        <views:RadCompilerSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:BspRepackViewModel}">
+        <views:BspRepackSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:TemplatingSettingsViewModel}">
+        <views:TemplatingSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:ResourcePackingViewModel}">
+        <views:ResourcePackingView />
+    </DataTemplate>
+
 </ResourceDictionary>

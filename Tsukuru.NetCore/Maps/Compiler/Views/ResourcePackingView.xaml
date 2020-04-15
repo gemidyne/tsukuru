@@ -13,10 +13,9 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="250" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}"
-             DataContext="{Binding ResourcePackingViewModel, Source={StaticResource ViewModelLocator}}">
+             d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}">
 
-    <Grid Margin="10">
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -29,6 +28,59 @@
                 Content="Enable Resource Packing?" />
         </StackPanel>
 
-        <local:ResourceFolderSelectionView  Grid.Row="1" />
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" 
+                        HorizontalAlignment="Right" 
+                        Orientation="Horizontal">
+                <Button Content="Add folder" 
+                        Command="{Binding AddFolderCommand}"
+                        FontSize="12"
+                        Height="Auto"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding FoldersToPack}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel
+                                Margin="8 0 0 0"
+                                Grid.Column="0">
+                                    <TextBlock FontWeight="Bold"
+                                               Text="{Binding File}" />
+                                    <TextBlock
+                                    Text="{Binding Folder}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" 
+                                        Orientation="Vertical"
+                                        Margin="10,0">
+                                    <CheckBox Content="Pack only used files" IsChecked="{Binding Intelligent}" />
+                                    <CheckBox Content="Pack all files" IsChecked="{Binding NotIntelligent}" />
+                                </StackPanel>
+
+                                <Button Grid.Column="2" 
+                                    Command="{Binding RemoveFolderCommand}">
+                                    <Button.Content>
+                                        Delete
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

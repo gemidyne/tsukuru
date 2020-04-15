@@ -2,10 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:compiler="clr-namespace:Tsukuru.Maps.Compiler"
+             xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:VbspCompilationSettingsViewModel}">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -27,28 +28,28 @@
         </TextBlock>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10">
-            <CheckBox IsChecked="{Binding VBSPSettings.OnlyEntities}" 
+            <CheckBox IsChecked="{Binding OnlyEntities}" 
                       Content="Only Entities"
                       ToolTip="Only import the entities from the VMF. Brushes and internal entities are not modified. Conserves existing lighting data."/>
 
-            <CheckBox IsChecked="{Binding VBSPSettings.OnlyProps}" 
+            <CheckBox IsChecked="{Binding OnlyProps}" 
                       Content="Only Props" 
                       ToolTip="Only update static and detail props (i.e. the internal entities). Does not generate a .prt file which will cause VVIS to error."/>
 
-            <CheckBox IsChecked="{Binding VBSPSettings.NoDetailEntities}" 
+            <CheckBox IsChecked="{Binding NoDetailEntities}" 
                       Content="No Detail Entities" 
                       ToolTip="Removes func_detail brushes. The geometry left over is what affects visibility."/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10">
-            <CheckBox IsChecked="{Binding VBSPSettings.NoWaterBrushes}" 
+            <CheckBox IsChecked="{Binding NoWaterBrushes}" 
                       Content="No Water Brushes" 
                       ToolTip="Removes water brushes." />
 
-            <CheckBox IsChecked="{Binding VBSPSettings.LowPriority}" 
+            <CheckBox IsChecked="{Binding LowPriority}" 
                       Content="Low Priority Compile" 
                       ToolTip="Runs VBSP as a low-priority process in Windows."/>
 
-            <CheckBox IsChecked="{Binding VBSPSettings.KeepStalePackedData}" 
+            <CheckBox IsChecked="{Binding KeepStalePackedData}" 
                       Content="Keep Stale Packed Data" 
                       ToolTip="Keep the BSP pakfile intact but recompile everything else."/>
         </StackPanel>
@@ -58,7 +59,7 @@
                 <Label>Other VBSP arguments</Label>
                 <TextBox
                     VerticalAlignment="Top"
-                    Text="{Binding VBSPSettings.OtherArguments}" />
+                    Text="{Binding OtherArguments}" />
             </StackPanel>
         </Grid>
 
@@ -66,7 +67,7 @@
             <StackPanel>
                 <Label>Formatted arguments</Label>
                 <TextBox 
-                    Text="{Binding VBSPSettings.FormattedArguments}"
+                    Text="{Binding FormattedArguments}"
                     IsReadOnly="True" />
             </StackPanel>
 

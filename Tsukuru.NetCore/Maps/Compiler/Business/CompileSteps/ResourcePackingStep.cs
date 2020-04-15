@@ -3,6 +3,7 @@ using System.Linq;
 using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Maps.Packer;
+using Tsukuru.Settings;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -30,7 +31,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
             var packer = new BspPackEngine(log, session);
 
-            if (viewModel.GenerateMapSpecificFiles)
+            if (SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles)
             {
                 using (var mapSpecificFileGenerator = new TemplatingEngine(log, session.CompleteFoldersToAdd, MapCompileSessionInfo.Instance.MapName))
                 {
@@ -46,7 +47,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                 packer.PackData();
             }
 
-            if (viewModel.PerformRepack)
+            if (SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress)
             {
                 log.WriteLine("ResourcePackingStep", "Repacking with compression for better BSP file size...");
                 packer.RepackCompressBsp();

@@ -18,9 +18,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private string _vmfPath;
         private bool _compressMapToBZip2;
 
-        private VbspCompilationSettings _vbspSettings;
-        private VvisCompilationSettings _vvisSettings;
-        private VradCompilationSettings _vradSettings;
+        private VbspCompilationSettingsViewModel _vbspSettings;
+        private VvisCompilationSettingsViewModel _vvisSettings;
+        private VradCompilationSettingsViewModel _vradSettings;
         private bool _copyMapToGameMapsFolder;
         private bool _launchMapInGame;
 
@@ -87,11 +87,11 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public VbspCompilationSettings VBSPSettings => _vbspSettings ?? (_vbspSettings = new VbspCompilationSettings());
+        public VbspCompilationSettingsViewModel VBSPSettings => _vbspSettings ?? (_vbspSettings = new VbspCompilationSettingsViewModel());
 
-        public VvisCompilationSettings VVISSettings => _vvisSettings ?? (_vvisSettings = new VvisCompilationSettings());
+        public VvisCompilationSettingsViewModel VVISSettings => _vvisSettings ?? (_vvisSettings = new VvisCompilationSettingsViewModel());
 
-        public VradCompilationSettings VRADSettings => _vradSettings ?? (_vradSettings = new VradCompilationSettings());
+        public VradCompilationSettingsViewModel VRADSettings => _vradSettings ?? (_vradSettings = new VradCompilationSettingsViewModel());
 
         public RelayCommand MapCompileCommand { get; }
 

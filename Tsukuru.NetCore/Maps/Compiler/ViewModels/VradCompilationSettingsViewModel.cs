@@ -1,8 +1,9 @@
 ﻿using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler
+namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class VradCompilationSettings : BaseCompilationSettings
+    public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplicationContentView
     {
         private bool _ldr;
         private bool _hdr;
@@ -15,6 +16,7 @@ namespace Tsukuru.Maps.Compiler
         private string _otherArguments;
         private bool _useModifiedVrad;
         private bool _largeDispSampleRadius;
+        private bool _isLoading;
 
         public bool LDR
         {
@@ -25,7 +27,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -38,7 +44,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -51,7 +61,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -64,7 +78,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -77,7 +95,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -90,7 +112,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -103,7 +129,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -116,7 +146,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -128,7 +162,11 @@ namespace Tsukuru.Maps.Compiler
                 Set(() => UseModifiedVrad, ref _useModifiedVrad, value);
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -141,7 +179,11 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -154,11 +196,25 @@ namespace Tsukuru.Maps.Compiler
                 OnArgumentChanged();
 
                 SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
-        public VradCompilationSettings()
+        public string Name => "VRAD Settings";
+
+        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
+        public void Init()
         {
             LDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr;
             HDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr;
@@ -167,11 +223,10 @@ namespace Tsukuru.Maps.Compiler
             StaticPropLighting = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting;
             StaticPropPolys = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys;
             TextureShadows = SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows;
-
             LowPriority = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority;
             UseModifiedVrad = SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad;
-            OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments;
             LargeDispSampleRadius = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius;
+            OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments;
         }
 
         public override string BuildArguments()

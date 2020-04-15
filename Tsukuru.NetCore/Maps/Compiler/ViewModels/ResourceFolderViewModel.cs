@@ -8,6 +8,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 {
     public class ResourceFolderViewModel : ViewModelBase
     {
+        private bool _suppressSave;
         private string _folder;
         private bool _intelligent;
 
@@ -37,7 +38,11 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 }
 
                 folder.Intelligent = value;
-                SettingsManager.Save();
+
+                if (!_suppressSave)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -51,9 +56,16 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public RelayCommand RemoveFolderCommand { get; }
 
-        public ResourceFolderViewModel()
+
+        public ResourceFolderViewModel(string folder, bool intelligent)
         {
             RemoveFolderCommand = new RelayCommand(RemoveSelectedFolder);
+            _suppressSave = true;
+
+            Folder = folder;
+            Intelligent = intelligent;
+
+            _suppressSave = false;
         }
 
         private string GetHeading()

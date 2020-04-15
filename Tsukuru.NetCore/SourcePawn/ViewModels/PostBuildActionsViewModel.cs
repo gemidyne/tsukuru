@@ -29,7 +29,11 @@ namespace Tsukuru.SourcePawn.ViewModels
                 Set(() => CopySmxToClipboardOnCompile, ref _copySmxToClipboardOnCompile, value);
 
                 SettingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -41,7 +45,11 @@ namespace Tsukuru.SourcePawn.ViewModels
                 Set(() => ExecutePostBuildScripts, ref _executePostBuildScripts, value);
 
                 SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
@@ -53,7 +61,11 @@ namespace Tsukuru.SourcePawn.ViewModels
                 Set(() => IncrementVersion, ref _incrementVersion, value);
 
                 SettingsManager.Manifest.SourcePawnCompiler.Versioning = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 

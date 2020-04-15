@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Chiaki;
 using GalaSoft.MvvmLight;
+using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private static readonly object _door = new object();
         private readonly ObservableCollection<IApplicationContentView> _pages;
 
         public ReadOnlyObservableCollection<IApplicationContentView> Pages { get; }
@@ -29,19 +31,22 @@ namespace Tsukuru
             {
                 value ??= Pages.FirstOrDefault();
 
-                if (value != null && !value.IsLoading)
+                lock (_door)
                 {
-                    Task.Run(() =>
+                    if (value != null && !value.IsLoading)
                     {
-                        value.IsLoading = true;
-                        value.Init();
-                    }).ContinueWith((task) => value.IsLoading = false);
+                        Task.Run(() =>
+                        {
+                            value.IsLoading = true;
+                            value.Init();
+                        }).ContinueWith((task) => value.IsLoading = false);
+                    }
+
+                    Set(() => SelectedPage, ref _selectedPage, value);
+
+                    PagesInSelectedGroupCollectionView.Refresh();
+                    RaisePropertyChanged(nameof(SelectedNavigationGroup));
                 }
-
-                Set(() => SelectedPage, ref _selectedPage, value);
-
-                PagesInSelectedGroupCollectionView.Refresh();
-                RaisePropertyChanged(nameof(SelectedNavigationGroup));
             }
         }
 
@@ -80,9 +85,17 @@ namespace Tsukuru
 
         private IEnumerable<IApplicationContentView> CreateAllPages()
         {
+            // SourcePawn Compiler
             yield return new SourcePawn.ViewModels.SettingsViewModel();
             yield return new SourcePawn.ViewModels.SourcePawnCompileViewModel();
             yield return new SourcePawn.ViewModels.PostBuildActionsViewModel();
+
+            yield return new VbspCompilationSettingsViewModel();
+            yield return new VvisCompilationSettingsViewModel();
+            yield return new VradCompilationSettingsViewModel();
+            yield return new ResourcePackingViewModel();
+            yield return new TemplatingSettingsViewModel();
+            yield return new BspRepackViewModel();
         }
 
         private bool FilterPages(object item)

@@ -219,6 +219,10 @@
 
                                 <Grid Grid.Row="1"
                                       Margin="{adonisUi:Space 3, 0, 3, 0}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="14*"/>
+                                    </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="{adonisUi:Space 1}"/>
@@ -227,16 +231,16 @@
 
                                     <CheckBox Grid.Row="0"
                                               Content="Enable selected page"
-                                              IsChecked="{Binding IsEnabled}"/>
+                                              IsChecked="{Binding IsEnabled}" Grid.ColumnSpan="2"/>
 
                                     <CheckBox Grid.Row="2"
                                               Content="Show developer views"
-                                              IsChecked="{Binding IsDeveloperMode}"/>
+                                              IsChecked="{Binding IsDeveloperMode}" Grid.ColumnSpan="2"/>
                                 </Grid>
                             </Grid>
 
                             <ListBox Grid.Row="2"
-                                     ItemsSource="{Binding PagesCollectionView}"
+                                     ItemsSource="{Binding PagesInSelectedGroupCollectionView}"
                                      SelectedItem="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -274,26 +278,27 @@
                                                                 <ItemsPresenter Grid.Row="1"/>
                                                             </Grid>
 
-                                                            <!--<ControlTemplate.Triggers>
+                                                            <ControlTemplate.Triggers>
                                                                 <DataTrigger Binding="{Binding Name}"
-                                                                             Value="{x:Static viewModels:ApplicationNavigationGroup.Samples}">
+                                                                             Value="{x:Static viewModels:EShellNavigationPage.SourcePawnCompiler}">
                                                                     <Setter Property="Text"
                                                                             TargetName="GroupHeader"
-                                                                            Value="SAMPLES"/>
+                                                                            Value="SOURCEPAWN COMPILER"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding Name}"
-                                                                             Value="{x:Static viewModels:ApplicationNavigationGroup.IssueScenarios}">
+                                                                             Value="{x:Static viewModels:EShellNavigationPage.SourceMapCompiler}">
                                                                     <Setter Property="Text"
                                                                             TargetName="GroupHeader"
-                                                                            Value="ISSUE SCENARIOS"/>
+                                                                            Value="SOURCE MAP COMPILER"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding Name}"
-                                                                             Value="{x:Static viewModels:ApplicationNavigationGroup.Reference}">
+                                                                             Value="{x:Static viewModels:EShellNavigationPage.Translations}">
                                                                     <Setter Property="Text"
                                                                             TargetName="GroupHeader"
-                                                                            Value="REFERENCE"/>
+                                                                            Value="TRANSLATIONS"/>
                                                                 </DataTrigger>
-                                                            </ControlTemplate.Triggers>-->
+
+                                                            </ControlTemplate.Triggers>
                                                         </ControlTemplate>
                                                     </Setter.Value>
                                                 </Setter>

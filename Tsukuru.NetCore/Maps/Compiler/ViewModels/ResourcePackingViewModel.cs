@@ -4,15 +4,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class ResourcePackingViewModel : ViewModelBase
+    public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
     {
         private ObservableCollection<ResourceFolderViewModel> _foldersToPack;
         private bool _performResourcePacking;
-        private bool _generateMapSpecificFiles;
-        private bool _performRepack;
+        private bool _isLoading;
 
         public bool PerformResourcePacking
         {
@@ -22,56 +22,50 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 Set(() => PerformResourcePacking, ref _performResourcePacking, value);
 
                 SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
-        public bool GenerateMapSpecificFiles
+        public ObservableCollection<ResourceFolderViewModel> FoldersToPack
         {
-            get => _generateMapSpecificFiles;
-            set
-            {
-                Set(() => GenerateMapSpecificFiles, ref _generateMapSpecificFiles, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles = value;
-                SettingsManager.Save();
-            }
+            get => _foldersToPack;
+            set => Set(() => FoldersToPack, ref _foldersToPack, value);
         }
-
-        public bool PerformRepack
-        {
-            get => _performRepack;
-            set
-            {
-                Set(() => PerformRepack, ref _performRepack, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress = value;
-                SettingsManager.Save();
-            }
-        }
-
-        public ObservableCollection<ResourceFolderViewModel> FoldersToPack => _foldersToPack ?? (_foldersToPack = new ObservableCollection<ResourceFolderViewModel>());
 
         public RelayCommand AddFolderCommand { get; }
 
+        public string Name => "Resource Packing";
+
+        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
         public ResourcePackingViewModel()
         {
+            AddFolderCommand = new RelayCommand(AddFolderToPack);
+            FoldersToPack = new ObservableCollection<ResourceFolderViewModel>();
+
+            MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
+        }
+
+        public void Init()
+        {
             PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
-            GenerateMapSpecificFiles = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles;
-            PerformRepack = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress;
+
+            FoldersToPack.Clear();
 
             foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
             {
-                FoldersToPack.Add(new ResourceFolderViewModel
-                {
-                    Folder = folder.Path,
-                    Intelligent = folder.Intelligent
-                });
+                FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
             }
-
-            AddFolderCommand = new RelayCommand(AddFolderToPack);
-
-            MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
         }
 
         private void AddFolderToPack()
@@ -85,11 +79,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
             if (FoldersToPack.All(x => x.Folder != dialog.SelectedPath))
             {
-                FoldersToPack.Add(new ResourceFolderViewModel
-                {
-                    Folder = dialog.SelectedPath,
-                    Intelligent = false
-                });
+                FoldersToPack.Add(new ResourceFolderViewModel(dialog.SelectedPath, false));
 
                 SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Add(new ResourcePackingFolderSetting
                 {
@@ -121,5 +111,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Remove(settingsFolder);
             SettingsManager.Save();
         }
+
+
     }
 }

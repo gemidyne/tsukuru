@@ -10,8 +10,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="250" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}"
-             DataContext="{Binding ResourcePackingViewModel, Source={StaticResource ViewModelLocator}}">
+             d:DataContext="{d:DesignInstance viewModels:BspRepackViewModel}">
     <StackPanel Margin="10">
         <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">

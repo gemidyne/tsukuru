@@ -19,7 +19,11 @@ namespace Tsukuru.SourcePawn.ViewModels
                 Set(() => SourcePawnCompiler, ref _sourcePawnCompiler, value);
 
                 SettingsManager.Manifest.SourcePawnCompiler.CompilerPath = value;
-                SettingsManager.Save();
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
             }
         }
 
