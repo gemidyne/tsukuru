@@ -5,13 +5,14 @@ using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Compiler
 {
-	public static class MapCompileInitialiser
+    public static class MapCompileInitialiser
     {
         public static bool Execute(MapCompilerViewModel mapCompilerViewModel)
         {
             var logView = SimpleIoc.Default.GetInstance<MapCompilerResultsViewModel>();
             var mainWindow = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
             var mapPacking = SimpleIoc.Default.GetInstance<ResourcePackingViewModel>();
+            var postBuild = SimpleIoc.Default.GetInstance<PostCompileActionsViewModel>();
 
             logView.Initialise(mapCompilerViewModel.MapName);
 
@@ -23,31 +24,31 @@ namespace Tsukuru.Maps.Compiler
             MapCompileSessionInfo.Clear();
             MapCompileSessionInfo.Instance.MapName = mapCompilerViewModel.MapName;
 
-			var stepRunner = new CompileStepRunner(logView);
+            var stepRunner = new CompileStepRunner(logView);
 
-			stepRunner.AddStep(new PrepareVmfFileStep());
-			stepRunner.AddStep(new RunVBspStep());
-			stepRunner.AddStep(new RunVVisStep());
-			stepRunner.AddStep(new RunVRadStep());
+            stepRunner.AddStep(new PrepareVmfFileStep());
+            stepRunner.AddStep(new RunVBspStep());
+            stepRunner.AddStep(new RunVVisStep());
+            stepRunner.AddStep(new RunVRadStep());
 
-			if (mapPacking.PerformResourcePacking)
+            if (mapPacking.PerformResourcePacking)
             {
                 stepRunner.AddStep(new ResourcePackingStep());
             }
 
-            if (mapCompilerViewModel.CopyMapToGameMapsFolder)
+            if (postBuild.CopyMapToGameMapsFolder)
             {
-	            stepRunner.AddStep(new CopyBspToGameStep());
+                stepRunner.AddStep(new CopyBspToGameStep());
             }
 
-            if (mapCompilerViewModel.CompressMapToBZip2)
+            if (postBuild.CompressMapToBZip2)
             {
-				stepRunner.AddStep(new CompressBspToBzip2Step());
+                stepRunner.AddStep(new CompressBspToBzip2Step());
             }
 
-            if (mapCompilerViewModel.LaunchMapInGame)
+            if (postBuild.LaunchMapInGame)
             {
-	            stepRunner.AddStep(new LaunchMapInGameStep());
+                stepRunner.AddStep(new LaunchMapInGameStep());
             }
 
             stepRunner.Run();

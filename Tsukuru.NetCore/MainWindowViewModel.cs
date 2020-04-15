@@ -96,6 +96,7 @@ namespace Tsukuru
             yield return new ResourcePackingViewModel();
             yield return new TemplatingSettingsViewModel();
             yield return new BspRepackViewModel();
+            yield return new PostCompileActionsViewModel();
         }
 
         private bool FilterPages(object item)

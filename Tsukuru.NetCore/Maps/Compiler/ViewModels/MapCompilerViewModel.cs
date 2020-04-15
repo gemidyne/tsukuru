@@ -13,16 +13,13 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 {
     public class MapCompilerViewModel : ViewModelBase
     {
-        private readonly ResourcePackingViewModel _resourcePackingViewModel;
         private string _mapName;
         private string _vmfPath;
-        private bool _compressMapToBZip2;
 
         private VbspCompilationSettingsViewModel _vbspSettings;
         private VvisCompilationSettingsViewModel _vvisSettings;
         private VradCompilationSettingsViewModel _vradSettings;
-        private bool _copyMapToGameMapsFolder;
-        private bool _launchMapInGame;
+
 
         public string MapName
         {
@@ -51,41 +48,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public bool CompressMapToBZip2
-        {
-            get => _compressMapToBZip2;
-            set
-            {
-                Set(() => CompressMapToBZip2, ref _compressMapToBZip2, value);
 
-                SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2 = value;
-                SettingsManager.Save();
-            }
-        }
-
-        public bool CopyMapToGameMapsFolder
-        {
-            get => _copyMapToGameMapsFolder;
-            set
-            {
-                Set(() => CopyMapToGameMapsFolder, ref _copyMapToGameMapsFolder, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder = value;
-                SettingsManager.Save();
-            }
-        }
-
-        public bool LaunchMapInGame
-        {
-            get => _launchMapInGame;
-            set
-            {
-                Set(() => LaunchMapInGame, ref _launchMapInGame, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame = value;
-                SettingsManager.Save();
-            }
-        }
 
         public VbspCompilationSettingsViewModel VBSPSettings => _vbspSettings ?? (_vbspSettings = new VbspCompilationSettingsViewModel());
 
@@ -109,10 +72,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string GameInfo => GameHelper.GetGameInfo();
 
-        public MapCompilerViewModel(ResourcePackingViewModel resourcePackingViewModel)
+        public MapCompilerViewModel()
         {
-            _resourcePackingViewModel = resourcePackingViewModel;
-
             if (IsInDesignMode)
             {
                 VProject = "??";
@@ -123,9 +84,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
 
             VMFPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
-            CompressMapToBZip2 = SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2;
-            CopyMapToGameMapsFolder = SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder;
-            LaunchMapInGame = SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame;
 
             if (string.IsNullOrWhiteSpace(VMFPath))
             {

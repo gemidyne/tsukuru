@@ -54,18 +54,16 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             FoldersToPack = new ObservableCollection<ResourceFolderViewModel>();
 
             MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
-        }
-
-        public void Init()
-        {
             PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
-
-            FoldersToPack.Clear();
 
             foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
             {
                 FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
             }
+        }
+
+        public void Init()
+        {
         }
 
         private void AddFolderToPack()

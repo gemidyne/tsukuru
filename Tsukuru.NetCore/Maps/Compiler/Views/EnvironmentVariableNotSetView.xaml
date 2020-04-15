@@ -8,20 +8,13 @@
     <StackPanel VerticalAlignment="Center">
         <Label
             Content="Your VPROJECT environment variable is not set."
-            FontSize="26"
-            HorizontalAlignment="Center" />
+            FontSize="16" />
 
-        <Label Content="Set the user environment variable and restart Tsukuru to use the Map Compiler."
-               FontSize="22"
-               HorizontalAlignment="Center"/>
+        <Label Content="Set the user environment variable and restart Tsukuru to use the Map Compiler." />
 
         <Label Content="Your environment variable should be set to the game directory. For example:"
-               FontSize="14"
-               HorizontalAlignment="Center"
                Margin="0,20,0,0"/>
 
-        <Label Content="C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf"
-               FontSize="14"
-               HorizontalAlignment="Center"/>
+        <Label Content="C:\Program Files (x86)\Steam\steamapps\common\Team Fortress 2\tf" />
     </StackPanel>
 </UserControl>

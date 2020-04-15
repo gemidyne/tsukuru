@@ -68,62 +68,12 @@
             </Grid>
         </GroupBox>
 
-            <TabControl  Grid.Row="1" 
-                         Grid.Column="0"
-                         Grid.ColumnSpan="2" VerticalAlignment="Stretch">
-                <TabItem Header="VBSP Settings">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:BspCompilerSettingsView />
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="VVIS Settings">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:VisCompilerSettingsView />
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="VRAD Settings">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:RadCompilerSettingsView />
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Resource Packing: Folders">
-                    <local:ResourcePackingView />
-                </TabItem>
-                <TabItem Header="Resource Packing: Templating" 
-                         Visibility="{Binding ResourcePackingViewModel.PerformResourcePacking, Source={StaticResource ViewModelLocator}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <local:TemplatingSettingsView />
-                </TabItem>
-                <TabItem Header="Resource Package: Repack" 
-                         Visibility="{Binding ResourcePackingViewModel.PerformResourcePacking, Source={StaticResource ViewModelLocator}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <local:BspRepackSettingsView />
-                </TabItem>
-            </TabControl>
-
-        <GroupBox
-                Grid.Row="2" 
-                Grid.Column="0"
-                Header="Before compile tasks">
-
-        </GroupBox>
 
         <GroupBox
                 Grid.Row="2" 
                 Grid.Column="1"
                 Header="After compile tasks">
-            <StackPanel>
-                <CheckBox
-                        IsChecked="{Binding CopyMapToGameMapsFolder}" 
-                        Content="Copy compiled map to game maps folder" />
-
-                <CheckBox 
-                        IsChecked="{Binding LaunchMapInGame}" 
-                        Content="Launch compiled map in game" />
-
-                <CheckBox 
-                        IsChecked="{Binding CompressMapToBZip2}" 
-                        Content="Compress compiled map to BZip2 for fast download server" />
-
-            </StackPanel>
+            
         </GroupBox>
     </Grid>
 </UserControl>

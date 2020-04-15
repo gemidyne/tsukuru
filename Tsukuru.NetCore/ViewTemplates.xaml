@@ -43,4 +43,7 @@
         <views:ResourcePackingView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewModels:PostCompileActionsViewModel}">
+        <views:PostCompileActionsView />
+    </DataTemplate>
 </ResourceDictionary>

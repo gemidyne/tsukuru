@@ -19,6 +19,6 @@
              d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
     <Grid>
         <views:MainSettingsView Visibility="{Binding IsVProjectSet, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <views:EnvironmentVariableNotSetView Visibility="{Binding IsVProjectNotSet, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        
     </Grid>
 </UserControl>
