@@ -18,7 +18,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             CalculateVbspPath();
 
-            var viewModel = SimpleIoc.Default.GetInstance<MapCompilerViewModel>();
+            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
 
             MapCompileSessionInfo.Instance.SdkToolsPath = SdkToolsPath;
 

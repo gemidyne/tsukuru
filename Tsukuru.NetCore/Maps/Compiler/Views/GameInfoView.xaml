@@ -4,32 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
-             xmlns:views="clr-namespace:Tsukuru.Maps.Compiler.Views"
+             xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:views="clr-namespace:Tsukuru.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapCompilerViewModel}">
-    <GroupBox Header="Game information">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:GameInfoViewModel}">
+    <StackPanel Margin="32">
+        <views:ValidationSummaryView />
 
-            <StackPanel Grid.Row="0">
-                <Label>VProject Path</Label>
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <Label>VProject Path</Label>
 
-                <TextBox Text="{Binding VProject, Mode=OneWay}"
-                         IsReadOnly="True" />
+            <TextBox Text="{Binding VProject, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     IsReadOnly="True"
+                     extensions:ValidationExtension.IsErrorMessageVisibleOnFocus="False"
+                     extensions:ValidationExtension.IsErrorMessageVisibleOnMouseOver="False"/>
+        </StackPanel>
 
-                <views:EnvironmentVariableNotSetView Visibility="{Binding IsVProjectNotSet, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            </StackPanel>
-            
-            <StackPanel Grid.Row="1">
-                <Label>Game information</Label>
-                <TextBox Text="{Binding GameInfo, Mode=OneWay}"
-                         IsReadOnly="True" />
-            </StackPanel>
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <Label>Game information</Label>
+            <TextBox Text="{Binding GameInfo, Mode=OneWay}"
+                     IsReadOnly="True" />
+        </StackPanel>
 
-            
-        </Grid>
-    </GroupBox>
+        
+    </StackPanel>
 </UserControl>

@@ -2,9 +2,9 @@
 
 namespace Tsukuru.Maps.Compiler
 {
-	public partial class MapCompilerView : UserControl
+	public partial class CompileConfirmationView : UserControl
     {
-        public MapCompilerView()
+        public CompileConfirmationView()
         {
             InitializeComponent();
         }

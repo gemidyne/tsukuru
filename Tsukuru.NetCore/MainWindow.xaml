@@ -202,10 +202,8 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Side Bar Navigation -->
-                <Grid>
-                    <GroupBox MinWidth="{adonisUi:Space 25}"
-                              Padding="{adonisUi:Space 0, 1, 0, 0}">
-
+                <Grid Grid.Column="0">
+                    <GroupBox MinWidth="{adonisUi:Space 25}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -331,50 +329,4 @@
             </Grid>
         </DockPanel>
     </Grid>
-
-    <!--<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <views:LogoControl Grid.Row="0" />
-
-        <TabControl Grid.Row="1" 
-            >
-            <TabItem Header="SourcePawn Plugin Compiler" 
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     Visibility="{Binding DisplaySourcePawnCompilerView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <sourcePawnViews:SourcePawnCompilerView />
-            </TabItem>
-
-            <TabItem Header="Source Map Compiler"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch">
-                <Grid>
-                    <compiler:MapCompilerView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
-                    <compiler:MapCompilerResultsView Visibility="{Binding MainWindowViewModel.DisplayMapCompilerResultsView, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource ViewModelLocator}}" />
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="SourceMod Translator Import">
-                <translatorViews:TranslatorImportView />
-            </TabItem>
-
-            <TabItem Header="SourceMod Translator Export">
-                <translatorViews:TranslatorExportView />
-            </TabItem>
-
-                <TabItem Header="Options">
-                <views:OptionsView />
-            </TabItem>
-
-                <TabItem Header="About">
-                <views:AboutView />
-            </TabItem>
-
-
-        </TabControl>
-    </Grid>-->
 </controls:AdonisWindow>

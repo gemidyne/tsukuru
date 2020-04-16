@@ -17,7 +17,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override bool Run(ILogReceiver log)
         {
-            var viewModel = SimpleIoc.Default.GetInstance<MapCompilerViewModel>();
+            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
 
             if (viewModel.VRADSettings.UseModifiedVrad)
             {

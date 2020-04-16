@@ -10,7 +10,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public bool Run(ILogReceiver log)
         {
-            var viewModel = SimpleIoc.Default.GetInstance<MapCompilerViewModel>();
+            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
 
             if (!File.Exists(viewModel.VMFPath))
             {

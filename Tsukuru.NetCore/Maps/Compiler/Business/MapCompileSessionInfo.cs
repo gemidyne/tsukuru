@@ -9,6 +9,8 @@ namespace Tsukuru.Maps.Compiler.Business
 
         public string MapName { get; set; }
 
+        public FileInfo InputVmfFile { get; set; }
+
         public FileInfo GeneratedVmfFile { get; set; }
 
         public string GeneratedFileNameNoExtension => GeneratedVmfFile.FullName.TrimEnd(".vmf");
@@ -17,9 +19,7 @@ namespace Tsukuru.Maps.Compiler.Business
 
         public string SdkToolsPath { get; set; }
 
-        public string GameMapsPath { get; set; }
-
-        public static MapCompileSessionInfo Instance => _instance ?? (_instance = new MapCompileSessionInfo());
+        public static MapCompileSessionInfo Instance => _instance ??= new MapCompileSessionInfo();
 
         public static void Clear()
         {

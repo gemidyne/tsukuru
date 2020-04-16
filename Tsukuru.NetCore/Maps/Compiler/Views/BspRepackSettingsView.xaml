@@ -11,7 +11,7 @@
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:BspRepackViewModel}">
-    <StackPanel Margin="10">
+    <StackPanel Margin="32">
         <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">
             Repacking your map can significantly decrease the file size. This will compress data within the map.

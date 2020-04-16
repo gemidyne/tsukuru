@@ -14,7 +14,6 @@
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}">
-
     <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

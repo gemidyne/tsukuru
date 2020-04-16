@@ -7,22 +7,23 @@ namespace Tsukuru.Maps.Compiler
 {
     public static class MapCompileInitialiser
     {
-        public static bool Execute(MapCompilerViewModel mapCompilerViewModel)
+        public static bool Execute(CompileConfirmationViewModel compileConfirmationViewModel)
         {
             var logView = SimpleIoc.Default.GetInstance<MapCompilerResultsViewModel>();
             var mainWindow = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
             var mapPacking = SimpleIoc.Default.GetInstance<ResourcePackingViewModel>();
             var postBuild = SimpleIoc.Default.GetInstance<PostCompileActionsViewModel>();
 
-            logView.Initialise(mapCompilerViewModel.MapName);
+            logView.Initialise(compileConfirmationViewModel.MapName);
 
 #warning TODO amend this
             //mainWindow.DisplayMapCompilerResultsView = true;
             //mainWindow.DisplayMapCompilerView = false;
             //mainWindow.DisplaySourcePawnCompilerView = false;
 
+#warning TODO this needs to be rewritten so criteria is built up before hand by the compileconfirmationviewmodel
             MapCompileSessionInfo.Clear();
-            MapCompileSessionInfo.Instance.MapName = mapCompilerViewModel.MapName;
+            MapCompileSessionInfo.Instance.MapName = compileConfirmationViewModel.MapName;
 
             var stepRunner = new CompileStepRunner(logView);
 

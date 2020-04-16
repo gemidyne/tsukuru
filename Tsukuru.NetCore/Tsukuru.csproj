@@ -56,11 +56,8 @@
     <Compile Update="Maps\Compiler\MapCompilerResultsView.xaml.cs">
       <DependentUpon>MapCompilerResultsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Maps\Compiler\MapCompilerView.xaml.cs">
-      <DependentUpon>MapCompilerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Maps\Compiler\MapDetailsControl.xaml.cs">
-      <DependentUpon>MapDetailsControl.xaml</DependentUpon>
+    <Compile Update="Maps\Compiler\CompileConfirmationView.xaml.cs">
+      <DependentUpon>CompileConfirmationView.xaml</DependentUpon>
     </Compile>
     <Compile Update="SourcePawn\Views\CompilationFilesControl.xaml.cs">
       <DependentUpon>CompilationFilesControl.xaml</DependentUpon>
@@ -96,10 +93,7 @@
     <Page Update="Maps\Compiler\MapCompilerResultsView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Maps\Compiler\MapCompilerView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Maps\Compiler\MapDetailsControl.xaml">
+    <Page Update="Maps\Compiler\CompileConfirmationView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="SourcePawn\Views\CompilationFilesControl.xaml">

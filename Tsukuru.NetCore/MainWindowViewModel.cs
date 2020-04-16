@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Chiaki;
 using GalaSoft.MvvmLight;
-using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru
@@ -90,13 +89,15 @@ namespace Tsukuru
             yield return new SourcePawn.ViewModels.SourcePawnCompileViewModel();
             yield return new SourcePawn.ViewModels.PostBuildActionsViewModel();
 
-            yield return new VbspCompilationSettingsViewModel();
-            yield return new VvisCompilationSettingsViewModel();
-            yield return new VradCompilationSettingsViewModel();
-            yield return new ResourcePackingViewModel();
-            yield return new TemplatingSettingsViewModel();
-            yield return new BspRepackViewModel();
-            yield return new PostCompileActionsViewModel();
+            yield return new Maps.Compiler.ViewModels.GameInfoViewModel();
+            yield return new Maps.Compiler.ViewModels.MapSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.VbspCompilationSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.VvisCompilationSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.VradCompilationSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.ResourcePackingViewModel();
+            yield return new Maps.Compiler.ViewModels.TemplatingSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.BspRepackViewModel();
+            yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
         }
 
         private bool FilterPages(object item)

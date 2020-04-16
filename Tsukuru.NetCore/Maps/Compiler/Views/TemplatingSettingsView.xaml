@@ -11,7 +11,7 @@
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:TemplatingSettingsViewModel}">
-    <StackPanel Margin="10">
+    <StackPanel Margin="32">
         <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">
             Templating allows you to dynamically generate files from templates as part of the compile process. 

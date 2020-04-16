@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:VradCompilationSettingsViewModel}">
-    <Grid Margin="10">
+    <Grid Margin="32">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />

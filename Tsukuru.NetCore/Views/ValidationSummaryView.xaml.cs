@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Views
 {
     /// <summary>
-    /// Interaction logic for MainSettingsView.xaml
+    /// Interaction logic for ValidationSummaryView.xaml
     /// </summary>
-    public partial class MainSettingsView : UserControl
+    public partial class ValidationSummaryView : UserControl
     {
-        public MainSettingsView()
+        public ValidationSummaryView()
         {
             InitializeComponent();
         }

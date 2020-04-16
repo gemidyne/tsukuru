@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Tsukuru.Settings
 {
@@ -38,7 +38,7 @@ namespace Tsukuru.Settings
                         Manifest = JsonConvert.DeserializeObject<SettingsManifest>(data);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Manifest = new SettingsManifest();
                 }

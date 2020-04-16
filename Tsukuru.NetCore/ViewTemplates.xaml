@@ -46,4 +46,12 @@
     <DataTemplate DataType="{x:Type viewModels:PostCompileActionsViewModel}">
         <views:PostCompileActionsView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:GameInfoViewModel}">
+        <views:GameInfoView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:MapSettingsViewModel}">
+        <views:MapSettingsView />
+    </DataTemplate>
 </ResourceDictionary>

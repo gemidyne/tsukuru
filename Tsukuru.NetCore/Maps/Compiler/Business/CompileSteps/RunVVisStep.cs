@@ -18,7 +18,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             CalculateVvisPath();
 
-            var viewModel = SimpleIoc.Default.GetInstance<MapCompilerViewModel>();
+            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
 
             return RunVvisExecutable(log, viewModel.VVISSettings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
         }

@@ -17,7 +17,7 @@ namespace Tsukuru
 
         public MainWindowViewModel MainWindowViewModel => _ioc.GetInstance<MainWindowViewModel>();
 
-        public MapCompilerViewModel MapCompilerViewModel => _ioc.GetInstance<MapCompilerViewModel>();
+        public CompileConfirmationViewModel CompileConfirmationViewModel => _ioc.GetInstance<CompileConfirmationViewModel>();
 
         public MapCompilerResultsViewModel MapCompilerResultsViewModel =>
             _ioc.GetInstance<MapCompilerResultsViewModel>();
@@ -68,9 +68,9 @@ namespace Tsukuru
                 _ioc.Register<ResourcePackingViewModel>();
             }
 
-            if (!_ioc.IsRegistered<MapCompilerViewModel>())
+            if (!_ioc.IsRegistered<CompileConfirmationViewModel>())
             {
-                _ioc.Register<MapCompilerViewModel>();
+                _ioc.Register<CompileConfirmationViewModel>();
             }
 
             if (!_ioc.IsRegistered<MapCompilerResultsViewModel>())
