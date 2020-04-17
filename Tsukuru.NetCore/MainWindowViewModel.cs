@@ -98,6 +98,7 @@ namespace Tsukuru
             yield return new Maps.Compiler.ViewModels.TemplatingSettingsViewModel();
             yield return new Maps.Compiler.ViewModels.BspRepackViewModel();
             yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
+            yield return new Maps.Compiler.ViewModels.CompileConfirmationViewModel();
         }
 
         private bool FilterPages(object item)

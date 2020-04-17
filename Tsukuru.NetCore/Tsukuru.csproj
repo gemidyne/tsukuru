@@ -56,7 +56,7 @@
     <Compile Update="Maps\Compiler\MapCompilerResultsView.xaml.cs">
       <DependentUpon>MapCompilerResultsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Maps\Compiler\CompileConfirmationView.xaml.cs">
+    <Compile Update="Maps\Compiler\Views\CompileConfirmationView.xaml.cs">
       <DependentUpon>CompileConfirmationView.xaml</DependentUpon>
     </Compile>
     <Compile Update="SourcePawn\Views\CompilationFilesControl.xaml.cs">
@@ -93,7 +93,7 @@
     <Page Update="Maps\Compiler\MapCompilerResultsView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Maps\Compiler\CompileConfirmationView.xaml">
+    <Page Update="Maps\Compiler\Views\CompileConfirmationView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="SourcePawn\Views\CompilationFilesControl.xaml">

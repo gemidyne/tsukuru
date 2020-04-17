@@ -54,4 +54,8 @@
     <DataTemplate DataType="{x:Type viewModels:MapSettingsViewModel}">
         <views:MapSettingsView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:CompileConfirmationViewModel}">
+        <views:CompileConfirmationView />
+    </DataTemplate>
 </ResourceDictionary>
