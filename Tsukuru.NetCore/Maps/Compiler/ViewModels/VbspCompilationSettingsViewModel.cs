@@ -135,6 +135,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "VBSP Settings";
 
+        public string Description =>
+            "VBSP is the command-line tool that compiles a raw VMF file into the Binary Space Partition format. It is followed by VVIS and VRAD.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

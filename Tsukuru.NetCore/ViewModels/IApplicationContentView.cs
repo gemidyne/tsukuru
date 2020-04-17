@@ -4,6 +4,8 @@
     {
         string Name { get; }
 
+        string Description { get; }
+
         EShellNavigationPage Group { get; }
 
         bool IsLoading { get; set; }

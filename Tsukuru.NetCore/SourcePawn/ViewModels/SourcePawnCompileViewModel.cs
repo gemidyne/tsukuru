@@ -115,6 +115,8 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public string Name => "Compile plugins";
 
+        public string Description => "This page allows you to specify which SourcePawn files should be compiled.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
 
         public bool IsLoading

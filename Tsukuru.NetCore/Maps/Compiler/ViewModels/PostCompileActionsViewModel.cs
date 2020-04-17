@@ -13,6 +13,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "Post compile actions";
 
+        public string Description =>
+            "These actions can be toggled to run once the map has been compiled (and packed if enabled).";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

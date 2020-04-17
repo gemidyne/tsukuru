@@ -11,6 +11,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "Templating";
 
+        public string Description => "Templating allows you to dynamically generate files from templates as part of the compile process.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

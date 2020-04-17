@@ -14,7 +14,6 @@ namespace Tsukuru.Maps.Compiler
             var mapPacking = SimpleIoc.Default.GetInstance<ResourcePackingViewModel>();
             var postBuild = SimpleIoc.Default.GetInstance<PostCompileActionsViewModel>();
 
-            logView.Initialise(compileConfirmationViewModel.MapName);
 
 #warning TODO amend this
             //mainWindow.DisplayMapCompilerResultsView = true;
@@ -22,8 +21,8 @@ namespace Tsukuru.Maps.Compiler
             //mainWindow.DisplaySourcePawnCompilerView = false;
 
 #warning TODO this needs to be rewritten so criteria is built up before hand by the compileconfirmationviewmodel
-            MapCompileSessionInfo.Clear();
-            MapCompileSessionInfo.Instance.MapName = compileConfirmationViewModel.MapName;
+
+            logView.Initialise(MapCompileSessionInfo.Instance.MapName);
 
             var stepRunner = new CompileStepRunner(logView);
 

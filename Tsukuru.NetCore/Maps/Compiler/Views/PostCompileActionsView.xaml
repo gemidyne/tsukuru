@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
@@ -14,8 +13,8 @@
                 IsChecked="{Binding CopyMapToGameMapsFolder}" 
                 Content="Copy compiled BSP to VPROJECT maps folder?" />
 
-            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0">
-                If selected, the compiled BSP file will be copied to your game's maps folder.
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0">
+                If selected, the BSP file will be copied to your game's maps folder.
             </TextBlock>
         </StackPanel>
 
@@ -24,7 +23,7 @@
                 IsChecked="{Binding LaunchMapInGame}" 
                 Content="Load compiled BSP in game" />
 
-            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0">
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0">
                 If selected, Tsukuru will launch the game and load your compiled map immediately.
             </TextBlock>
         </StackPanel>
@@ -34,7 +33,7 @@
                 IsChecked="{Binding CompressMapToBZip2}" 
                 Content="Compress compiled BSP to BZip2" />
 
-            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
                        TextWrapping="WrapWithOverflow">
                 If selected, Tsukuru will also compress the BSP file into the BZip2 format. This is useful for serving to players via a fast download mirror. Note, that if you use the Repack feature you may not see much of a difference in terms of file size.
             </TextBlock>

@@ -1,6 +1,5 @@
-﻿using System.IO;
-using GalaSoft.MvvmLight.Ioc;
-using Tsukuru.Maps.Compiler.ViewModels;
+﻿using System;
+using System.IO;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -10,24 +9,50 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public bool Run(ILogReceiver log)
         {
-            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
+            var input = MapCompileSessionInfo.Instance.InputVmfFile;
 
-            if (!File.Exists(viewModel.VMFPath))
+            if (!input.Exists)
             {
-                log.WriteLine("PrepareVmf", $"File not found at location: {viewModel.VMFPath}");
+                log.WriteLine("PrepareVmf", $"File not found at location: {input.FullName}");
                 return false;
             }
 
-            var generatedVmfFile = VmfFileCopier.CopyFile(viewModel.VMFPath, viewModel.MapName);
+            string generatedVmfFile;
+
+            try
+            {
+                generatedVmfFile = DoCopyFile(input, MapCompileSessionInfo.Instance.MapName);
+            }
+            catch (Exception ex)
+            {
+                log.WriteLine("PrepareVmf", $"Error thrown when trying to generate VMF file for compile: {ex.Message}");
+                return false;
+            }
 
             if (string.IsNullOrWhiteSpace(generatedVmfFile))
             {
+                log.WriteLine("PrepareVmf", "Unable to generate VMF file.");
+
                 return false;
             }
 
             MapCompileSessionInfo.Instance.GeneratedVmfFile = new FileInfo(generatedVmfFile);
 
             return true;
+        }
+
+        private static string DoCopyFile(FileInfo inputVmf, string destinationFileName)
+        {
+            var destinationFullPath = Path.Combine(inputVmf.DirectoryName, "generated");
+
+            if (!Directory.Exists(destinationFullPath))
+            {
+                Directory.CreateDirectory(destinationFullPath);
+            }
+
+            var destinationFullFile = Path.Combine(destinationFullPath, destinationFileName + ".vmf");
+
+            return inputVmf.CopyTo(destinationFileName, overwrite: true).FullName;
         }
     }
 }

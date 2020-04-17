@@ -34,7 +34,9 @@
                 </Button>
             </Grid>
 
-            <TextBlock FontStyle="Italic" FontSize="11"
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
                        TextWrapping="WrapWithOverflow">
                 This is the file path to your "master" copy of your map. This copy is not modified or read into the map compile process. It will be copied into a file with the name set below in the "Generated map name" field.
             </TextBlock>
@@ -47,7 +49,9 @@
 
             <TextBox Text="{Binding MapName}" />
 
-            <TextBlock FontStyle="Italic" FontSize="11"
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
                        TextWrapping="WrapWithOverflow">
                 This is the filename of the compiled BSP that will be created.
             </TextBlock>

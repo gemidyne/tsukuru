@@ -40,6 +40,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "Resource Packing";
 
+        public string Description => "Pack custom textures, models and sounds into your BSP file.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

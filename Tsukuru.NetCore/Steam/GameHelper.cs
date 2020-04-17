@@ -31,7 +31,7 @@ namespace Tsukuru.Steam
                 return null;
             }
 
-            return $"{gameInfo["game"].Value} (App ID {GetAppId()})";
+            return $"{gameInfo["game"].Value}";
         }
 
         private static KeyValue TryGetGameInfo()

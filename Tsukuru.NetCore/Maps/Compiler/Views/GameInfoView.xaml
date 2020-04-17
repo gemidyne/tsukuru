@@ -19,12 +19,38 @@
                      IsReadOnly="True"
                      extensions:ValidationExtension.IsErrorMessageVisibleOnFocus="False"
                      extensions:ValidationExtension.IsErrorMessageVisibleOnMouseOver="False"/>
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                This is the path to your game folder, which will contain the "maps", "materials", "models" and "sound" folders. 
+            </TextBlock>
         </StackPanel>
 
         <StackPanel Margin="{adonisUi:Space 2}">
-            <Label>Game information</Label>
-            <TextBox Text="{Binding GameInfo, Mode=OneWay}"
+            <Label>Steam App Id</Label>
+            <TextBox Text="{Binding SteamAppId, Mode=OneWay}" IsReadOnly="True" />
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                The unique identifier of the game you will be compiling for.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <Label>Game</Label>
+            <TextBox Text="{Binding GameName, Mode=OneWay}"
                      IsReadOnly="True" />
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                The name of the game you will be compiling for.
+            </TextBlock>
         </StackPanel>
 
         

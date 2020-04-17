@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
-using GalaSoft.MvvmLight.Ioc;
+using Chiaki;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -18,9 +19,12 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             CalculateVvisPath();
 
-            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
+            var settings = new VvisCompilationSettingsViewModel();
 
-            return RunVvisExecutable(log, viewModel.VVISSettings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+            using (new ApplicationContentViewLoader(settings))
+            {
+                return RunVvisExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+            }
         }
 
         private void CalculateVvisPath()
@@ -30,20 +34,22 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                 throw new NotSupportedException("VProject is not set");
             }
 
-            if (_executable == null)
+            if (_executable != null)
             {
-                _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vvis.exe"));
+                return;
+            }
 
-                if (!_executable.Exists)
-                {
-                    throw new FileNotFoundException("VVIS executable not found.", _executable.FullName);
-                }
+            _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vvis.exe"));
+
+            if (!_executable.Exists)
+            {
+                throw new FileNotFoundException("VVIS executable not found.", _executable.FullName);
             }
         }
 
         private string GenerateArgs(ICompilationSettings settings, string vmfPathWithoutExtension)
         {
-            return $" -game \"{VProject}\" {settings.FormattedArguments} \"{vmfPathWithoutExtension}\"";
+            return $" -game \"{VProject}\" {settings.FormattedArguments} {vmfPathWithoutExtension.PrependIfNeeded('"').AppendIfNeeded('"')}";
         }
 
         private int RunVvisExecutable(ILogReceiver log, ICompilationSettings settings, string vmfPathWithoutExtension)

@@ -4,8 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -17,37 +17,41 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override bool Run(ILogReceiver log)
         {
-            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
+            var settings = new VradCompilationSettingsViewModel();
 
-            if (viewModel.VRADSettings.UseModifiedVrad)
+            using (new ApplicationContentViewLoader(settings))
             {
-                var modifiedLib = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vrad_dll-optimized.dll"));
-                var modifiedExe = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vrad_optimized.exe"));
-
-                if (!modifiedLib.Exists)
+                if (settings.UseModifiedVrad)
                 {
-                    log.WriteLine("VRAD", "Writing modified VRAD DLL...");
-                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_dll-optimized.dll"))
-                    using (var fileStream = modifiedLib.OpenWrite())
+                    var modifiedLib = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vrad_dll-optimized.dll"));
+                    var modifiedExe = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vrad_optimized.exe"));
+
+                    if (!modifiedLib.Exists)
                     {
-                        stream.CopyTo(fileStream);
+                        log.WriteLine("VRAD", "Writing modified VRAD DLL...");
+                        using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_dll-optimized.dll"))
+                        using (var fileStream = modifiedLib.OpenWrite())
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+
+                    if (!modifiedExe.Exists)
+                    {
+                        log.WriteLine("VRAD", "Writing modified VRAD EXE...");
+                        using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_optimized.exe"))
+                        using (var fileStream = modifiedExe.OpenWrite())
+                        {
+                            stream.CopyTo(fileStream);
+                        }
                     }
                 }
 
-                if (!modifiedExe.Exists)
-                {
-                    log.WriteLine("VRAD", "Writing modified VRAD EXE...");
-                    using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_optimized.exe"))
-                    using (var fileStream = modifiedExe.OpenWrite())
-                    {
-                        stream.CopyTo(fileStream);
-                    }
-                }
+                CalculateVradPath(settings.UseModifiedVrad);
+
+                return RunVradExecutable(log, settings,
+                    MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
             }
-
-            CalculateVradPath(viewModel.VRADSettings.UseModifiedVrad);
-
-            return RunVradExecutable(log, viewModel.VRADSettings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
         }
 
         private void CalculateVradPath(bool useModdedExecutable)

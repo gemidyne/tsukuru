@@ -11,6 +11,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "Repack";
 
+        public string Description =>
+            "Repacking your map can significantly decrease the file size. This will compress data within the map.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

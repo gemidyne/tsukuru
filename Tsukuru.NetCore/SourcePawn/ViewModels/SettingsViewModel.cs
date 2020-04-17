@@ -31,6 +31,8 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public string Name => "Compiler Settings";
 
+        public string Description => "This page allows you to set settings for the SourcePawn compiler.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
 
         public bool IsLoading

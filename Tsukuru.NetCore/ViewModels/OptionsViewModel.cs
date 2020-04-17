@@ -26,6 +26,8 @@ namespace Tsukuru.ViewModels
 
         public string Name => "Settings";
 
+        public string Description => "Configure various settings of Tsukuru.";
+
         public EShellNavigationPage Group => EShellNavigationPage.Settings;
 
         public bool IsLoading { get; set; }

@@ -300,8 +300,32 @@
                                     Height="600"
                                     Margin="0, 0, -64, -136"/>-->
 
-                    <ContentControl Content="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}"
-                                    Margin="{adonisUi:Space 1}"/>
+                    <Grid Margin="{adonisUi:Space 1}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock 
+                            Grid.Row="0"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Margin="16,0"
+                            Text="{Binding SelectedPage.Name}" />
+                        <TextBlock 
+                            Grid.Row="1"
+                            FontStyle="Italic" 
+                            FontSize="14" 
+                            Margin="16,0"
+                            Text="{Binding SelectedPage.Description}"
+                            TextWrapping="WrapWithOverflow" />
+
+                        <ContentControl 
+                            Grid.Row="2" 
+                            Content="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}" />
+                    </Grid>
+
+                    
 
                     <Grid>
                         <Grid.Style>

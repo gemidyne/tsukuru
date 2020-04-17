@@ -206,6 +206,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "VRAD Settings";
 
+        public string Description =>
+            "VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

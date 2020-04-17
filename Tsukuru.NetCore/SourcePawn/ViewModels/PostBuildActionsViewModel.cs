@@ -13,6 +13,9 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public string Name => "Post-build actions";
 
+        public string Description =>
+            "This page allows you to toggle actions that will be run once the plugins have been compiled.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
 
         public bool IsLoading

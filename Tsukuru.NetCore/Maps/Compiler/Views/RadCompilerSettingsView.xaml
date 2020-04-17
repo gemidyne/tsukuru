@@ -6,8 +6,9 @@
              xmlns:tsukuru="clr-namespace:Tsukuru"
              xmlns:compiler="clr-namespace:Tsukuru.Maps.Compiler"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:VradCompilationSettingsViewModel}">
+             d:DesignHeight="600" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:VradCompilationSettingsViewModel}">
     <Grid Margin="32">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -15,86 +16,130 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition MinHeight="150"/>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="3"
-                   TextWrapping="WrapWithOverflow">
-            VRAD is the command-line tool that takes a compiled BSP map and embeds lighting data into it. VRAD's static and pre-compiled light is bounced around the world with a radiosity algorithm.
-        </TextBlock>
 
-        <StackPanel Grid.Row="1" 
-                                    Grid.Column="0"
-                                    Margin="0,10">
-            <CheckBox IsChecked="{Binding LDR}" Content="LDR" />
-            <CheckBox IsChecked="{Binding HDR}" Content="HDR" />
-        </StackPanel>
+        <StackPanel CanVerticallyScroll="True">
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding LDR}" 
+                          Content="LDR" />
 
-        <StackPanel Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="0,10">
-            <CheckBox IsChecked="{Binding Fast}" 
-                                      Content="Fast" 
-                                      ToolTip="Quick lighting tests only. If shipping your map, use Final instead of Fast."/>
-            <CheckBox IsChecked="{Binding Final}" 
-                                      Content="Final" 
-                                      ToolTip="Increases the quality of lighting by spending more time firing rays."/>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Low dynamic lighting range pass only.
+                </TextBlock>
+            </StackPanel>
 
-            <CheckBox IsChecked="{Binding LowPriority}" 
-                                      Content="Low Priority Compile"
-                                      ToolTip="Runs VRAD as a low-priority process in Windows."/>
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding HDR}" 
+                          Content="HDR" />
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    High dynamic lighting range pass as well as LDR.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding Fast}" 
+                          Content="Fast" />
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Quick lighting tests only. If shipping your map, use Final instead of Fast.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding Final}" 
+                          Content="Final" />
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Increases the quality of lighting by spending more time firing rays.
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel 
-            Grid.Row="1"
-            Grid.Column="2"
-            Margin="0,10">
-            <CheckBox IsChecked="{Binding StaticPropLighting}" 
-                                      Content="Static Prop Lighting" 
-                                      ToolTip="Generate per-vertex prop_static lighting."/>
+            Grid.Row="0"
+            Grid.Column="1">
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding StaticPropLighting}" 
+                          Content="Static Prop Lighting" />
 
-            <CheckBox IsChecked="{Binding StaticPropPolys}" 
-                                      Content="Static Prop Polys" 
-                                      ToolTip="Perform shadow tests of prop_static entities at polygon precision."/>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Generate per-vertex prop_static lighting.
+                </TextBlock>
+            </StackPanel>
 
-            <CheckBox IsChecked="{Binding TextureShadows}"
-                                      Content="Texture Shadows" 
-                                      ToolTip="Generates lightmap shadows from $translucent surfaces of models (NOT brushes) that are specified in a lights file and being used with prop_static. It is recommended that you also enable Static Prop Polys setting when using Texture Shadows."/>
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding StaticPropPolys}" 
+                          Content="Static Prop Polys" />
 
-            <CheckBox IsChecked="{Binding LargeDispSampleRadius}"
-                                      Content="Large Displacement Sample Radius" 
-                                      ToolTip="This can be used if there are splotches of bounced light on terrain. This will cause the VRAD process to take longer, but it will gather light across a wider area."/>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Perform shadow tests of prop_static entities at polygon precision.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="{adonisUi:Space 2}">
+
+                <CheckBox IsChecked="{Binding TextureShadows}"
+                          Content="Texture Shadows" 
+                          ToolTip=""/>
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Generates lightmap shadows from $translucent surfaces of models (NOT brushes) that are specified in a lights file and being used with prop_static. It is recommended that you also enable Static Prop Polys setting when using Texture Shadows.
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding LargeDispSampleRadius}"
+                          Content="Large Displacement Sample Radius" />
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    This can be used if there are splotches of bounced light on terrain. This will cause the VRAD process to take longer, but it will gather light across a wider area.
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" 
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Margin="0,10">
+        <StackPanel Grid.Row="0"
+                    Grid.Column="2">
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding LowPriority}" 
+                          Content="Low Priority" />
 
-            <CheckBox IsChecked="{Binding UseModifiedVrad}">
-                <CheckBox.Content>
-                    Use multi-core optimised VRAD? (TF2 / Source 2013 games only)
-                </CheckBox.Content>
-            </CheckBox>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Runs VRAD as a low-priority process in Windows.
+                </TextBlock>
+            </StackPanel>
 
-            <TextBlock Margin="23,0,0,0"
-                       TextWrapping="WrapWithOverflow">
-                Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines.
-                For more information, see the following GitHub pull request:
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding UseModifiedVrad}"
+                          Content="Use multi-core optimised VRAD? " />
 
-                <tsukuru:BrowserHyperlink NavigateUri="https://github.com/ValveSoftware/source-sdk-2013/pull/436">
-                    https://github.com/ValveSoftware/source-sdk-2013/pull/436
-                </tsukuru:BrowserHyperlink>
-            </TextBlock>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    For TF2 / Source 2013 games only.
+
+                    Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines.
+                    For more information, see the following GitHub pull request:
+
+                    <tsukuru:BrowserHyperlink NavigateUri="https://github.com/ValveSoftware/source-sdk-2013/pull/436">
+                        https://github.com/ValveSoftware/source-sdk-2013/pull/436
+                    </tsukuru:BrowserHyperlink>
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
 
-        <Grid Grid.Row="3" 
+        <Grid Grid.Row="1" 
               Grid.Column="0"
               Grid.ColumnSpan="3"
               VerticalAlignment="Bottom">
@@ -104,7 +149,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="4" 
+        <Grid Grid.Row="2" 
               Grid.Column="0" 
               Grid.ColumnSpan="3">
             <StackPanel>

@@ -63,6 +63,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public string Name => "VVIS Settings";
 
+        public string Description =>
+            "VVIS is the command-line tool that takes a compiled BSP map and embeds visibility data into it. VVIS tests which visleaves can see each other, and which cannot.";
+
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
         public bool IsLoading

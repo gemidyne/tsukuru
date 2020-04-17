@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
-using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -18,11 +18,12 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             CalculateVbspPath();
 
-            var viewModel = SimpleIoc.Default.GetInstance<CompileConfirmationViewModel>();
-
             MapCompileSessionInfo.Instance.SdkToolsPath = SdkToolsPath;
 
-            return RunBspExecutable(log, viewModel.VBSPSettings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+            var settings = new VbspCompilationSettingsViewModel();
+
+            using (new ApplicationContentViewLoader(settings))
+                return RunBspExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
         }
 
         private void CalculateVbspPath()

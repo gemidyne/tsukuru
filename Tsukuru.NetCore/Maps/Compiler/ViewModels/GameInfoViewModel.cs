@@ -8,10 +8,14 @@ namespace Tsukuru.Maps.Compiler.ViewModels
     {
         private static readonly object _door = new object();
         private bool _isLoading;
-        private string _gameInfo;
+        private string _gameName;
         private string _vProject;
+        private string _steamAppId;
 
         public string Name => "Game information";
+
+        public string Description =>
+            "This page shows you the loaded game information that will be used to compile the map.";
 
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
@@ -36,10 +40,16 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public bool IsVProjectNotSet => string.IsNullOrWhiteSpace(VProject);
 
-        public string GameInfo
+        public string GameName
         {
-            get => _gameInfo;
-            set => Set(() => GameInfo, ref _gameInfo, value);
+            get => _gameName;
+            set => Set(() => GameName, ref _gameName, value);
+        }
+
+        public string SteamAppId
+        {
+            get => _steamAppId;
+            set => Set(() => SteamAppId, ref _steamAppId, value);
         }
 
         public GameInfoViewModel()
@@ -51,7 +61,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             else
             {
                 VProject = VProjectHelper.Path;
-                GameInfo = GameHelper.GetGameInfo();
+                SteamAppId = GameHelper.GetAppId()?.ToString() ?? "Unknown";
+                GameName = GameHelper.GetGameInfo();
             }
         }
 

@@ -12,7 +12,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
     {
         private bool _isLoading;
 
-        public string Name => "Map Settings";
+        public string Name => "Map information";
+
+        public string Description => "This page allows you to select the VMF and output map filename.";
 
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 

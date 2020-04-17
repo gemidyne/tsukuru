@@ -3,51 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:compiler="clr-namespace:Tsukuru.Maps.Compiler"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:VvisCompilationSettingsViewModel}">
     <Grid Margin="32">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   TextWrapping="WrapWithOverflow">
-            VVIS is the command-line tool that takes a compiled BSP map and embeds visibility data into it. VVIS tests which visleaves can see each other, and which cannot.
-        </TextBlock>
+        <StackPanel Grid.Row="0">
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding Fast}" 
+                          Content="Fast" />
 
-        <StackPanel Grid.Row="1" 
-                    Grid.Column="0"
-                    Margin="0,10">
-            <CheckBox IsChecked="{Binding Fast}" 
-                      Content="Fast" 
-                      ToolTip="Only do a quick first pass. Using this setting, VVIS will not actually test visibility."/>
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Only do a quick first pass. Using this setting, VVIS will not actually test visibility.
+                </TextBlock>
+            </StackPanel>
 
-            <CheckBox IsChecked="{Binding LowPriority}" 
-                      Content="Low Priority" 
-                      ToolTip="Runs VVIS as a low-priority process in Windows."/>
+            <StackPanel Margin="{adonisUi:Space 2}">
+                <CheckBox IsChecked="{Binding LowPriority}" 
+                          Content="Low Priority" />
+
+                <TextBlock FontStyle="Italic" FontSize="11" Margin="20,5,0,0"
+                           TextWrapping="WrapWithOverflow">
+                    Runs VVIS as a low-priority process in Windows.
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
 
-        <Grid Grid.Row="2"
-              Grid.Column="0"
-              Grid.ColumnSpan="2">
+        <Grid Grid.Row="1">
             <StackPanel>
                 <Label>Other VVIS arguments</Label>
                 <TextBox Text="{Binding OtherArguments}" />
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="2">
             <StackPanel>
                 <Label>Formatted arguments</Label>
                 <TextBox 

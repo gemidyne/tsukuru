@@ -14,8 +14,6 @@
     <StackPanel Margin="32">
         <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">
-            Templating allows you to dynamically generate files from templates as part of the compile process. 
-            
             Template files must end in the ".tsutmpl" file extension, with the correct file extension before hand. 
 
             For example, to create a preprocessed txt file, name your file test.txt.tsutmpl
