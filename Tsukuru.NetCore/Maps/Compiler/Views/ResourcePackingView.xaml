@@ -5,14 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tsukuru.Maps.Compiler.Views"
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:converters="clr-namespace:Tsukuru.Converters"
              mc:Ignorable="d" 
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             d:DesignHeight="250" d:DesignWidth="600" 
+             d:DesignHeight="600" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:ResourcePackingViewModel}">
+    <UserControl.Resources>
+        <converters:BooleanToPackingModeConverter x:Key="BooleanToPackingModeConverter" />
+    </UserControl.Resources>
+
     <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,9 +27,7 @@
 
         <StackPanel Grid.Row="0"
                     Margin="0,0,0,10">
-            <CheckBox 
-                IsChecked="{Binding PerformResourcePacking}" 
-                Content="Enable Resource Packing?" />
+
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -32,53 +36,95 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" 
-                        HorizontalAlignment="Right" 
-                        Orientation="Horizontal">
-                <Button Content="Add folder" 
-                        Command="{Binding AddFolderCommand}"
-                        FontSize="12"
-                        Height="Auto"/>
-            </StackPanel>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <CheckBox 
+                    Grid.Column="0"
+                    IsChecked="{Binding PerformResourcePacking}" 
+                    Content="Pack resources into your map?" />
 
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding FoldersToPack}">
-                    <ItemsControl.ItemTemplate>
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding AddFolderCommand}"
+                    FontSize="12"
+                    Height="Auto"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="+"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Add folder"
+                                   Margin="{adonisUi:Space 1, 0, 0, 0}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+                
+            <DataGrid 
+                Grid.Row="1" 
+                ItemsSource="{Binding FoldersToPack}"
+                AutoGenerateColumns="False"
+                FrozenColumnCount="1"
+                EnableRowVirtualization="True"
+                EnableColumnVirtualization="True"
+                VerticalScrollBarVisibility="Visible">
+                    <DataGrid.Resources>
+                        <Style x:Key="CellErrorStyle"
+                                   TargetType="{x:Type TextBlock}">
+                            <Setter Property="Validation.ErrorTemplate"
+                                        Value="{DynamicResource {x:Static adonisUi:Templates.ValidationErrorTemplate}}"/>
+                            <Style.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="{DynamicResource {x:Static adonisUi:Colors.ErrorColor}}" Opacity="0.25"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
+                                                Binding="{Binding Name, ValidatesOnDataErrors=True}"
+                                                ElementStyle="{StaticResource CellErrorStyle}"
+                                                MinWidth="200" 
+                                                IsReadOnly="True"/>
+
+                        <DataGridTextColumn 
+                            Header="Path"
+                            Binding="{Binding Folder, ValidatesOnDataErrors=True}"
+                            ElementStyle="{StaticResource CellErrorStyle}"
+                            IsReadOnly="True"/>
+
+                        <DataGridCheckBoxColumn 
+                            Header="Pack only used files?"
+                            Binding="{Binding Intelligent}"
+                            IsReadOnly="False" />
+
+                        <DataGridCheckBoxColumn 
+                            Header="Pack all files?"
+                            Binding="{Binding NotIntelligent}"
+                            IsReadOnly="False" />
+                </DataGrid.Columns>
+
+                    <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel
-                                Margin="8 0 0 0"
-                                Grid.Column="0">
-                                    <TextBlock FontWeight="Bold"
-                                               Text="{Binding File}" />
-                                    <TextBlock
-                                    Text="{Binding Folder}" />
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" 
-                                        Orientation="Vertical"
-                                        Margin="10,0">
-                                    <CheckBox Content="Pack only used files" IsChecked="{Binding Intelligent}" />
-                                    <CheckBox Content="Pack all files" IsChecked="{Binding NotIntelligent}" />
-                                </StackPanel>
-
-                                <Button Grid.Column="2" 
-                                    Command="{Binding RemoveFolderCommand}">
-                                    <Button.Content>
-                                        Delete
-                                    </Button.Content>
-                                </Button>
-                            </Grid>
+                            <local:FolderDataGridTemplateView />
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+                    </DataGrid.RowDetailsTemplate>
+
+                    <DataGrid.RowValidationRules>
+                        <DataErrorValidationRule ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue" />
+                    </DataGrid.RowValidationRules>
+
+                </DataGrid>
         </Grid>
     </Grid>
 </UserControl>

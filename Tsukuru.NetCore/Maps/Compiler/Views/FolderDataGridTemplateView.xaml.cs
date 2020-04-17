@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace Tsukuru.Maps.Compiler.Views
 {
     /// <summary>
-    /// Interaction logic for ResourceFolderSelectionView.xaml
+    /// Interaction logic for FolderDataGridTemplateView.xaml
     /// </summary>
-    public partial class ResourceFolderSelectionView : UserControl
+    public partial class FolderDataGridTemplateView : UserControl
     {
-        public ResourceFolderSelectionView()
+        public FolderDataGridTemplateView()
         {
             InitializeComponent();
         }

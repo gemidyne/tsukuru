@@ -55,12 +55,22 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             AddFolderCommand = new RelayCommand(AddFolderToPack);
             FoldersToPack = new ObservableCollection<ResourceFolderViewModel>();
 
-            MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
-            PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
-            foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
+            if (IsInDesignMode)
             {
-                FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
+                FoldersToPack.Add(new ResourceFolderViewModel("c:\\test", intelligent: true));
+                FoldersToPack.Add(new ResourceFolderViewModel("c:\\test2", intelligent: false));
+                FoldersToPack.Add(new ResourceFolderViewModel("c:\\test3", intelligent: true));
+            }
+            else
+            {
+                MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
+                PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
+
+                foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
+                {
+                    FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
+                }
             }
         }
 

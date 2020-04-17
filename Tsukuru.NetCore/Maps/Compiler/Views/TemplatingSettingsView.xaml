@@ -15,8 +15,6 @@
         <TextBlock Margin="0,0,0,10"
                    TextWrapping="WrapWithOverflow">
             Template files must end in the ".tsutmpl" file extension, with the correct file extension before hand. 
-
-            For example, to create a preprocessed txt file, name your file test.txt.tsutmpl
         </TextBlock>
 
         <TextBlock TextWrapping="WrapWithOverflow">

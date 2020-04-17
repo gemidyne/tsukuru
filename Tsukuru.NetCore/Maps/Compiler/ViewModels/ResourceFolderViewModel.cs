@@ -46,12 +46,16 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public string File => GetHeading();
+        public string Name => GetHeading();
 
         public bool NotIntelligent
         {
             get => !Intelligent;
-            set => Intelligent = !value;
+            set
+            {
+                Intelligent = !value;
+                RaisePropertyChanged(nameof(NotIntelligent));
+            }
         }
 
         public RelayCommand RemoveFolderCommand { get; }
