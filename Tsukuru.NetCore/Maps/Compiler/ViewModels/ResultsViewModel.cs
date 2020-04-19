@@ -2,12 +2,13 @@
 using System.Text;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Tsukuru.Maps.Compiler.Business;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class MapCompilerResultsViewModel : ViewModelBase, ILogReceiver
+    public class ResultsViewModel : ViewModelBase, ILogReceiver, IApplicationContentView
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
         private static readonly object _door = new object();
         private readonly StringBuilder _consoleText = new StringBuilder();
 
@@ -17,6 +18,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private string _subtitle;
         private int _progressValue;
         private int _progressMaximum;
+        private bool _isLoading;
 
         public string Heading
         {
@@ -68,10 +70,20 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public RelayCommand CloseCommand { get; }
 
-        public MapCompilerResultsViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            _mainWindowViewModel = mainWindowViewModel;
+        public string Name => "Compiler Results";
 
+        public string Description => "View current compiler progress and results.";
+
+        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
+        public ResultsViewModel()
+        {
             CloseCommand = new RelayCommand(CloseResults);
         }
 
@@ -82,20 +94,23 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             //_mainWindowViewModel.DisplayMapCompilerView = true;
             //_mainWindowViewModel.DisplaySourcePawnCompilerView = true;
 
-        }
-
-        public void Initialise(string mapName)
-        {
-            _mapName = mapName;
-
-            Heading = $"Map Compiler: {_mapName}";
-            Subtitle = "Please wait...";
-            IsCloseButtonOnExecutionEnabled = false;
-
             lock (_door)
             {
                 _consoleText.Clear();
             }
+        }
+
+        public void Init()
+        {
+            _mapName = MapCompileSessionInfo.Instance.MapName;
+            Subtitle = "Ready";
+        }
+
+        public void Initialise(string mapName)
+        {
+            Heading = $"Compiling {_mapName}...";
+            Subtitle = "Please wait...";
+            IsCloseButtonOnExecutionEnabled = false;
         }
 
         public void NotifyComplete(TimeSpan timeElapsed)

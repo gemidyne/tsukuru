@@ -4,49 +4,51 @@ using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business
 {
-	internal class CompileStepRunner
-	{
-		private readonly MapCompilerResultsViewModel _log;
-		private readonly List<ICompileStep> _steps = new List<ICompileStep>();
+    internal class CompileStepRunner
+    {
+        private readonly ResultsViewModel _log;
+        private readonly List<ICompileStep> _steps = new List<ICompileStep>();
 
-		public CompileStepRunner(MapCompilerResultsViewModel log)
-		{
-			_log = log;
-		}
+        public CompileStepRunner(ResultsViewModel log)
+        {
+            _log = log;
+        }
 
-		public void AddStep(ICompileStep step)
-		{
-			_steps.Add(step);
-		}
+        public void AddStep(ICompileStep step)
+        {
+            _steps.Add(step);
+        }
 
-		public void Run()
-		{
-			var stopwatch = Stopwatch.StartNew();
+        public void Run()
+        {
+            var stopwatch = Stopwatch.StartNew();
 
-			_log.ProgressMaximum = _steps.Count;
+            _log.ProgressMaximum = _steps.Count;
 
-			foreach (ICompileStep step in _steps)
-			{
-				_log.Subtitle = $"Running compile step: \"{step.StepName}\"";
+            for (var i = 0; i < _steps.Count; i++)
+            {
+                ICompileStep step = _steps[i];
 
-				bool result = step.Run(_log);
+                _log.Subtitle = $"Running: \"{step.StepName}\"... ({i}/{_steps.Count})";
 
-				if (result)
-				{
-					_log.ProgressValue++;
-					continue;
-				}
+                bool result = step.Run(_log);
 
-				stopwatch.Stop();
+                if (result)
+                {
+                    _log.ProgressValue++;
+                    continue;
+                }
 
-				_log.WriteLine("Tsukuru", "An error was encountered in the compilation process.");
-				_log.NotifyComplete(stopwatch.Elapsed);
+                stopwatch.Stop();
 
-				return;
-			}
+                _log.WriteLine("Tsukuru", "An error was encountered in the compilation process.");
+                _log.NotifyComplete(stopwatch.Elapsed);
 
-			stopwatch.Stop();
-			_log.NotifyComplete(stopwatch.Elapsed);
-		}
-	}
+                return;
+            }
+
+            stopwatch.Stop();
+            _log.NotifyComplete(stopwatch.Elapsed);
+        }
+    }
 }

@@ -52,7 +52,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
             var destinationFullFile = Path.Combine(destinationFullPath, destinationFileName + ".vmf");
 
-            return inputVmf.CopyTo(destinationFileName, overwrite: true).FullName;
+            return inputVmf.CopyTo(destinationFullFile, overwrite: true).FullName;
         }
     }
 }

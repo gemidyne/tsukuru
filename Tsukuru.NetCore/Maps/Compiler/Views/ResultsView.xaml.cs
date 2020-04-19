@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Maps.Compiler
+namespace Tsukuru.Maps.Compiler.Views
 {
-    public partial class MapCompilerResultsView : UserControl
+    public partial class ResultsView : UserControl
     {
-        public MapCompilerResultsView()
+        public ResultsView()
         {
             InitializeComponent();
         }

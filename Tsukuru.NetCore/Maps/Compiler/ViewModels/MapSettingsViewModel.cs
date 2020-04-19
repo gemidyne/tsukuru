@@ -73,16 +73,21 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         public MapSettingsViewModel()
         {
             SelectVmfFileCommand = new RelayCommand(SelectVmfFile);
+
+#warning TODO This shouldn't be in here. Map compiler should just refer to settings and build from that rather than rely on viewmodels...
+            VmfPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
+
+#warning TODO Support saving map name and detecting a date stamp in filename
+
+            if (string.IsNullOrWhiteSpace(MapName))
+            {
+                MapName = $"TsukuruMap-{DateTime.Now:yyyyMMdd}";
+            }
         }
 
         public void Init()
         {
-            VmfPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
 
-            if (string.IsNullOrWhiteSpace(VmfPath))
-            {
-                MapName = $"TsukuruMap-{DateTime.Now:yyyyMMdd}";
-            }
         }
 
         private void SelectVmfFile()

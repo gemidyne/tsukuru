@@ -53,9 +53,6 @@
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Maps\Compiler\MapCompilerResultsView.xaml.cs">
-      <DependentUpon>MapCompilerResultsView.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Maps\Compiler\Views\CompileConfirmationView.xaml.cs">
       <DependentUpon>CompileConfirmationView.xaml</DependentUpon>
     </Compile>
@@ -89,9 +86,6 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Maps\Compiler\MapCompilerResultsView.xaml">
-      <SubType>Designer</SubType>
     </Page>
     <Page Update="Maps\Compiler\Views\CompileConfirmationView.xaml">
       <SubType>Designer</SubType>

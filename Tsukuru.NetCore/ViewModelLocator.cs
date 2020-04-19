@@ -17,13 +17,6 @@ namespace Tsukuru
 
         public MainWindowViewModel MainWindowViewModel => _ioc.GetInstance<MainWindowViewModel>();
 
-        public CompileConfirmationViewModel CompileConfirmationViewModel => _ioc.GetInstance<CompileConfirmationViewModel>();
-
-        public MapCompilerResultsViewModel MapCompilerResultsViewModel =>
-            _ioc.GetInstance<MapCompilerResultsViewModel>();
-
-        public ResourcePackingViewModel ResourcePackingViewModel => _ioc.GetInstance<ResourcePackingViewModel>();
-
         public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
 
         public OptionsViewModel OptionsViewModel => _ioc.GetInstance<OptionsViewModel>();
@@ -71,11 +64,6 @@ namespace Tsukuru
             if (!_ioc.IsRegistered<CompileConfirmationViewModel>())
             {
                 _ioc.Register<CompileConfirmationViewModel>();
-            }
-
-            if (!_ioc.IsRegistered<MapCompilerResultsViewModel>())
-            {
-                _ioc.Register<MapCompilerResultsViewModel>();
             }
 
             if (!_ioc.IsRegistered<OptionsViewModel>())

@@ -58,4 +58,8 @@
     <DataTemplate DataType="{x:Type viewModels:CompileConfirmationViewModel}">
         <views:CompileConfirmationView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:ResultsViewModel}">
+        <views:ResultsView />
+    </DataTemplate>
 </ResourceDictionary>

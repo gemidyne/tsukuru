@@ -67,7 +67,7 @@ namespace Tsukuru
 
         public MainWindowViewModel()
         {
-            _pages = new ObservableCollection<IApplicationContentView>(CreateAllPages());
+            _pages = new ObservableCollection<IApplicationContentView>(CreateAllPages().ToList());
             Pages = new ReadOnlyObservableCollection<IApplicationContentView>(_pages);
             PagesCollectionView = CollectionViewSource.GetDefaultView(Pages);
             PagesCollectionView.Filter = FilterPages;
@@ -80,6 +80,19 @@ namespace Tsukuru
             NavigationGroups = new ReadOnlyObservableCollection<EShellNavigationPage>(_navigationGroups);
             NavigationGroupsCollectionView = CollectionViewSource.GetDefaultView(NavigationGroups);
             NavigationGroupsCollectionView.Filter = FilterNavigationGroups;
+        }
+
+        public void NavigateToPage<T>()
+            where T : IApplicationContentView
+        {
+            var page = Pages.OfType<T>().SingleOrDefault();
+
+            if (page == null)
+            {
+                return;
+            }
+
+            SelectedPage = page;
         }
 
         private IEnumerable<IApplicationContentView> CreateAllPages()
@@ -99,6 +112,7 @@ namespace Tsukuru
             yield return new Maps.Compiler.ViewModels.BspRepackViewModel();
             yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
             yield return new Maps.Compiler.ViewModels.CompileConfirmationViewModel();
+            yield return new Maps.Compiler.ViewModels.ResultsViewModel();
         }
 
         private bool FilterPages(object item)

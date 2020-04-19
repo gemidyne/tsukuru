@@ -3,6 +3,7 @@ using System.Media;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.Business;
 using Tsukuru.Steam;
 using Tsukuru.ViewModels;
@@ -131,6 +132,10 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private async void DoMapCompile()
         {
+            SimpleIoc.Default
+                .GetInstance<MainWindowViewModel>()
+                .NavigateToPage<ResultsViewModel>();
+
             await Task.Run(() =>
             {
                 MapCompileInitialiser.Execute(this);
