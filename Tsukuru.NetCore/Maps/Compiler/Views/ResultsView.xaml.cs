@@ -9,7 +9,7 @@ namespace Tsukuru.Maps.Compiler.Views
             InitializeComponent();
         }
 
-        private void tbConsole_TextChanged(object sender, TextChangedEventArgs e)
+        private void OnTextBoxConsoleChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
             textBox?.ScrollToEnd();

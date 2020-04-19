@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Chiaki;
+using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Packer
 {
     public class TemplatingEngine : IDisposable
     {
         private readonly List<string> _filesToCleanup;
-        private readonly ILogReceiver _log;
+        private readonly ResultsLogContainer _log;
         private readonly IReadOnlyList<string> _directoriesToScan;
 
         private readonly string _tokenMapName;
 
         public TemplatingEngine(
-            ILogReceiver log,
+            ResultsLogContainer log,
             IReadOnlyList<string> directoriesToScan,
             string mapName)
         {
@@ -29,7 +30,7 @@ namespace Tsukuru.Maps.Packer
 
         public void Generate()
         {
-            _log.WriteLine(nameof(TemplatingEngine), $"{_directoriesToScan.Count} directories to be processed.");
+            _log.AppendLine(nameof(TemplatingEngine), $"{_directoriesToScan.Count} directories to be processed.");
 
             foreach (string directory in _directoriesToScan)
             {
@@ -37,14 +38,14 @@ namespace Tsukuru.Maps.Packer
 
                 var files = directoryInfo.GetFiles("*.tsutmpl", SearchOption.AllDirectories);
 
-                _log.WriteLine(nameof(TemplatingEngine), $"{files.Length} template file(s) found in {directoryInfo.Name}");
+                _log.AppendLine(nameof(TemplatingEngine), $"{files.Length} template file(s) found in {directoryInfo.Name}");
 
                 foreach (var file in files)
                 {
                     if (file.Length >= 2097152)
                     {
                         // Don't process files larger than 2MB.
-                        _log.WriteLine(nameof(TemplatingEngine), $"WARNING: Cannot process {file.FullName} - file is larger than 2MB limit.");
+                        _log.AppendLine(nameof(TemplatingEngine), $"WARNING: Cannot process {file.FullName} - file is larger than 2MB limit.");
                         continue;
                     }
 
@@ -63,11 +64,11 @@ namespace Tsukuru.Maps.Packer
 
                         File.WriteAllText(destinationFileName, builder.ToString());
 
-                        _log.WriteLine(nameof(TemplatingEngine), $"Processed {file.Name} successfully");
+                        _log.AppendLine(nameof(TemplatingEngine), $"Processed {file.Name} successfully");
                     }
                     catch (Exception ex)
                     {
-                        _log.WriteLine(nameof(TemplatingEngine), $"ERROR: Processing {file.FullName} resulted in error: \n{ex}");
+                        _log.AppendLine(nameof(TemplatingEngine), $"ERROR: Processing {file.FullName} resulted in error: \n{ex}");
                     }
                     finally
                     {
@@ -87,7 +88,7 @@ namespace Tsukuru.Maps.Packer
 
                 if (!fileInfo.Exists)
                 {
-                    _log.WriteLine(nameof(TemplatingEngine), $"WARNING: Attempted to cleanup {fileInfo.FullName} but it no longer exists...");
+                    _log.AppendLine(nameof(TemplatingEngine), $"WARNING: Attempted to cleanup {fileInfo.FullName} but it no longer exists...");
                     continue;
                 }
 
@@ -97,14 +98,14 @@ namespace Tsukuru.Maps.Packer
                 }
                 catch (Exception ex)
                 {
-                    _log.WriteLine(nameof(TemplatingEngine), $"ERROR: Attempted to cleanup {fileInfo.FullName} resulted in error: \n{ex}");
+                    _log.AppendLine(nameof(TemplatingEngine), $"ERROR: Attempted to cleanup {fileInfo.FullName} resulted in error: \n{ex}");
                     continue;
                 }
 
                 count++;
             }
 
-            _log.WriteLine(nameof(TemplatingEngine), $"Cleaned up {count} processed file(s)");
+            _log.AppendLine(nameof(TemplatingEngine), $"Cleaned up {count} processed file(s)");
         }
 
         private string PerformReplacements(string input)

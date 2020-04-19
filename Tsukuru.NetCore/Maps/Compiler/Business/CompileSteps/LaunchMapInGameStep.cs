@@ -1,4 +1,5 @@
 ﻿using Chiaki;
+using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Steam;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
@@ -7,9 +8,9 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
     {
         public string StepName => "Launch map in game";
 
-        public bool Run(ILogReceiver log)
+        public bool Run(ResultsLogContainer log)
         {
-            log.WriteLine("LaunchMapInGameStep", "Launching game and loading map...");
+            log.AppendLine("LaunchMapInGameStep", "Launching game and loading map...");
 
             return SteamHelper.LaunchAppWithMap(MapCompileSessionInfo.Instance.GeneratedBspFile.Name.TrimEnd(".bsp"));
         }

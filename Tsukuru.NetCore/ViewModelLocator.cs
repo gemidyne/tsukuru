@@ -25,6 +25,8 @@ namespace Tsukuru
 
         public TranslatorExportViewModel TranslatorExportViewModel => _ioc.GetInstance<TranslatorExportViewModel>();
 
+        public ResultsViewModel ResultsViewModel => _ioc.GetInstance<ResultsViewModel>();
+
         public ViewModelLocator()
         {
             if (ViewModelBase.IsInDesignModeStatic)
@@ -54,6 +56,11 @@ namespace Tsukuru
             if (!_ioc.IsRegistered<ResultsWindowViewModel>())
             {
                 _ioc.Register<ResultsWindowViewModel>();
+            }
+
+            if (!_ioc.IsRegistered<ResultsViewModel>())
+            {
+                _ioc.Register<ResultsViewModel>();
             }
 
             if (!_ioc.IsRegistered<ResourcePackingViewModel>())

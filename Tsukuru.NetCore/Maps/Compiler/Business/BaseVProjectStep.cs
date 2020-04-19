@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Tsukuru.Core.SourceEngine;
+using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business
 {
@@ -44,6 +45,6 @@ namespace Tsukuru.Maps.Compiler.Business
 
         public abstract string StepName { get; }
 
-        public abstract bool Run(ILogReceiver log);
+        public abstract bool Run(ResultsLogContainer log);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Tsukuru.Maps.Compiler.Business;
@@ -7,11 +8,8 @@ using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
 {
-    public class ResultsViewModel : ViewModelBase, ILogReceiver, IApplicationContentView
+    public class ResultsViewModel : ViewModelBase, IApplicationContentView
     {
-        private static readonly object _door = new object();
-        private readonly StringBuilder _consoleText = new StringBuilder();
-
         private bool _isCloseButtonOnExecutionEnabled;
         private string _heading;
         private string _mapName;
@@ -19,6 +17,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private int _progressValue;
         private int _progressMaximum;
         private bool _isLoading;
+        private int _activeLogsIndex;
 
         public string Heading
         {
@@ -44,17 +43,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             set => Set(() => ProgressMaximum, ref _progressMaximum, value);
         }
 
-        public string ConsoleText
-        {
-            get
-            {
-                lock (_door)
-                {
-                    return _consoleText.ToString();
-                }
-            }
-        }
-
         public bool IsCloseButtonOnExecutionEnabled
         {
             get => _isCloseButtonOnExecutionEnabled;
@@ -64,6 +52,14 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(IsProgressBarIndeterminate));
             }
+        }
+
+        public ObservableCollection<ResultsLogContainer> Logs { get; } = new ObservableCollection<ResultsLogContainer>();
+
+        public int ActiveLogsIndex
+        {
+            get => _activeLogsIndex;
+            set => Set(() => ActiveLogsIndex, ref _activeLogsIndex, value);
         }
 
         public bool IsProgressBarIndeterminate => false;
@@ -94,9 +90,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             //_mainWindowViewModel.DisplayMapCompilerView = true;
             //_mainWindowViewModel.DisplaySourcePawnCompilerView = true;
 
-            lock (_door)
+            lock (Logs)
             {
-                _consoleText.Clear();
+                Logs.Clear();
             }
         }
 
@@ -111,34 +107,41 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             Heading = $"Compiling {_mapName}...";
             Subtitle = "Please wait...";
             IsCloseButtonOnExecutionEnabled = false;
+
+            Logs.Clear();
         }
 
         public void NotifyComplete(TimeSpan timeElapsed)
         {
-            Heading = $"Map Compiler {_mapName}";
+            Heading = $"Compiled {_mapName}";
             Subtitle = $"Completed in {timeElapsed}";
-            WriteLine("Tsukuru", $"Completed in {timeElapsed}");
 
             IsCloseButtonOnExecutionEnabled = true;
             ProgressValue = ProgressMaximum;
         }
 
-        public void Write(string message)
+        public ResultsLogContainer GetLogDestination(string category)
         {
-            lock (_door)
+            if (Logs.All(x => x.Category != category))
             {
-                _consoleText.Append(message);
-                RaisePropertyChanged(nameof(ConsoleText));
+                Logs.Add(new ResultsLogContainer { Category = category });
             }
+
+            return Logs.Single(x => x.Category == category);
         }
 
-        public void WriteLine(string category, string message)
+        public void NavigateToLogTab(string category)
         {
-            lock (_door)
+            var tab = Logs.SingleOrDefault(x => x.Category == category);
+
+            if (tab == null)
             {
-                _consoleText.AppendLine($"[{category}]: {message}");
-                RaisePropertyChanged(nameof(ConsoleText));
+                return;
             }
+
+            int idx = Logs.IndexOf(tab);
+
+            ActiveLogsIndex = idx;
         }
     }
 }

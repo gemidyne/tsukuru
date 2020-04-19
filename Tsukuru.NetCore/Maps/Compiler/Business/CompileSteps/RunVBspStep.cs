@@ -14,7 +14,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override string StepName => "VBSP";
 
-        public override bool Run(ILogReceiver log)
+        public override bool Run(ResultsLogContainer log)
         {
             CalculateVbspPath();
 
@@ -49,7 +49,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} \"{vmfPathWithoutExtension}\"";
         }
 
-        private int RunBspExecutable(ILogReceiver log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunBspExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -73,7 +73,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                     errors.Append(e.Data);
                 };
 
-                log.WriteLine("VBSP", "Redirecting process output:");
+                log.AppendLine("VBSP", "Running VBSP...");
 
                 process.Start();
                 process.BeginErrorReadLine();
@@ -84,7 +84,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        log.Write(message: ((char)ch).ToString());
+                        log.Append(((char)ch));
                     }
                 });
 
@@ -94,11 +94,11 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                 outputReader.Join();
 
-                log.WriteLine("VBSP", $"Exited with code {process.ExitCode}");
+                log.AppendLine("VBSP", $"Exited with code {process.ExitCode}");
 
                 if (errors.Length > 0)
                 {
-                    log.WriteLine("VBSP", errors.ToString());
+                    log.AppendLine("VBSP", errors.ToString());
                 }
 
                 return process.ExitCode;

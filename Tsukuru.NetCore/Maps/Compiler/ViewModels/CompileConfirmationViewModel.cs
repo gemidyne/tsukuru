@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Media;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -136,10 +135,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 .GetInstance<MainWindowViewModel>()
                 .NavigateToPage<ResultsViewModel>();
 
-            await Task.Run(() =>
-            {
-                MapCompileInitialiser.Execute(this);
-            });
+            await MapCompileInitialiser.ExecuteAsync(this);
 
             SystemSounds.Asterisk.Play();
         }

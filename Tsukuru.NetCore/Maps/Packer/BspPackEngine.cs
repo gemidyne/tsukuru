@@ -7,19 +7,19 @@ using System.Text;
 using System.Threading;
 using Chiaki;
 using Tsukuru.Core.SourceEngine;
-using Tsukuru.Maps.Compiler.Business;
+using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Packer
 {
     public class BspPackEngine : IProgress<string>
     {
-        private readonly ILogReceiver _log;
+        private readonly ResultsLogContainer _log;
 
         public PackerSessionDetails Details { get; }
 
         public Dictionary<string, string> FilesToPack { get; private set; }
 
-        public BspPackEngine(ILogReceiver log, PackerSessionDetails sessionDetails)
+        public BspPackEngine(ResultsLogContainer log, PackerSessionDetails sessionDetails)
         {
             _log = log;
             Details = sessionDetails;
@@ -40,48 +40,13 @@ namespace Tsukuru.Maps.Packer
                 Report($"{fileType.Key} count: {fileType.Count()}");
             }
 
-            _log.WriteLine("BspPackEngine", $"Number of files to pack: {FilesToPack.Count}");
+            _log.AppendLine("BspPackEngine", $"Number of files to pack: {FilesToPack.Count}");
 
             WriteFileList();
-            _log.WriteLine("BspPackEngine", "Packing...");
+            _log.AppendLine("BspPackEngine", "Packing...");
 
             PackBsp();
-            _log.WriteLine("BspPackEngine", "Pack complete.");
-        }
-
-        public void RepackCompressBsp()
-        {
-            var args = GetArgumentsForRepackCompress(Details.MapFile);
-
-            var startInfo = new ProcessStartInfo(Path.Combine(Details.GamePath, "bin", "bspzip.exe"), args)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-
-            _log.WriteLine("REPACK", "Redirecting repack output:");
-
-            using (var process = Process.Start(startInfo))
-            {
-                var outputReader = new Thread(() =>
-                {
-                    int ch;
-
-                    while ((ch = process.StandardOutput.Read()) >= 0)
-                    {
-                        _log.Write(message: ((char)ch).ToString());
-                    }
-                });
-
-                outputReader.Start();
-
-                process.WaitForExit();
-
-                outputReader.Join();
-
-                _log.WriteLine("REPACK", $"BSPZIP exited with code {process.ExitCode}");
-            }
+            _log.AppendLine("BspPackEngine", "Pack complete.");
         }
 
         private void GenerateFileListForcedFolders()
@@ -182,7 +147,7 @@ namespace Tsukuru.Maps.Packer
                 CreateNoWindow = true,
             };
 
-            _log.WriteLine("PACK", "Redirecting process output:");
+            _log.AppendLine("PACK", "Redirecting process output:");
 
             using (var process = Process.Start(startInfo))
             {
@@ -192,7 +157,7 @@ namespace Tsukuru.Maps.Packer
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        _log.Write(message: ((char)ch).ToString());
+                        _log.Append((char)ch);
                     }
                 });
 
@@ -202,7 +167,7 @@ namespace Tsukuru.Maps.Packer
 
                 outputReader.Join();
 
-                _log.WriteLine("PACK", $"Exited with code {process.ExitCode}");
+                _log.AppendLine("PACK", $"Exited with code {process.ExitCode}");
             }
         }
 
@@ -211,14 +176,9 @@ namespace Tsukuru.Maps.Packer
             return $"-addorupdatelist \"{inputMap}\" \"{fileList}\" \"{outputMap}\"";
         }
 
-        private static string GetArgumentsForRepackCompress(string bspFile)
-        {
-            return $" -repack -compress \"{bspFile}\"";
-        }
-
         public void Report(string value)
         {
-            _log.WriteLine(nameof(BspPackEngine), value);
+            _log.AppendLine(nameof(BspPackEngine), value);
         }
     }
 }

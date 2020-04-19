@@ -16,7 +16,8 @@
               Height="720"
               ResizeMode="CanMinimize"
               IconVisibility="Hidden"
-              DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
+              DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
+              UseLayoutRounding="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -290,7 +291,8 @@
 
                         <ContentControl 
                             Grid.Row="2" 
-                            Content="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}" />
+                            Content="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}"
+                            UseLayoutRounding="True"/>
                     </Grid>
 
 

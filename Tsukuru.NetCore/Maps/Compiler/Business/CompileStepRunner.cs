@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business
@@ -19,7 +20,7 @@ namespace Tsukuru.Maps.Compiler.Business
             _steps.Add(step);
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -31,7 +32,11 @@ namespace Tsukuru.Maps.Compiler.Business
 
                 _log.Subtitle = $"Running: \"{step.StepName}\"... ({i}/{_steps.Count})";
 
-                bool result = step.Run(_log);
+                var receiver = _log.GetLogDestination(step.StepName);
+
+                _log.NavigateToLogTab(step.StepName);
+
+                bool result = await Task.Run(() => step.Run(receiver));
 
                 if (result)
                 {
@@ -41,7 +46,7 @@ namespace Tsukuru.Maps.Compiler.Business
 
                 stopwatch.Stop();
 
-                _log.WriteLine("Tsukuru", "An error was encountered in the compilation process.");
+                _log.Heading = "An error was encountered during compilation.";
                 _log.NotifyComplete(stopwatch.Elapsed);
 
                 return;

@@ -15,7 +15,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override string StepName => "VVIS";
 
-        public override bool Run(ILogReceiver log)
+        public override bool Run(ResultsLogContainer log)
         {
             CalculateVvisPath();
 
@@ -52,7 +52,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} {vmfPathWithoutExtension.PrependIfNeeded('"').AppendIfNeeded('"')}";
         }
 
-        private int RunVvisExecutable(ILogReceiver log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunVvisExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -76,7 +76,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                     errors.Append(e.Data);
                 };
 
-                log.WriteLine("VVIS", "Redirecting process output:");
+                log.AppendLine("VVIS", "Redirecting process output:");
 
                 process.Start();
                 process.BeginErrorReadLine();
@@ -87,7 +87,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        log.Write(message: ((char)ch).ToString());
+                        log.Append(((char)ch));
                     }
                 });
 
@@ -97,11 +97,11 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                 outputReader.Join();
 
-                log.WriteLine("VVIS", $"Exited with code {process.ExitCode}");
+                log.AppendLine("VVIS", $"Exited with code {process.ExitCode}");
 
                 if (errors.Length > 0)
                 {
-                    log.WriteLine("VVIS", errors.ToString());
+                    log.AppendLine("VVIS", errors.ToString());
                 }
 
                 return process.ExitCode;

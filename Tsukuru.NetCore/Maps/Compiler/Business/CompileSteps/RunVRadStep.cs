@@ -15,7 +15,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override string StepName => "VRAD";
 
-        public override bool Run(ILogReceiver log)
+        public override bool Run(ResultsLogContainer log)
         {
             var settings = new VradCompilationSettingsViewModel();
 
@@ -28,7 +28,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     if (!modifiedLib.Exists)
                     {
-                        log.WriteLine("VRAD", "Writing modified VRAD DLL...");
+                        log.AppendLine("VRAD", "Writing modified VRAD DLL...");
                         using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_dll-optimized.dll"))
                         using (var fileStream = modifiedLib.OpenWrite())
                         {
@@ -38,7 +38,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     if (!modifiedExe.Exists)
                     {
-                        log.WriteLine("VRAD", "Writing modified VRAD EXE...");
+                        log.AppendLine("VRAD", "Writing modified VRAD EXE...");
                         using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Tsukuru.Maps.Compiler.ModdedVrad.vrad_optimized.exe"))
                         using (var fileStream = modifiedExe.OpenWrite())
                         {
@@ -81,7 +81,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} \"{vmfPathWithoutExtension}\"";
         }
 
-        private int RunVradExecutable(ILogReceiver log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunVradExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -104,7 +104,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                     errors.Append(e.Data);
                 };
 
-                log.WriteLine("VRAD", "Redirecting process output:");
+                log.AppendLine("VRAD", "Redirecting process output:");
 
                 process.Start();
                 process.BeginErrorReadLine();
@@ -115,7 +115,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        log.Write(message: ((char)ch).ToString());
+                        log.Append(((char)ch));
                     }
                 });
 
@@ -125,11 +125,11 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                 outputReader.Join();
 
-                log.WriteLine("VRAD", $"Exited with code {process.ExitCode}");
+                log.AppendLine("VRAD", $"Exited with code {process.ExitCode}");
 
                 if (errors.Length > 0)
                 {
-                    log.WriteLine("VRAD", errors.ToString());
+                    log.AppendLine("VRAD", errors.ToString());
                 }
 
                 return process.ExitCode;

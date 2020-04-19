@@ -17,7 +17,8 @@
         <TextBlock
             Grid.Row="0"
             FontSize="16"
-            Text="{Binding Heading}" Margin="0,0,0,10" />
+            Padding="0,0,0,10"
+            Text="{Binding Heading}" />
 
         <ProgressBar Height="20" 
                      IsIndeterminate="{Binding IsProgressBarIndeterminate}" 
@@ -26,17 +27,27 @@
                      Grid.Row="1"
                      extensions:ProgressBarExtension.Content="{Binding Subtitle}"/>
 
-        <TextBox 
-            Grid.Row="2"
-            FontFamily="Consolas"
-            Text="{Binding ConsoleText, Mode=OneWay}" 
-            IsReadOnly="True"
-            HorizontalScrollBarVisibility="Visible" 
-            VerticalAlignment="Stretch"
-            VerticalContentAlignment="Stretch"
-            VerticalScrollBarVisibility="Visible"
-            TextChanged="tbConsole_TextChanged" 
-            Height="Auto"
-        />
+        <TabControl Grid.Row="2" ItemsSource="{Binding Logs}" SelectedIndex="{Binding ActiveLogsIndex}" Padding="0">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Category}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <TextBox 
+                        FontFamily="Consolas"
+                        Text="{Binding ConsoleText}" 
+                        IsReadOnly="True"
+                        HorizontalScrollBarVisibility="Visible" 
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        VerticalScrollBarVisibility="Visible"
+                        TextChanged="OnTextBoxConsoleChanged" 
+                        Height="Auto" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
     </Grid>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Tsukuru.Maps.Compiler.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 {
@@ -7,11 +8,11 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
     {
         public override string StepName => "Copy map to game";
 
-        public override bool Run(ILogReceiver log)
+        public override bool Run(ResultsLogContainer log)
         {
             var bspFile = MapCompileSessionInfo.Instance.GeneratedBspFile;
 
-            log.WriteLine("CopyBspToGameStep", $"Copying BSP to the game maps folder at: {GameMapsFolderPath}");
+            log.AppendLine("CopyBspToGameStep", $"Copying BSP to the game maps folder at: {GameMapsFolderPath}");
 
             try
             {
@@ -20,7 +21,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             }
             catch (Exception ex)
             {
-                log.WriteLine("CopyBspToGameStep", $"Exception thrown: {ex}");
+                log.AppendLine("CopyBspToGameStep", $"Exception thrown: {ex}");
                 return false;
             }
         }
