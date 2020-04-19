@@ -46,7 +46,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         {
             lock (_door)
             {
-                _builder.AppendFormat("[{0}]: {1}", category, message);
+                _builder.AppendFormat("[{0}]: {1}", category, message).AppendLine();
 
                 RebuildStringCache();
             }
