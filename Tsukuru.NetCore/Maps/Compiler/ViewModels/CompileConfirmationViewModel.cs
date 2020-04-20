@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Media;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -19,6 +21,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private string _folderPackInfo;
         private string _templatingInfo;
         private string _repackInfo;
+        private bool _isButtonEnabled;
 
         public RelayCommand MapCompileCommand { get; }
 
@@ -78,10 +81,18 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             set => Set(() => RepackInfo, ref _repackInfo, value);
         }
 
+        public bool IsButtonEnabled
+        {
+            get => _isButtonEnabled;
+            set => Set(() => IsButtonEnabled, ref _isButtonEnabled, value);
+        }
+
         public CompileConfirmationViewModel()
         {
             MapCompileCommand = new RelayCommand(DoMapCompile);
             LaunchMapCommand = new RelayCommand(DoMapLaunch);
+
+            IsButtonEnabled = true;
         }
 
         public void Init()
@@ -131,6 +142,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private async void DoMapCompile()
         {
+            IsButtonEnabled = false;
+
             SimpleIoc.Default
                 .GetInstance<MainWindowViewModel>()
                 .NavigateToPage<ResultsViewModel>();
@@ -138,21 +151,18 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             await MapCompileInitialiser.ExecuteAsync(this);
 
             SystemSounds.Asterisk.Play();
+
+            IsButtonEnabled = true;
         }
 
-        private void DoMapLaunch()
+        private async void DoMapLaunch()
         {
+            IsButtonEnabled = false;
             SteamHelper.LaunchAppWithMap(MapCompileSessionInfo.Instance.MapName);
 
-#warning  TODO Update to use something else
-            //await DialogHost.Show(new ProgressSpinner(), async delegate (object sender, DialogOpenedEventArgs args)
-            //{
-            //    await Task.Delay(5000);
-            //    args.Session.Close(false);
-            //});
+            await Task.Delay(TimeSpan.FromSeconds(10));
+
+            IsButtonEnabled = true;
         }
-
-
-
     }
 }

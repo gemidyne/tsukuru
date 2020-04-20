@@ -7,9 +7,8 @@ using System.Windows.Data;
 using Chiaki;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Tsukuru.ViewModels;
 
-namespace Tsukuru
+namespace Tsukuru.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
@@ -114,6 +113,9 @@ namespace Tsukuru
             yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
             yield return new Maps.Compiler.ViewModels.CompileConfirmationViewModel();
             yield return SimpleIoc.Default.GetInstance<Maps.Compiler.ViewModels.ResultsViewModel>();
+
+            yield return new Translator.ViewModels.TranslatorImportViewModel();
+            yield return new Translator.ViewModels.TranslatorExportViewModel();
         }
 
         private bool FilterPages(object item)

@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
+                    xmlns:views="clr-namespace:Tsukuru.SourcePawn.Views">
+
+    <DataTemplate DataType="{x:Type viewModels:SourcePawnCompileViewModel}">
+        <views:SourcePawnCompilerView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+        <views:SettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:PostBuildActionsViewModel}">
+        <views:PostBuildActionsView />
+    </DataTemplate>
+</ResourceDictionary>

@@ -5,6 +5,7 @@ using Tsukuru.Maps.Compiler.Business;
 using Tsukuru.Maps.Compiler.Business.CompileSteps;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler
 {
@@ -15,14 +16,7 @@ namespace Tsukuru.Maps.Compiler
             var mainWindow = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
             var logView = mainWindow.Pages.OfType<ResultsViewModel>().Single();
 
-#warning TODO amend this
-            //mainWindow.DisplayMapCompilerResultsView = true;
-            //mainWindow.DisplayMapCompilerView = false;
-            //mainWindow.DisplaySourcePawnCompilerView = false;
-
-#warning TODO this needs to be rewritten so criteria is built up before hand by the compileconfirmationviewmodel
-
-            logView.Initialise(MapCompileSessionInfo.Instance.MapName);
+            logView.Initialise();
 
             var stepRunner = new CompileStepRunner(logView);
 
@@ -57,11 +51,6 @@ namespace Tsukuru.Maps.Compiler
             }
 
             await stepRunner.RunAsync();
-
-#warning TODO amend this
-            //mainWindow.DisplayMapCompilerResultsView = true;
-            //mainWindow.DisplayMapCompilerView = true;
-            //mainWindow.DisplaySourcePawnCompilerView = true;
 
             return true;
         }

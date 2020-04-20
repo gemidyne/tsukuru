@@ -27,9 +27,10 @@
 
 
                 <Button Command="{Binding SelectVmfFileCommand}"
-                        Grid.Column="1">
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom">
                     <Button.Content>
-                        Open...
+                        Browse...
                     </Button.Content>
                 </Button>
             </Grid>

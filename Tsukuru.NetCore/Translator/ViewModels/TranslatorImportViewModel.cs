@@ -1,20 +1,34 @@
 ﻿using System.Threading.Tasks;
-using System.Windows;
+using AdonisUI.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Core.Translations;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Translator.ViewModels
 {
-    public class TranslatorImportViewModel : ViewModelBase
+    public class TranslatorImportViewModel : ViewModelBase, IApplicationContentView
     {
         private string _selectedFile;
+        private bool _isLoading;
 
         public string SelectedFile
         {
             get => _selectedFile;
             set { Set(() => SelectedFile, ref _selectedFile, value); }
+        }
+
+        public string Name => "SourceMod Translation Importer";
+
+        public string Description => "Import translations from SourceMod into a Tsukuru translation project.";
+
+        public EShellNavigationPage Group => EShellNavigationPage.Translations;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
         }
 
         public RelayCommand BrowseFileCommand { get; }
@@ -24,6 +38,10 @@ namespace Tsukuru.Translator.ViewModels
         {
             BrowseFileCommand = new RelayCommand(BrowseFile);
             ImportCommand = new RelayCommand(DoImport);
+        }
+
+        public void Init()
+        {
         }
 
         private void BrowseFile()
@@ -61,37 +79,37 @@ namespace Tsukuru.Translator.ViewModels
             {
                 case EProjectGenerateResult.CompleteNoErrors:
                     MessageBox.Show(
-                        messageBoxText:
+                        text:
                         "Import completed.",
                         caption: "Success",
-                        button: MessageBoxButton.OK,
+                        buttons: MessageBoxButton.OK,
                         icon: MessageBoxImage.Information);
                     break;
 
                 case EProjectGenerateResult.SourceFileNotFound:
                     MessageBox.Show(
-                        messageBoxText:
+                        text:
                         "Source file not found.",
                         caption: "Error",
-                        button: MessageBoxButton.OK,
+                        buttons: MessageBoxButton.OK,
                         icon: MessageBoxImage.Error);
                     break;
 
                 case EProjectGenerateResult.BadRootTranslationFile:
                     MessageBox.Show(
-                        messageBoxText:
+                        text:
                         "Invalid KeyValue data. Check the format of your translation files and try again later.",
                         caption: "Error",
-                        button: MessageBoxButton.OK,
+                        buttons: MessageBoxButton.OK,
                         icon: MessageBoxImage.Error);
                     break;
 
                 default:
                     MessageBox.Show(
-                        messageBoxText:
+                        text:
                         "There was a general error when importing. Check the format of your translation files and try again later.",
                         caption: "Error",
-                        button: MessageBoxButton.OK,
+                        buttons: MessageBoxButton.OK,
                         icon: MessageBoxImage.Error);
                     break;
             }

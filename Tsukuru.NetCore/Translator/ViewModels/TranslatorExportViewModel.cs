@@ -1,15 +1,17 @@
 ﻿using System.Threading.Tasks;
-using System.Windows;
+using AdonisUI.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Core.Translations;
+using Tsukuru.ViewModels;
 
 namespace Tsukuru.Translator.ViewModels
 {
-    public class TranslatorExportViewModel : ViewModelBase
+    public class TranslatorExportViewModel : ViewModelBase, IApplicationContentView
     {
         private string _selectedFile;
+        private bool _isLoading;
 
         public string SelectedFile
         {
@@ -20,10 +22,26 @@ namespace Tsukuru.Translator.ViewModels
         public RelayCommand BrowseFileCommand { get; }
         public RelayCommand ExportCommand { get; }
 
+        public string Name => "Translator Export";
+
+        public string Description => "Export Tsukuru translator projects to SourceMod translation files.";
+
+        public EShellNavigationPage Group => EShellNavigationPage.Translations;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
+
         public TranslatorExportViewModel()
         {
             BrowseFileCommand = new RelayCommand(BrowseFile);
             ExportCommand = new RelayCommand(DoExport);
+        }
+
+        public void Init()
+        {
         }
 
         private void BrowseFile()
@@ -56,11 +74,11 @@ namespace Tsukuru.Translator.ViewModels
             });
 
             MessageBox.Show(
-                messageBoxText:
-                "Export completed.",
+                text: "Export completed.",
                 caption: "Success",
-                button: MessageBoxButton.OK,
+                buttons: MessageBoxButton.OK,
                 icon: MessageBoxImage.Information);
         }
+
     }
 }

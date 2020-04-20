@@ -12,7 +12,7 @@
              d:DesignHeight="300" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance Type=viewModels:TranslatorExportViewModel}"
              DataContext="{Binding TranslatorExportViewModel, Source={StaticResource ViewModelLocator}}">
-    <Grid Margin="15">
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <StackPanel Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -37,13 +37,21 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" 
-                        Command="{Binding BrowseFileCommand}">
+                        Command="{Binding BrowseFileCommand}"
+                        VerticalAlignment="Bottom">
                     <Button.Content>
-                        Open...
+                        Browse...
                     </Button.Content>
                 </Button>
             </Grid>
-        </Grid>
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                The file path of your Tsukuru translator project file. If you do not have one, you can create one by importing your SourceMod translations.
+            </TextBlock>
+        </StackPanel>
 
         <StackPanel Grid.Row="3" 
                     HorizontalAlignment="Right" 

@@ -4,13 +4,14 @@
               xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
               xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
               xmlns:viewModels="clr-namespace:Tsukuru.ViewModels"
+              xmlns:tsukuru="clr-namespace:Tsukuru"
               FontFamily="{StaticResource AppFont}"
               TextElement.FontWeight="Regular"
               TextElement.FontSize="13"
               TextOptions.TextFormattingMode="Ideal"
               TextOptions.TextRenderingMode="Auto"
               MinWidth="1020"
-              Icon="app.ico"
+              Icon="/app.ico"
               Title="Tsukuru" 
               Width="1280"
               Height="720"
@@ -21,7 +22,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ViewTemplates.xaml"/>
+                <ResourceDictionary Source="/ViewTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="NavigationGroupHeaderStyle"
@@ -88,8 +89,8 @@
                                 Orientation="Horizontal">
 
                         <Image Source="/Resources/logo.png" 
-                               
-                               Margin="0,10" UseLayoutRounding="True" />
+                               Margin="0,10" 
+                               UseLayoutRounding="True" />
 
                         <ContentControl Style="{StaticResource BreadcrumbSeparatorStyle}"/>
 
@@ -137,15 +138,6 @@
                         </ComboBox>
 
                         <ContentControl Style="{StaticResource BreadcrumbSeparatorStyle}"/>
-
-                        <!--<ComboBox ItemsSource="{Binding PagesInSelectedGroupCollectionView}"
-                                  SelectedItem="{Binding SelectedPage, ValidatesOnDataErrors=False, ValidatesOnNotifyDataErrors=False}"
-                                  DisplayMemberPath="Name"
-                                  Style="{DynamicResource {x:Static adonisUi:Styles.AccentComboBox}}"
-                                  VerticalAlignment="Center"/>
-
-                        <ContentControl Style="{StaticResource BreadcrumbSeparatorStyle}"/>-->
-
                     </StackPanel>
 
                     <StackPanel Grid.Column="1"
@@ -165,14 +157,11 @@
                     <StackPanel Grid.Column="2"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
-
-                        <TextBlock VerticalAlignment="Center">
-                            <Hyperlink NavigateUri="https://github.com/benruehl/adonis-ui"
-                                       Foreground="{DynamicResource {x:Static adonisUi:Brushes.AccentForegroundBrush}}">
-                                🡲 gemidyne.com
-                            </Hyperlink>
+                        <TextBlock Margin="0,5" VerticalAlignment="Center" Foreground="Transparent">
+                            <tsukuru:BrowserHyperlink NavigateUri="https://www.gemidyne.com/" TextDecorations="None">
+                                <Image Source="/Resources/gemidyne-logo.png" UseLayoutRounding="True" />
+                            </tsukuru:BrowserHyperlink>
                         </TextBlock>
-
                     </StackPanel>
 
                 </Grid>

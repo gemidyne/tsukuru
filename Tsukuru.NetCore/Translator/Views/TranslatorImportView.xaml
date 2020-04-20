@@ -17,7 +17,7 @@
         <converters:WatchButtonTextConverter x:Key="WatchButtonTextConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="15">
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
@@ -25,7 +25,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <StackPanel Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -41,13 +41,21 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" 
-                        Command="{Binding BrowseFileCommand}">
+                        Command="{Binding BrowseFileCommand}"
+                        VerticalAlignment="Bottom">
                     <Button.Content>
-                        Open...
+                        Browse...
                     </Button.Content>
                 </Button>
             </Grid>
-        </Grid>
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                This is the file path to your english SourceMod translation file. If other languages of the same translation file exist in language folders, they will automatically be imported to your project.
+            </TextBlock>
+        </StackPanel>
 
         <StackPanel Grid.Row="3" 
                     HorizontalAlignment="Right" 

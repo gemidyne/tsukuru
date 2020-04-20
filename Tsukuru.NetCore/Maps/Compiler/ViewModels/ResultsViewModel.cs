@@ -85,11 +85,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private void CloseResults()
         {
-#warning TODO AMEND THIS
-            //_mainWindowViewModel.DisplayMapCompilerResultsView = false;
-            //_mainWindowViewModel.DisplayMapCompilerView = true;
-            //_mainWindowViewModel.DisplaySourcePawnCompilerView = true;
-
             lock (Logs)
             {
                 Logs.Clear();
@@ -102,7 +97,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             Subtitle = "Ready";
         }
 
-        public void Initialise(string mapName)
+        public void Initialise()
         {
             Heading = $"Compiling {_mapName}...";
             Subtitle = "Please wait...";
