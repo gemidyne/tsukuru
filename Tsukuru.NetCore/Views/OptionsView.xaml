@@ -4,25 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=viewModels:OptionsViewModel}"
-             DataContext="{Binding OptionsViewModel, Source={StaticResource ViewModelLocator}}">
-    <StackPanel Margin="15">
-        <TextBlock 
-            Margin="0,0,0,10"
-            FontSize="18"
-            Text="Options" />
+             d:DataContext="{d:DesignInstance Type=viewModels:OptionsViewModel}">
+    <StackPanel Margin="32" Orientation="Vertical">
 
-        <GroupBox Header="Update settings">
-            <StackPanel Orientation="Vertical">
-                <CheckBox Content="Check for updates on startup?" 
-                          IsChecked="{Binding CheckForUpdatesOnStartup}" />
-            </StackPanel>
-        </GroupBox>
+        <StackPanel Margin="{adonisUi:Space 2}">
+            <CheckBox Content="Check for updates on startup?" 
+                      IsChecked="{Binding CheckForUpdatesOnStartup}" />
+
+            <TextBlock FontStyle="Italic" FontSize="11" Margin="20,0,0,0"
+                       TextWrapping="WrapWithOverflow">
+                If selected, whenever you start the app Tsukuru will check for any updates that can be downloaded.
+            </TextBlock>
+        </StackPanel>
     </StackPanel>
 </UserControl>

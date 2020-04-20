@@ -11,12 +11,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="300" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance Type=viewModels:TranslatorImportViewModel}"
-             DataContext="{Binding TranslatorImportViewModel, Source={StaticResource ViewModelLocator}}">
-    <UserControl.Resources>
-        <converters:WatchButtonTextConverter x:Key="WatchButtonTextConverter" />
-    </UserControl.Resources>
-
+             d:DataContext="{d:DesignInstance Type=viewModels:TranslatorImportViewModel}">
     <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

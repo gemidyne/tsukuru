@@ -10,8 +10,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="300" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance Type=viewModels:TranslatorExportViewModel}"
-             DataContext="{Binding TranslatorExportViewModel, Source={StaticResource ViewModelLocator}}">
+             d:DataContext="{d:DesignInstance Type=viewModels:TranslatorExportViewModel}">
     <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

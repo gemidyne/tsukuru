@@ -112,10 +112,13 @@ namespace Tsukuru.ViewModels
             yield return new Maps.Compiler.ViewModels.BspRepackViewModel();
             yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
             yield return new Maps.Compiler.ViewModels.CompileConfirmationViewModel();
-            yield return SimpleIoc.Default.GetInstance<Maps.Compiler.ViewModels.ResultsViewModel>();
+            yield return new Maps.Compiler.ViewModels.ResultsViewModel();
 
             yield return new Translator.ViewModels.TranslatorImportViewModel();
             yield return new Translator.ViewModels.TranslatorExportViewModel();
+
+            yield return new OptionsViewModel();
+            yield return new AboutViewModel();
         }
 
         private bool FilterPages(object item)

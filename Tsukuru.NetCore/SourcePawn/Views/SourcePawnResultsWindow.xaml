@@ -1,12 +1,10 @@
 ﻿<Window x:Class="Tsukuru.SourcePawn.Views.SourcePawnResultsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         Icon="/app.ico"
         Title="{Binding WindowTitle}" 
         Height="311" 
         Width="945"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
@@ -36,10 +34,9 @@
                 </DataGrid>
             </TabItem>
             <TabItem Header="Raw Output">
-                <TextBox Style="{StaticResource MaterialDesignFilledTextFieldTextBox}" 
-                         HorizontalAlignment="Stretch"
+                <TextBox HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
-                         Text="{Binding RawOutput, Mode=OneTime}" 
+                         Text="{Binding RawOutput}" 
                          IsReadOnly="True" />
             </TabItem>
         </TabControl>

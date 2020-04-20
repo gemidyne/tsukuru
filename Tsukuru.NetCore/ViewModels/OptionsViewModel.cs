@@ -6,6 +6,7 @@ namespace Tsukuru.ViewModels
     public class OptionsViewModel : ViewModelBase, IApplicationContentView
     {
         private bool _checkForUpdatesOnStartup;
+        private bool _isLoading;
 
         public bool CheckForUpdatesOnStartup
         {
@@ -15,13 +16,12 @@ namespace Tsukuru.ViewModels
                 Set(() => CheckForUpdatesOnStartup, ref _checkForUpdatesOnStartup, value);
 
                 SettingsManager.Manifest.CheckForUpdatesOnStartup = value;
-                SettingsManager.Save();
-            }
-        }
 
-        public OptionsViewModel()
-        {
-            CheckForUpdatesOnStartup = SettingsManager.Manifest.CheckForUpdatesOnStartup;
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
+            }
         }
 
         public string Name => "Settings";
@@ -30,10 +30,15 @@ namespace Tsukuru.ViewModels
 
         public EShellNavigationPage Group => EShellNavigationPage.Settings;
 
-        public bool IsLoading { get; set; }
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(() => IsLoading, ref _isLoading, value);
+        }
 
         public void Init()
         {
+            CheckForUpdatesOnStartup = SettingsManager.Manifest.CheckForUpdatesOnStartup;
         }
     }
 }

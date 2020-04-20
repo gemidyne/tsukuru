@@ -12,8 +12,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="500" d:DesignWidth="600" 
-             d:DataContext="{d:DesignInstance Type=viewModels:SourcePawnCompileViewModel}"
-             DataContext="{Binding SourcePawnCompileViewModel, Source={StaticResource ViewModelLocator}}">
+             d:DataContext="{d:DesignInstance Type=viewModels:SourcePawnCompileViewModel}">
     <UserControl.Resources>
         <converters:WatchButtonTextConverter x:Key="WatchButtonTextConverter" />
     </UserControl.Resources>

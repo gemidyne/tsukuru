@@ -7,11 +7,11 @@ using Tsukuru.SourcePawn.Views;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
-	public class CompilationFileViewModel : ViewModelBase
+    public class CompilationFileViewModel : ViewModelBase
     {
-		private string _file;
-		private ObservableCollection<CompilationMessage> _messages;
-		private CompilationResult _result = CompilationResult.Unknown;
+        private string _file;
+        private ObservableCollection<CompilationMessage> _messages;
+        private CompilationResult _result = CompilationResult.Unknown;
         private bool _canShowDetails;
         private bool _isSuccessfulCompile;
         private bool _isBusy;
@@ -22,13 +22,13 @@ namespace Tsukuru.SourcePawn.ViewModels
         public string File
         {
             get { return _file; }
-	        set { Set(() => File, ref _file, value); } 
+            set { Set(() => File, ref _file, value); }
         }
 
         public CompilationResult Result
         {
             get { return _result; }
-	        set { Set(() => Result, ref _result, value); }
+            set { Set(() => Result, ref _result, value); }
         }
 
         public ObservableCollection<CompilationMessage> Messages
@@ -77,23 +77,24 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public RelayCommand ShowDetailsCommand { get; private set; }
 
-	    public CompilationFileViewModel()
-	    {
-		    ShowDetailsCommand = new RelayCommand(ShowDetails);
-	    }
+        public CompilationFileViewModel()
+        {
+            ShowDetailsCommand = new RelayCommand(ShowDetails);
+            IsUnknownState = true;
+        }
 
-	    private void ShowDetails()
-	    {
-		    var viewModel = SimpleIoc.Default.GetInstance<ResultsWindowViewModel>();
+        private void ShowDetails()
+        {
+            var viewModel = SimpleIoc.Default.GetInstance<ResultsWindowViewModel>();
 
-			viewModel.SetResults(Messages, $"Results - {File} - Total {Messages.Count} message(s)");
+            viewModel.SetResults(Messages, $"Results - {File} - Total {Messages.Count} message(s)");
 
-		    var info = new SourcePawnResultsWindow
-		    {
-			    Owner = Application.Current.MainWindow
-		    };
+            var info = new SourcePawnResultsWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
 
-		    info.ShowDialog();
-	    }
+            info.ShowDialog();
+        }
     }
 }

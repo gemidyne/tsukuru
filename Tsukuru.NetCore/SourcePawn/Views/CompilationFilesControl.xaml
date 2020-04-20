@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Tsukuru.SourcePawn.ViewModels"
              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:views="clr-namespace:Tsukuru.SourcePawn.Views"
              mc:Ignorable="d" 
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
@@ -12,85 +13,62 @@
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:SourcePawnCompileViewModel}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
+        <StackPanel 
+            Grid.Row="0" 
+            HorizontalAlignment="Right" 
+            Orientation="Horizontal">
+                <Button
+                    Command="{Binding AddFileCommand}"
+                    FontSize="12"
+                    Height="Auto"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="+"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"/>
 
-        <GroupBox>
-            <GroupBox.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" 
-                               VerticalAlignment="Center"
-                               Text="SourcePawn files to compile" />
-
-                    <StackPanel Grid.Column="1" 
-                                HorizontalAlignment="Right" 
-                                Orientation="Horizontal">
-                        <Button Content="Add file" 
-                                Command="{Binding AddFileCommand}"
-                                FontSize="12"
-                                Height="Auto"/>
-                        <Button Content="Remove file" 
-                                Command="{Binding RemoveFileCommand}"
-                                FontSize="12"
-                                Height="Auto"/>
+                        <TextBlock Text="Add file"
+                                           Margin="{adonisUi:Space 1, 0, 0, 0}"
+                                           VerticalAlignment="Center"/>
                     </StackPanel>
-                </Grid>
-            </GroupBox.Header>
+                </Button>
 
-            <ListBox 
-                 HorizontalContentAlignment="Stretch"
-                 ItemsSource="{Binding FilesToCompile}"
-                 SelectedItem="{Binding SelectedFile}"
-                 SelectionMode="Single">
+                <Button
+                    Command="{Binding RemoveFileCommand}"
+                    FontSize="12"
+                    Height="Auto"
+                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" 
+                    Margin="10,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="-"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Remove file"
+                                           Margin="{adonisUi:Space 1, 0, 0, 0}"
+                                           VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+        <ListBox
+            Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            ItemsSource="{Binding FilesToCompile}"
+            SelectedItem="{Binding SelectedFile}"
+            SelectionMode="Single">
                 <ListBox.ItemTemplate>
-                    <DataTemplate DataType="viewModels:CompilationFileViewModel">
-                        <Grid Height="35">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="32" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Grid Grid.Column="0"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center">
-                                <Grid>
-                                    <Label Visibility="{Binding IsCompiledWithErrors, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled with errors.</Label>
-                                    <Label Visibility="{Binding IsCompiledWithWarnings, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled with warnings.</Label>
-                                    <Label Visibility="{Binding IsSuccessfulCompile, Converter={StaticResource BooleanToVisibilityConverter}}">Compiled successfully.</Label>
-                                    <Label Visibility="{Binding IsUnknownState, Converter={StaticResource BooleanToVisibilityConverter}}">Waiting.</Label>
-                                </Grid>
-
-                                <ContentControl ContentTemplate="{DynamicResource {x:Static adonisUi:Templates.LoadingBars}}"
-                                                Foreground="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"
-                                                Width="24"
-                                                Height="24"
-                                                Focusable="False" 
-                                                Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            </Grid>
-                            <TextBlock Text="{Binding File}" 
-                                       Margin="5,0,0,0" 
-                                       VerticalAlignment="Center"
-                                       Grid.Column="1" />
-                            <Button Command="{Binding ShowDetailsCommand}"
-                                    HorizontalAlignment="Right" 
-                                    Grid.Column="2"
-                                    Visibility="{Binding CanShowDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Button.Content>
-                                    Info
-                                </Button.Content>
-                            </Button>
-                        </Grid>
+                    <DataTemplate>
+                        <views:SourcePawnFileView />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </GroupBox>
     </Grid>
 </UserControl>

@@ -95,23 +95,27 @@
                                                 Binding="{Binding Name, ValidatesOnDataErrors=True}"
                                                 ElementStyle="{StaticResource CellErrorStyle}"
                                                 MinWidth="200" 
-                                                IsReadOnly="True"/>
+                                                IsReadOnly="True"
+                                                Width="Auto" />
 
                         <DataGridTextColumn 
                             Header="Path"
                             Binding="{Binding Folder, ValidatesOnDataErrors=True}"
                             ElementStyle="{StaticResource CellErrorStyle}"
-                            IsReadOnly="True"/>
+                            IsReadOnly="True"
+                            Width="*"/>
 
                         <DataGridCheckBoxColumn 
                             Header="Pack only used files?"
                             Binding="{Binding Intelligent}"
-                            IsReadOnly="False" />
+                            IsReadOnly="False"
+                            Width="Auto" />
 
                         <DataGridCheckBoxColumn 
                             Header="Pack all files?"
                             Binding="{Binding NotIntelligent}"
-                            IsReadOnly="False" />
+                            IsReadOnly="False"
+                            Width="Auto" />
                 </DataGrid.Columns>
 
                     <DataGrid.RowDetailsTemplate>
