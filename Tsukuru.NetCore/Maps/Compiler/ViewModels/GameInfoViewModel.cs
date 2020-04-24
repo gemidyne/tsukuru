@@ -1,5 +1,4 @@
 ﻿using Tsukuru.Core.SourceEngine;
-using Tsukuru.Steam;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
@@ -61,8 +60,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             else
             {
                 VProject = VProjectHelper.Path;
-                SteamAppId = GameHelper.GetAppId()?.ToString() ?? "Unknown";
-                GameName = GameHelper.GetGameInfo();
+                SteamAppId = GameInfoHelper.GetAppId()?.ToString() ?? "Unknown";
+                GameName = GameInfoHelper.GetGameInfo();
             }
         }
 

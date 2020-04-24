@@ -18,7 +18,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding FileName}" Header="File" Width="*"/>
                         <DataGridTextColumn Binding="{Binding Message}" Header="Message" Width="*"/>
-                        <DataGridTextColumn Binding="{Binding LineNumberDisplay}" Header="Line" Width="0.5*"/>
+                        <DataGridTextColumn Binding="{Binding LineNumberDisplay}" Header="Line number" Width="0.5*"/>
                         <DataGridTextColumn Binding="{Binding Prefix}" Header="Type" Width="0.5*"/>
                     </DataGrid.Columns>
                 </DataGrid>

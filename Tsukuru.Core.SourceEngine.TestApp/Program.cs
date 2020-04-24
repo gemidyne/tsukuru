@@ -8,9 +8,18 @@ namespace Tsukuru.Core.SourceEngine.TestApp
     {
         static void Main(string[] args)
         {
-            string vproject = Environment.GetEnvironmentVariable("VPROJECT", EnvironmentVariableTarget.User);
+            string vproject = VProjectHelper.Path;
 
             Console.WriteLine($"VPROJECT: {vproject}");
+
+            var paths = GameInfoHelper.GetAllVpkPaths();
+
+            Console.WriteLine("VPK Paths");
+
+            foreach (var path in paths)
+            {
+                Console.WriteLine(path.FullName);
+            }
 
             var results = BspDependencyAnalyser.Analyse(new Program(), vproject, Path.Combine(vproject, "maps\\warioware_redux_master-20200321.bsp"));
 

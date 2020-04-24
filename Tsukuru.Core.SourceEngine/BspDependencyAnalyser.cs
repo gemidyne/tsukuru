@@ -31,6 +31,9 @@ namespace Tsukuru.Core.SourceEngine
         {
             Map map;
 
+            _progress.Report("Preloading VPK & filesystem info...");
+            _pathExplorer.Init();
+
             using (var fileStream = new FileStream(mapBspFilePath, FileMode.Open))
             {
                 using (var binaryReader = new BinaryReader(fileStream))
@@ -116,7 +119,7 @@ namespace Tsukuru.Core.SourceEngine
                         {
                             string sndFile = $"sound/{entity["message"]}";
 
-                            string fileSystemPath = _pathExplorer.GetFileSystemPath(sndFile);
+                            string fileSystemPath = _pathExplorer.TryGetFileSystemPath(sndFile);
 
                             if (fileSystemPath == null)
                             {
@@ -142,7 +145,7 @@ namespace Tsukuru.Core.SourceEngine
                                 continue;
                             }
 
-                            string fileSystemPath = _pathExplorer.GetFileSystemPath(modelPath);
+                            string fileSystemPath = _pathExplorer.TryGetFileSystemPath(modelPath);
 
                             if (fileSystemPath == null)
                             {
@@ -161,7 +164,7 @@ namespace Tsukuru.Core.SourceEngine
 
                             foreach (string fileName in fileNames)
                             {
-                                string vmtFile = _pathExplorer.GetFileSystemPath(fileName);
+                                string vmtFile = _pathExplorer.TryGetFileSystemPath(fileName);
 
                                 if (vmtFile == null)
                                 {
@@ -190,7 +193,7 @@ namespace Tsukuru.Core.SourceEngine
 
                 string formatted = $"materials/{texture}.vmt";
 
-                string vmtFile = _pathExplorer.GetFileSystemPath(formatted);
+                string vmtFile = _pathExplorer.TryGetFileSystemPath(formatted);
 
                 if (vmtFile == null)
                 {
@@ -209,7 +212,7 @@ namespace Tsukuru.Core.SourceEngine
 
             foreach (var modelPath in models)
             {
-                string fileSystemPath = _pathExplorer.GetFileSystemPath(modelPath);
+                string fileSystemPath = _pathExplorer.TryGetFileSystemPath(modelPath);
 
                 if (fileSystemPath == null)
                 {
@@ -222,7 +225,7 @@ namespace Tsukuru.Core.SourceEngine
 
         private void InspectModelTextures(string modelFilePath)
         {
-            string fileSystemPath = _pathExplorer.GetFileSystemPath(modelFilePath);
+            string fileSystemPath = _pathExplorer.TryGetFileSystemPath(modelFilePath);
 
             if (fileSystemPath == null)
             {
@@ -241,7 +244,7 @@ namespace Tsukuru.Core.SourceEngine
 
                     string assetPath = $"materials/{path}{filename}.vmt";
 
-                    string customMaterialPath = _pathExplorer.GetFileSystemPath(assetPath);
+                    string customMaterialPath = _pathExplorer.TryGetFileSystemPath(assetPath);
 
                     if (customMaterialPath == null)
                     {
@@ -257,7 +260,7 @@ namespace Tsukuru.Core.SourceEngine
 
         private void InspectAdditionalModelFiles(string modelFilePath)
         {
-            string fileSystemPath = _pathExplorer.GetFileSystemPath(modelFilePath);
+            string fileSystemPath = _pathExplorer.TryGetFileSystemPath(modelFilePath);
 
             if (fileSystemPath == null)
             {
@@ -277,7 +280,7 @@ namespace Tsukuru.Core.SourceEngine
             {
                 string path = Path.ChangeExtension(modelFilePath, extension);
 
-                string file = _pathExplorer.GetFileSystemPath(path);
+                string file = _pathExplorer.TryGetFileSystemPath(path);
 
                 if (file == null)
                 {
@@ -302,7 +305,7 @@ namespace Tsukuru.Core.SourceEngine
                         continue;
                     }
 
-                    string customTexturePath = pathExplorer.GetFileSystemPath($"materials/{texture}.vtf");
+                    string customTexturePath = pathExplorer.TryGetFileSystemPath($"materials/{texture}.vtf");
 
                     if (customTexturePath == null)
                     {
