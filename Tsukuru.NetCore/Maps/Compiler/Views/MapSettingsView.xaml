@@ -5,8 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:converters="clr-namespace:Tsukuru.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapSettingsViewModel}">
+             d:DesignHeight="6050" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:MapSettingsViewModel}">
+
+    <UserControl.Resources>
+        <converters:MapVersioningSettingsVisiblityConverter x:Key="MapVersioningSettingsVisiblityConverter" />
+    </UserControl.Resources>
 
     <StackPanel Margin="32">
         <StackPanel Margin="{adonisUi:Space 2}">
@@ -45,7 +50,71 @@
 
         <StackPanel Margin="{adonisUi:Space 2}">
             <Label>
-                Generated map name
+                Versioning Mode
+            </Label>
+
+            <ComboBox  ItemsSource="{Binding Path=VersioningModes}"
+                       DisplayMemberPath="Value"
+                       SelectedValuePath="Key"
+                       SelectedValue="{Binding Path=VersioningMode}">
+            </ComboBox>
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                Select the versioning mode to use when compiling your map.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}" Visibility="{Binding VersioningMode, Converter={StaticResource MapVersioningSettingsVisiblityConverter}}">
+            <Label>
+                Output filename prefix
+            </Label>
+
+            <TextBox Text="{Binding FileNamePrefix}" />
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                Sets the prefix text displayed before the version.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}" Visibility="{Binding VersioningMode, Converter={StaticResource MapVersioningSettingsVisiblityConverter}}">
+            <Label>
+                Output filename suffix
+            </Label>
+
+            <TextBox Text="{Binding FileNameSuffix}" />
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                Sets the suffix text displayed after the version.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}" Visibility="{Binding VersioningMode, Converter={StaticResource MapVersioningSettingsVisiblityConverter}}">
+            <Label>
+                Output map name (with versioning)
+            </Label>
+
+            <TextBox Text="{Binding MapName}" IsReadOnly="True" />
+
+            <TextBlock FontStyle="Italic" 
+                       FontSize="11"
+                       Margin="0,5,0,0"
+                       TextWrapping="WrapWithOverflow">
+                This is the filename of the compiled BSP that will be created with the versioning information.
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel Margin="{adonisUi:Space 2}" Visibility="{Binding VersioningMode, Converter={StaticResource MapVersioningSettingsVisiblityConverter}, ConverterParameter=True}">
+            <Label>
+                Output map name
             </Label>
 
             <TextBox Text="{Binding MapName}" />

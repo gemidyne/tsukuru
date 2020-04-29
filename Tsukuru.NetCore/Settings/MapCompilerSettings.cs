@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings
 {
-	internal class MapCompilerSettings
+    internal class MapCompilerSettings
     {
         [JsonProperty("vmfPath")]
         public string LastVmfPath { get; set; }
@@ -19,21 +19,25 @@ namespace Tsukuru.Settings
         [JsonProperty("vvis")]
         public VvisSettings VvisSettings { get; set; }
 
-	    [JsonProperty("vrad")]
-	    public VradSettings VradSettings { get; set; }
+        [JsonProperty("vrad")]
+        public VradSettings VradSettings { get; set; }
 
-		[JsonProperty("resourcePacking")]
-		public ResourcePackingSettings ResourcePackingSettings { get; set; }
+        [JsonProperty("resourcePacking")]
+        public ResourcePackingSettings ResourcePackingSettings { get; set; }
 
-		[JsonProperty("launchMapInGame")]
-	    public bool LaunchMapInGame { get; set; }
+        [JsonProperty("mapVersioning", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public MapVersioningSettings MapVersioningSettings { get; set; }
 
-	    public MapCompilerSettings()
+        [JsonProperty("launchMapInGame")]
+        public bool LaunchMapInGame { get; set; }
+
+        public MapCompilerSettings()
         {
             VbspSettings = new VbspSettings();
             VvisSettings = new VvisSettings();
-	        VradSettings = new VradSettings();
-	        ResourcePackingSettings = new ResourcePackingSettings();
+            VradSettings = new VradSettings();
+            ResourcePackingSettings = new ResourcePackingSettings();
+            MapVersioningSettings = new MapVersioningSettings();
         }
     }
 }

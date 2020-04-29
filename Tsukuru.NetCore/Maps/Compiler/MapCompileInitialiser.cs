@@ -50,9 +50,7 @@ namespace Tsukuru.Maps.Compiler
                 stepRunner.AddStep(new LaunchMapInGameStep());
             }
 
-            await stepRunner.RunAsync();
-
-            return true;
+            return await stepRunner.RunAsync();
         }
     }
 }

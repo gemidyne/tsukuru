@@ -20,7 +20,7 @@ namespace Tsukuru.Maps.Compiler.Business
             _steps.Add(step);
         }
 
-        public async Task RunAsync()
+        public async Task<bool> RunAsync()
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -49,11 +49,13 @@ namespace Tsukuru.Maps.Compiler.Business
                 _log.Heading = "An error was encountered during compilation.";
                 _log.NotifyComplete(stopwatch.Elapsed);
 
-                return;
+                return false;
             }
 
             stopwatch.Stop();
             _log.NotifyComplete(stopwatch.Elapsed);
+
+            return true;
         }
     }
 }

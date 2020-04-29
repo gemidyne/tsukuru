@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
@@ -26,6 +27,11 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         private string _mapName;
         private string _vmfPath;
+        private EMapVersionMode _versioningMode;
+        private string _fileNameSuffix;
+        private string _fileNamePrefix;
+        private int _buildNumber;
+        private Dictionary<EMapVersionMode, string> _versioningModes;
 
         public string MapName
         {
@@ -35,6 +41,84 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 Set(() => MapName, ref _mapName, value);
 
                 MapCompileSessionInfo.Instance.MapName = MapName;
+            }
+        }
+
+        public EMapVersionMode VersioningMode
+        {
+            get => _versioningMode;
+            set
+            {
+                Set(() => VersioningMode, ref _versioningMode, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode = value;
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
+
+                SetMapName();
+            }
+        }
+
+        public Dictionary<EMapVersionMode, string> VersioningModes
+        {
+            get => _versioningModes;
+            set => Set(() => VersioningModes, ref _versioningModes, value);
+        }
+
+        public string FileNamePrefix
+        {
+            get => _fileNamePrefix;
+            set
+            {
+                Set(() => FileNamePrefix, ref _fileNamePrefix, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix = value;
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
+
+                SetMapName();
+            }
+        }
+
+        public string FileNameSuffix
+        {
+            get => _fileNameSuffix;
+            set
+            {
+                Set(() => FileNameSuffix, ref _fileNameSuffix, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix = value;
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
+
+                SetMapName();
+            }
+        }
+
+        public int BuildNumber
+        {
+            get => _buildNumber;
+            set
+            {
+                Set(() => BuildNumber, ref _buildNumber, value);
+
+                SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber = value;
+
+                if (!IsLoading)
+                {
+                    SettingsManager.Save();
+                }
+
+                SetMapName();
             }
         }
 
@@ -53,17 +137,14 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 else
                 {
                     SettingsManager.Manifest.MapCompilerSettings.LastVmfPath = VmfPath;
+                    MapCompileSessionInfo.Instance.InputVmfFile = new FileInfo(VmfPath);
 
                     if (!IsLoading)
                     {
                         SettingsManager.Save();
                     }
 
-                    string fileName = Path.GetFileNameWithoutExtension(VmfPath);
-
-                    MapName = $"{fileName}-{DateTime.Now:yyyyMMdd}";
-
-                    MapCompileSessionInfo.Instance.InputVmfFile = new FileInfo(VmfPath);
+                    SetMapName();
                 }
             }
         }
@@ -74,20 +155,36 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         {
             SelectVmfFileCommand = new RelayCommand(SelectVmfFile);
 
-#warning TODO This shouldn't be in here. Map compiler should just refer to settings and build from that rather than rely on viewmodels...
-            VmfPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
-
-#warning TODO Support saving map name and detecting a date stamp in filename
-
-            if (string.IsNullOrWhiteSpace(MapName))
+            VersioningModes = new Dictionary<EMapVersionMode, string>
             {
-                MapName = $"TsukuruMap-{DateTime.Now:yyyyMMdd}";
-            }
+                {
+                    EMapVersionMode.NoVersioning,
+                    "No versioning"
+                },
+                {
+                    EMapVersionMode.VersionedDateTime,
+                    "Version with year, month & date"
+                },
+                {
+                    EMapVersionMode.VersionedBuildNumber,
+                    "Version with an incrementing build number"
+                }
+            };
         }
 
         public void Init()
         {
+            VmfPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
 
+            if (SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings == null)
+            {
+                SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings = new MapVersioningSettings();
+            }
+
+            VersioningMode = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode;
+            FileNamePrefix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix;
+            FileNameSuffix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix;
+            BuildNumber = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber;
         }
 
         private void SelectVmfFile()
@@ -108,6 +205,20 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
 
             VmfPath = dialog.FileName;
+        }
+
+        private void SetMapName()
+        {
+            switch (VersioningMode)
+            {
+                case EMapVersionMode.VersionedDateTime:
+                    MapName = $"{FileNamePrefix}{DateTime.Now:yyyyMMdd}{FileNameSuffix}";
+                    break;
+
+                case EMapVersionMode.VersionedBuildNumber:
+                    MapName = $"{FileNamePrefix}{BuildNumber}{FileNameSuffix}";
+                    break;
+            }
         }
     }
 }

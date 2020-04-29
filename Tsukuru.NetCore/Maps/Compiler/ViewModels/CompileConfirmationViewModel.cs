@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.Business;
+using Tsukuru.Settings;
 using Tsukuru.Steam;
 using Tsukuru.ViewModels;
 
@@ -148,9 +149,19 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 .GetInstance<MainWindowViewModel>()
                 .NavigateToPage<ResultsViewModel>();
 
-            await MapCompileInitialiser.ExecuteAsync(this);
+            bool result = await MapCompileInitialiser.ExecuteAsync(this);
 
-            SystemSounds.Asterisk.Play();
+            if (result)
+            {
+                SystemSounds.Asterisk.Play();
+            }
+            else
+            {
+                SystemSounds.Exclamation.Play();
+            }
+
+            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber++;
+            SettingsManager.Save();
 
             IsButtonEnabled = true;
         }
