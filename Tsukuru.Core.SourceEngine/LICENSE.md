@@ -1,4 +1,4 @@
-Tsukuru.SourceEngineTools uses large portions of the k0bin/sourceloader repository code, with extra modifications. 
+Tsukuru.Core.SourceEngine uses large portions of the k0bin/sourceloader repository code, with extra modifications. 
 
 sourceloader is licensed under a MIT License. See below for license text.
 
