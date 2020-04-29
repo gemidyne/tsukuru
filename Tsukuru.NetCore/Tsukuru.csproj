@@ -7,6 +7,8 @@
     <AssemblyName>Tsukuru</AssemblyName>
     <RootNamespace>Tsukuru</RootNamespace>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +37,9 @@
     <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
     <PackageReference Include="Sentry" Version="2.1.1" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
