@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.Business;
+using Tsukuru.Maps.Compiler.Messages;
 using Tsukuru.Settings;
 using Tsukuru.Steam;
 using Tsukuru.ViewModels;
@@ -139,6 +140,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private async void DoMapCompile()
         {
             IsButtonEnabled = false;
+            MessengerInstance.Send(new MapCompileStartMessage());
 
             SimpleIoc.Default
                 .GetInstance<MainWindowViewModel>()
@@ -159,6 +161,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             SettingsManager.Save();
 
             IsButtonEnabled = true;
+            MessengerInstance.Send(new MapCompileEndMessage());
         }
 
         private async void DoMapLaunch()

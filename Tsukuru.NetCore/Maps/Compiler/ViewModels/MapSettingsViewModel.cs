@@ -137,7 +137,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 else
                 {
                     SettingsManager.Manifest.MapCompilerSettings.LastVmfPath = VmfPath;
-                    MapCompileSessionInfo.Instance.InputVmfFile = new FileInfo(VmfPath);
 
                     if (!IsLoading)
                     {
@@ -170,6 +169,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                     "Version with an incrementing build number"
                 }
             };
+
+            Init();
         }
 
         public void Init()

@@ -33,6 +33,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Octokit" Version="0.47.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
+    <PackageReference Include="Sentry" Version="2.1.1" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
   </ItemGroup>
 

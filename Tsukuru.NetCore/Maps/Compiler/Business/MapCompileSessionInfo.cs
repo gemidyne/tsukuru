@@ -17,8 +17,6 @@ namespace Tsukuru.Maps.Compiler.Business
 
         public FileInfo GeneratedBspFile => new FileInfo(GeneratedFileNameNoExtension + ".bsp");
 
-        public string SdkToolsPath { get; set; }
-
         public static MapCompileSessionInfo Instance => _instance ??= new MapCompileSessionInfo();
 
         public static void Clear()

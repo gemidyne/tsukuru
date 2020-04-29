@@ -2,6 +2,7 @@
 using AdonisUI.Controls;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
+using Tsukuru.Maps.Compiler.Messages;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
@@ -23,11 +24,18 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         }
 
         private string _settingsFilePath;
+        private bool _isButtonEnabled;
 
         public string SettingsFilePath
         {
             get => _settingsFilePath;
             set => Set(() => SettingsFilePath, ref _settingsFilePath, value);
+        }
+
+        public bool IsButtonEnabled
+        {
+            get => _isButtonEnabled;
+            set => Set(() => IsButtonEnabled, ref _isButtonEnabled, value);
         }
 
         public RelayCommand SelectFileCommand { get; }
@@ -38,10 +46,25 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         {
             SelectFileCommand = new RelayCommand(SelectFile);
             ExportCommand = new RelayCommand(DoExport);
+
+            MessengerInstance.Register<MapCompileStartMessage>(this, OnMapCompileStart);
+            MessengerInstance.Register<MapCompileEndMessage>(this, OnMapCompileEnd);
+
+            IsButtonEnabled = true;
         }
 
         public void Init()
         {
+        }
+
+        private void OnMapCompileStart(MapCompileStartMessage message)
+        {
+            IsButtonEnabled = false;
+        }
+
+        private void OnMapCompileEnd(MapCompileEndMessage message)
+        {
+            IsButtonEnabled = true;
         }
 
         private void SelectFile()

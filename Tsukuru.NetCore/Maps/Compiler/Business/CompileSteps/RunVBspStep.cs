@@ -18,8 +18,6 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
         {
             CalculateVbspPath();
 
-            MapCompileSessionInfo.Instance.SdkToolsPath = SdkToolsPath;
-
             var settings = new VbspCompilationSettingsViewModel();
 
             using (new ApplicationContentViewLoader(settings))

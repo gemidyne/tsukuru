@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Ioc;
 using Tsukuru.Maps.Compiler.Business;
@@ -13,6 +14,8 @@ namespace Tsukuru.Maps.Compiler
     {
         public static async Task<bool> ExecuteAsync(CompileConfirmationViewModel compileConfirmationViewModel)
         {
+            MapCompileSessionInfo.Instance.InputVmfFile = new FileInfo(SettingsManager.Manifest.MapCompilerSettings.LastVmfPath);
+
             var mainWindow = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
             var logView = mainWindow.Pages.OfType<ResultsViewModel>().Single();
 

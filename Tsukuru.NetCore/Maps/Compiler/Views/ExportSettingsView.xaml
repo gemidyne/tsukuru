@@ -48,6 +48,7 @@
             <Button
                 Command="{Binding ExportCommand}" 
                 Content="Export"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Margin="5,0,0,0"
                 Width="124"/>
         </StackPanel>

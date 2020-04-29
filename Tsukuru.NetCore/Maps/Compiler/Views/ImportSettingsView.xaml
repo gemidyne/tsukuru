@@ -49,6 +49,7 @@
             <Button
                 Command="{Binding ImportCommand}" 
                 Content="Import"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Margin="5,0,0,0"
                 Width="124"/>
         </StackPanel>
