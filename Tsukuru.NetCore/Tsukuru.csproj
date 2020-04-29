@@ -51,6 +51,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Maps\Compiler\Views\ExportSettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Maps\Compiler\Views\ImportSettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -82,6 +88,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Maps\Compiler\Views\ExportSettingsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Maps\Compiler\Views\ImportSettingsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

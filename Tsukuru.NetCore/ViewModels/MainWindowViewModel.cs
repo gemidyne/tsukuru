@@ -101,6 +101,8 @@ namespace Tsukuru.ViewModels
             yield return new SourcePawn.ViewModels.SourcePawnCompileViewModel();
             yield return new SourcePawn.ViewModels.PostBuildActionsViewModel();
 
+            yield return new Maps.Compiler.ViewModels.ImportSettingsViewModel();
+            yield return new Maps.Compiler.ViewModels.ExportSettingsViewModel();
             yield return new Maps.Compiler.ViewModels.GameInfoViewModel();
             yield return new Maps.Compiler.ViewModels.MapSettingsViewModel();
             yield return new Maps.Compiler.ViewModels.VbspCompilationSettingsViewModel();

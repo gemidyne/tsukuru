@@ -45,4 +45,12 @@
     <DataTemplate DataType="{x:Type viewModels:ResultsViewModel}">
         <views:ResultsView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:ImportSettingsViewModel}">
+        <views:ImportSettingsView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModels:ExportSettingsViewModel}">
+        <views:ExportSettingsView />
+    </DataTemplate>
 </ResourceDictionary>
