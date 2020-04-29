@@ -129,7 +129,7 @@
                            TextWrapping="WrapWithOverflow">
                     For TF2 / Source 2013 games only.
 
-                    Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines.
+                    Tsukuru supports using a modified version of VRAD which improves performance of raytrace tests on multicore machines. Using this modified version will not replace your current VRAD exe &amp; dll.
                     For more information, see the following GitHub pull request:
 
                     <tsukuru:BrowserHyperlink NavigateUri="https://github.com/ValveSoftware/source-sdk-2013/pull/436">
