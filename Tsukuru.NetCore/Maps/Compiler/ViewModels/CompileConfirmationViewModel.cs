@@ -101,9 +101,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             var vbsp = new VbspCompilationSettingsViewModel();
             var vvis = new VvisCompilationSettingsViewModel();
             var vrad = new VradCompilationSettingsViewModel();
-            var packing = new ResourcePackingViewModel();
-            var templating = new TemplatingSettingsViewModel();
-            var repack = new BspRepackViewModel();
 
             using (new ApplicationContentViewLoader(vbsp))
                 VbspFormattedArgs = vbsp.FormattedArguments;
@@ -114,24 +111,22 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             using (new ApplicationContentViewLoader(vrad))
                 VradFormattedArgs = vrad.FormattedArguments;
 
-            using (new ApplicationContentViewLoader(templating))
-                TemplatingInfo = templating.RunTemplating
-                    ? "Templating will be run to generate files after the map is compiled."
-                    : "Templating will not be run.";
+            TemplatingInfo = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles
+                ? "Templating will be run to generate files after the map is compiled."
+                : "Templating will not be run.";
 
-            using (new ApplicationContentViewLoader(repack))
-                RepackInfo = repack.PerformRepack
-                    ? "The map will be repacked to compress file size even further."
-                    : "The map will NOT be repacked.";
+            RepackInfo = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress
+                ? "The map will be repacked to compress file size even further."
+                : "The map will NOT be repacked.";
 
-            IsPackingEnabled = packing.PerformResourcePacking;
+            IsPackingEnabled = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
             if (IsPackingEnabled)
             {
-                FolderPackInfo = "The following folders will be packed into the BSP file:\n" + string.Join("\n", packing.FoldersToPack.Select(x =>
+                FolderPackInfo = "The following folders will be packed into the BSP file:\n" + string.Join("\n", SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Select(x =>
                 {
                     string mode = x.Intelligent ? "Only used files" : "All files";
-                    return $"{x.Folder} (Pack mode: {mode})";
+                    return $"{x.Path} (Pack mode: {mode})";
                 }));
 
             }

@@ -10,7 +10,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 {
     public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
     {
-        private ObservableCollection<ResourceFolderViewModel> _foldersToPack;
+        private AsyncObservableCollection<ResourceFolderViewModel> _foldersToPack;
         private bool _performResourcePacking;
         private bool _isLoading;
 
@@ -30,7 +30,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public ObservableCollection<ResourceFolderViewModel> FoldersToPack
+        public AsyncObservableCollection<ResourceFolderViewModel> FoldersToPack
         {
             get => _foldersToPack;
             set => Set(() => FoldersToPack, ref _foldersToPack, value);
@@ -53,8 +53,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         public ResourcePackingViewModel()
         {
             AddFolderCommand = new RelayCommand(AddFolderToPack);
-            FoldersToPack = new ObservableCollection<ResourceFolderViewModel>();
-
+            FoldersToPack = new AsyncObservableCollection<ResourceFolderViewModel>();
 
             if (IsInDesignMode)
             {
@@ -65,6 +64,15 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             else
             {
                 MessengerInstance.Register<ResourceFolderViewModel>(this, "RemoveResourceFolderFromPacking", RemoveFolder);
+            }
+        }
+
+        public void Init()
+        {
+            lock (this)
+            {
+                FoldersToPack.Clear();
+
                 PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
                 foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
@@ -72,10 +80,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                     FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
                 }
             }
-        }
-
-        public void Init()
-        {
         }
 
         private void AddFolderToPack()
