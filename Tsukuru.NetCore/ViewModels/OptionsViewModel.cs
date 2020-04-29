@@ -28,7 +28,7 @@ namespace Tsukuru.ViewModels
 
         public string Description => "Configure various settings of Tsukuru.";
 
-        public EShellNavigationPage Group => EShellNavigationPage.Settings;
+        public EShellNavigationPage Group => EShellNavigationPage.Meta;
 
         public bool IsLoading
         {

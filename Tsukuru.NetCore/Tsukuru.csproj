@@ -17,6 +17,7 @@
     <None Remove="Resources\bg.png" />
     <None Remove="Resources\gemidyne-logo.png" />
     <None Remove="Resources\logo.png" />
+    <None Remove="Resources\logo_topnav.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,7 @@
     <Resource Include="Resources\bg.png" />
     <Resource Include="Resources\gemidyne-logo.png" />
     <Resource Include="Resources\logo.png" />
+    <Resource Include="Resources\logo_topnav.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,9 +75,6 @@
     </Compile>
     <Compile Update="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LogoControl.xaml.cs">
-      <DependentUpon>LogoControl.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\OptionsView.xaml.cs">
       <DependentUpon>OptionsView.xaml</DependentUpon>
@@ -109,9 +108,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AboutView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\LogoControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\OptionsView.xaml">

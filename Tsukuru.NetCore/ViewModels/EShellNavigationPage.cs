@@ -5,7 +5,6 @@
         SourcePawnCompiler = 0,
         SourceMapCompiler,
         Translations,
-        Settings,
-        About
+        Meta
     }
 }

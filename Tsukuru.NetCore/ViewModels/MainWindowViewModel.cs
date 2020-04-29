@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Chiaki;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
 
 namespace Tsukuru.ViewModels
 {
@@ -117,8 +116,8 @@ namespace Tsukuru.ViewModels
             yield return new Translator.ViewModels.TranslatorImportViewModel();
             yield return new Translator.ViewModels.TranslatorExportViewModel();
 
-            yield return new OptionsViewModel();
             yield return new AboutViewModel();
+            yield return new OptionsViewModel();
         }
 
         private bool FilterPages(object item)

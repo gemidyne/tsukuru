@@ -6,11 +6,11 @@ namespace Tsukuru.ViewModels
     {
         private bool _isLoading;
 
-        public string Name => "About the app";
+        public string Name => "About Tsukuru";
 
         public string Description => "Learn more about Tsukuru";
 
-        public EShellNavigationPage Group => EShellNavigationPage.About;
+        public EShellNavigationPage Group => EShellNavigationPage.Meta;
 
         public bool IsLoading
         {
