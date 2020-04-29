@@ -1,54 +1,55 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
+using Tsukuru.Core.SourceEngine;
 
 namespace Tsukuru.Steam
 {
-	internal static class SteamHelper
-	{
-		private static string _steamExePath;
+    internal static class SteamHelper
+    {
+        private static string _steamExePath;
 
-		public static string GetExecutableLocation()
-		{
-			if (!string.IsNullOrWhiteSpace(_steamExePath))
-			{
-				return _steamExePath;
-			}
+        public static string GetExecutableLocation()
+        {
+            if (!string.IsNullOrWhiteSpace(_steamExePath))
+            {
+                return _steamExePath;
+            }
 
-			var softwareKey = Registry.CurrentUser.OpenSubKey("Software");
-			var valveKey = softwareKey?.OpenSubKey("Valve");
-			var steamKey = valveKey?.OpenSubKey("Steam");
-			var exePathKey = steamKey?.GetValue("SteamExe");
+            var softwareKey = Registry.CurrentUser.OpenSubKey("Software");
+            var valveKey = softwareKey?.OpenSubKey("Valve");
+            var steamKey = valveKey?.OpenSubKey("Steam");
+            var exePathKey = steamKey?.GetValue("SteamExe");
 
-			_steamExePath = exePathKey as string;
+            _steamExePath = exePathKey as string;
 
-			return _steamExePath;
-		}
+            return _steamExePath;
+        }
 
-		public static bool LaunchAppByIdWithMap(int appId, string map)
-		{
-			string steamPath = GetExecutableLocation();
+        public static bool LaunchAppByIdWithMap(int appId, string map)
+        {
+            string steamPath = GetExecutableLocation();
 
-			if (string.IsNullOrWhiteSpace(steamPath) || !File.Exists(steamPath))
-			{
-				return false;
-			}
+            if (string.IsNullOrWhiteSpace(steamPath) || !File.Exists(steamPath))
+            {
+                return false;
+            }
 
-			var process = Process.Start(steamPath, $"-applaunch {appId} -dev -console +clear +echo \"[Tsukuru] Loading map: {map}...\" +map \"{map}\"");
+            var process = Process.Start(steamPath, $"-applaunch {appId} -dev -console +clear +echo \"[Tsukuru] Loading map: {map}...\" +map \"{map}\"");
 
-			return process?.Id != 0;
-		}
+            return process?.Id != 0;
+        }
 
-		public static bool LaunchAppWithMap(string map)
-		{
-			int? appId = GameHelper.GetAppId();
+        public static bool LaunchAppWithMap(string map)
+        {
+            int? appId = GameInfoHelper.GetAppId();
 
-			if (!appId.HasValue)
-			{
-				return false;
-			}
+            if (!appId.HasValue)
+            {
+                return false;
+            }
 
-			return LaunchAppByIdWithMap(appId.Value, map);
-		}
-	}
+            return LaunchAppByIdWithMap(appId.Value, map);
+        }
+    }
 }
