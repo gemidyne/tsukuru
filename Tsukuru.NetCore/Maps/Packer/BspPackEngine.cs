@@ -66,7 +66,7 @@ namespace Tsukuru.Maps.Packer
                         key = key.Substring(1);
                     }
 
-                    FilesToPack.Add(key, file);
+                    FilesToPack[key] = file;
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace Tsukuru.Maps.Packer
 
                     if (customAssets.Any(a => string.Equals(a, key.Replace("\\", "/"), StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        FilesToPack.Add(key, file);
+                        FilesToPack[key] = file;
                     }
                 }
             }
