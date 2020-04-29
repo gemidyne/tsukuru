@@ -9,6 +9,7 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <FileVersion>3.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
