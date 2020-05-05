@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Maps.Compiler.Business;
+using Tsukuru.Maps.Compiler.Messages;
 using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
@@ -170,6 +172,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                 }
             };
 
+            Messenger.Default.Register<MapCompileEndMessage>(this, OnMapCompileEnd);
+
             Init();
         }
 
@@ -186,6 +190,13 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             FileNamePrefix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix;
             FileNameSuffix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix;
             BuildNumber = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber;
+        }
+
+        private void OnMapCompileEnd(MapCompileEndMessage obj)
+        {
+            IsLoading = true;
+            Init();
+            IsLoading = false;
         }
 
         private void SelectVmfFile()
