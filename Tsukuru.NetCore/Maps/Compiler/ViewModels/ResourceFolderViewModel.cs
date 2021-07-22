@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
+using Chiaki;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Ookii.Dialogs.Wpf;
 using Tsukuru.Settings;
 
 namespace Tsukuru.Maps.Compiler.ViewModels
@@ -10,25 +12,22 @@ namespace Tsukuru.Maps.Compiler.ViewModels
     {
         private bool _suppressSave;
         private string _folder;
-        private bool _intelligent;
+        private EResourceFolderPackingMode _packingMode;
 
         public string Folder
         {
             get => _folder;
-            set
-            {
-                Set(() => Folder, ref _folder, value);
-                RaisePropertyChanged(nameof(File));
-            }
+            set => Set(() => Folder, ref _folder, value);
         }
 
-        public bool Intelligent
+        public EResourceFolderPackingMode[] PackingModes { get; }
+
+        public EResourceFolderPackingMode PackingMode
         {
-            get => _intelligent;
+            get => _packingMode;
             set
             {
-                Set(() => Intelligent, ref _intelligent, value);
-                RaisePropertyChanged(nameof(NotIntelligent));
+                Set(() => PackingMode, ref _packingMode, value);
 
                 var folder = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.SingleOrDefault(f => f.Path == Folder);
 
@@ -37,7 +36,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
                     return;
                 }
 
-                folder.Intelligent = value;
+                folder.Intelligent = value == EResourceFolderPackingMode.NecessaryAssetsOnly;
 
                 if (!_suppressSave)
                 {
@@ -46,37 +45,49 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public string Name => GetHeading();
-
-        public bool NotIntelligent
-        {
-            get => !Intelligent;
-            set
-            {
-                Intelligent = !value;
-                RaisePropertyChanged(nameof(NotIntelligent));
-            }
-        }
-
         public RelayCommand RemoveFolderCommand { get; }
 
+        public RelayCommand ChangePathCommand { get; }
 
         public ResourceFolderViewModel(string folder, bool intelligent)
         {
-            RemoveFolderCommand = new RelayCommand(RemoveSelectedFolder);
             _suppressSave = true;
 
+            RemoveFolderCommand = new RelayCommand(RemoveSelectedFolder);
+            ChangePathCommand = new RelayCommand(ChangePath);
+
             Folder = folder;
-            Intelligent = intelligent;
+            PackingModes = Enum<EResourceFolderPackingMode>.GetValues().ToArray();
+            PackingMode = intelligent
+                ? EResourceFolderPackingMode.NecessaryAssetsOnly
+                : EResourceFolderPackingMode.Everything;
 
             _suppressSave = false;
         }
 
-        private string GetHeading()
+        private void ChangePath()
         {
+            var dialog = new VistaFolderBrowserDialog
+            {
+                ShowNewFolderButton = false,
+                Description = "Select a folder to pack.",
+                SelectedPath = Folder,
+                UseDescriptionForTitle = true
+            };
+
+            if (!dialog.ShowDialog().GetValueOrDefault())
+            {
+                return;
+            }
+
             var directoryInfo = new DirectoryInfo(Folder);
 
-            return directoryInfo.Name;
+            if (!directoryInfo.Exists)
+            {
+                return;
+            }
+
+            Folder = dialog.SelectedPath;
         }
 
         private void RemoveSelectedFolder()

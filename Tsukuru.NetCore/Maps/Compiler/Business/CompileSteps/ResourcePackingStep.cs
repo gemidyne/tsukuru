@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using Chiaki;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Maps.Packer;
 using Tsukuru.Settings;
@@ -12,14 +13,13 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override bool Run(ResultsLogContainer log)
         {
-            var folders = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders;
+            var folders = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray();
 
             var session = new PackerSessionDetails
             {
                 MapFile = MapCompileSessionInfo.Instance.GeneratedBspFile.FullName,
                 GamePath = SdkToolsPath,
-                CompleteFoldersToAdd =
-                    folders.Where(x => !x.Intelligent).Select(x => x.Path).ToList(),
+                CompleteFoldersToAdd = folders.Where(x => !x.Intelligent).Select(x => x.Path).ToList(),
                 IntelligentFoldersToAdd =
                     folders.Where(x => x.Intelligent).Select(x => x.Path).ToList()
             };
@@ -36,9 +36,9 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             {
                 var allFolders = session.CompleteFoldersToAdd.Concat(session.IntelligentFoldersToAdd).ToList();
 
-                using (var mapSpecificFileGenerator = new TemplatingEngine(log, allFolders, MapCompileSessionInfo.Instance.MapName))
+                using (var engine = new TemplatingEngine(log, allFolders, MapCompileSessionInfo.Instance.MapName))
                 {
-                    mapSpecificFileGenerator.Generate();
+                    engine.Generate();
 
                     log.AppendLine("ResourcePackingStep", "Performing resource packing...");
                     packer.PackData();

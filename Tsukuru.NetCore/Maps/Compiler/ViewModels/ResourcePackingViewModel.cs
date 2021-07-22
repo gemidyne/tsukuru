@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using Chiaki;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
@@ -10,7 +11,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 {
     public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
     {
-        private AsyncObservableCollection<ResourceFolderViewModel> _foldersToPack;
+        private static readonly object _door = new object();
+
+        private ObservableCollection<ResourceFolderViewModel> _foldersToPack;
         private bool _performResourcePacking;
         private bool _isLoading;
 
@@ -30,7 +33,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             }
         }
 
-        public AsyncObservableCollection<ResourceFolderViewModel> FoldersToPack
+        public ObservableCollection<ResourceFolderViewModel> FoldersToPack
         {
             get => _foldersToPack;
             set => Set(() => FoldersToPack, ref _foldersToPack, value);
@@ -38,9 +41,9 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public RelayCommand AddFolderCommand { get; }
 
-        public string Name => "Resource Packing";
+        public string Name => "Resource Packing (BSPZIP)";
 
-        public string Description => "Pack custom textures, models and sounds into your BSP file.";
+        public string Description => "Pack custom textures, models and sounds into your BSP file. Uses BSPZIP.exe.";
 
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 
@@ -69,13 +72,13 @@ namespace Tsukuru.Maps.Compiler.ViewModels
 
         public void Init()
         {
-            lock (this)
+            lock (_door)
             {
                 FoldersToPack.Clear();
 
                 PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
-                foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders)
+                foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().DistinctBy(x => x.Path).ToArray())
                 {
                     FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
                 }

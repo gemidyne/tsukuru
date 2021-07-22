@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -17,34 +16,39 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override bool Run(ResultsLogContainer log)
         {
-            CalculateVvisPath();
+            if (!CalculateExecutablePath(log))
+            {
+                return false;
+            }
 
             var settings = new VvisCompilationSettingsViewModel();
 
             using (new ApplicationContentViewLoader(settings))
             {
-                return RunVvisExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+                return RunExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
             }
         }
 
-        private void CalculateVvisPath()
+        private bool CalculateExecutablePath(ResultsLogContainer log)
         {
             if (string.IsNullOrWhiteSpace(VProject))
             {
-                throw new NotSupportedException("VProject is not set");
+                log.AppendLine("VVIS", "VProject is not set. Set your VPROJECT environment variable in Windows system environment variables and then restart Tsukuru. It should be the full path to your game directory, for example: A:\\SteamLibrary\\steamapps\\common\\Team Fortress 2\\tf");
+                return false;
             }
 
-            if (_executable != null)
+            if (_executable == null)
             {
-                return;
+                _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vvis.exe"));
             }
 
-            _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vvis.exe"));
-
-            if (!_executable.Exists)
+            if (_executable.Exists)
             {
-                throw new FileNotFoundException("VVIS executable not found.", _executable.FullName);
+                return true;
             }
+
+            log.AppendLine("VVIS", $"Unable to find a vvis.exe at expected path: {_executable.FullName}");
+            return false;
         }
 
         private string GenerateArgs(ICompilationSettings settings, string vmfPathWithoutExtension)
@@ -52,7 +56,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} {vmfPathWithoutExtension.PrependIfNeeded('"').AppendIfNeeded('"')}";
         }
 
-        private int RunVvisExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -87,7 +91,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        log.Append(((char)ch));
+                        log.Append((char)ch);
                     }
                 });
 

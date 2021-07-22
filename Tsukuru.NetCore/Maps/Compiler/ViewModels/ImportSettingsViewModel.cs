@@ -131,7 +131,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels
             if (result)
             {
                 MessageBox.Show(
-                    text: "Settings imported successfully.",
+                    text: "Settings imported successfully. You may want to review file paths in Resource Packing (BSPZIP) to ensure they are valid folder paths.",
                     caption: "Success",
                     buttons: MessageBoxButton.OK,
                     icon: MessageBoxImage.Information);

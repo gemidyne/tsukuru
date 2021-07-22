@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -47,18 +46,24 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                     }
                 }
 
-                CalculateVradPath(settings.UseModifiedVrad);
+                if (!CalculateExecutablePath(settings.UseModifiedVrad, log))
+                {
+                    return false;
+                }
 
-                return RunVradExecutable(log, settings,
-                    MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+                return RunExecutable(
+                    log: log, 
+                    settings: settings,
+                    vmfPathWithoutExtension: MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
             }
         }
 
-        private void CalculateVradPath(bool useModdedExecutable)
+        private bool CalculateExecutablePath(bool useModdedExecutable, ResultsLogContainer log)
         {
             if (string.IsNullOrWhiteSpace(VProject))
             {
-                throw new NotSupportedException("VProject is not set");
+                log.AppendLine("VRAD", "VProject is not set. Set your VPROJECT environment variable in Windows system environment variables and then restart Tsukuru. It should be the full path to your game directory, for example: A:\\SteamLibrary\\steamapps\\common\\Team Fortress 2\\tf");
+                return false;
             }
 
             if (_executable == null)
@@ -68,12 +73,15 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
                     : "vrad.exe";
 
                 _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", vradFileName));
-
-                if (!useModdedExecutable && !_executable.Exists)
-                {
-                    throw new FileNotFoundException("VRAD executable not found.", _executable.FullName);
-                }
             }
+
+            if (_executable.Exists)
+            {
+                return true;
+            }
+
+            log.AppendLine("VRAD", $"Unable to find a vrad.exe at expected path: {_executable.FullName}");
+            return false;
         }
 
         private string GenerateArgs(ICompilationSettings settings, string vmfPathWithoutExtension)
@@ -81,7 +89,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} \"{vmfPathWithoutExtension}\"";
         }
 
-        private int RunVradExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {

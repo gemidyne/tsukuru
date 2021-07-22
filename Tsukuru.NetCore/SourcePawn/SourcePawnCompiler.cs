@@ -22,7 +22,7 @@ namespace Tsukuru.SourcePawn
 
             foreach (var compilationFile in viewModel.FilesToCompile)
             {
-                UpdateCompilationDataStatus(compilationFile, isCompiling: true);
+                compilationFile.UpdateStatus(isCompiling: true);
             }
 
             foreach (var compilationFile in viewModel.FilesToCompile)
@@ -102,10 +102,10 @@ namespace Tsukuru.SourcePawn
                             }
                         }
 
-                        UpdateCompilationDataStatus(compilationFileViewModel);
+                        compilationFileViewModel.UpdateStatus();
 
                         if (!compilationFileViewModel.Messages.Any(m =>
-                                CompilationMessageHelper.IsLineError(m.Prefix)) && runPostBuildScripts)
+                                CompilationMessageParser.IsLineError(m.Prefix)) && runPostBuildScripts)
                         {
                             RunPostBuildScript(Path.GetDirectoryName(file));
                         }
@@ -206,7 +206,7 @@ namespace Tsukuru.SourcePawn
                     continue;
                 }
 
-                CompilationMessage msg = CompilationMessageHelper.ParseFromString(line);
+                CompilationMessage msg = CompilationMessageParser.ParseFromString(line);
 
                 if (msg == null)
                 {
@@ -219,62 +219,6 @@ namespace Tsukuru.SourcePawn
             return messages;
         }
 
-        private static void UpdateCompilationDataStatus(CompilationFileViewModel fileViewModel, bool isCompiling = false)
-        {
-            if (isCompiling)
-            {
-                fileViewModel.Result = CompilationResult.Compiling;
-                fileViewModel.IsBusy = true;
-                fileViewModel.IsUnknownState = false;
-                fileViewModel.IsSuccessfulCompile = false;
-                fileViewModel.IsCompiledWithWarnings = false;
-                fileViewModel.IsCompiledWithErrors = false;
-                fileViewModel.CanShowDetails = false;
-                return;
-            }
-
-            if (!fileViewModel.Messages.Any())
-            {
-                fileViewModel.Result = CompilationResult.Unknown;
-                fileViewModel.IsBusy = false;
-                fileViewModel.IsUnknownState = true;
-                fileViewModel.IsSuccessfulCompile = false;
-                fileViewModel.IsCompiledWithWarnings = false;
-                fileViewModel.IsCompiledWithErrors = false;
-                fileViewModel.CanShowDetails = false;
-                return;
-            }
-
-            if (fileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineError(m.Prefix)))
-            {
-                fileViewModel.Result = CompilationResult.FailedWithErrors;
-                fileViewModel.IsBusy = false;
-                fileViewModel.IsUnknownState = false;
-                fileViewModel.IsSuccessfulCompile = false;
-                fileViewModel.IsCompiledWithWarnings = false;
-                fileViewModel.IsCompiledWithErrors = true;
-                fileViewModel.CanShowDetails = true;
-            }
-            else if (fileViewModel.Messages.Any(m => CompilationMessageHelper.IsLineWarning(m.Prefix)))
-            {
-                fileViewModel.Result = CompilationResult.CompletedWithWarnings;
-                fileViewModel.IsBusy = false;
-                fileViewModel.IsUnknownState = false;
-                fileViewModel.IsSuccessfulCompile = false;
-                fileViewModel.IsCompiledWithWarnings = true;
-                fileViewModel.IsCompiledWithErrors = false;
-                fileViewModel.CanShowDetails = true;
-            }
-            else
-            {
-                fileViewModel.Result = CompilationResult.Completed;
-                fileViewModel.IsBusy = false;
-                fileViewModel.IsUnknownState = false;
-                fileViewModel.IsSuccessfulCompile = true;
-                fileViewModel.IsCompiledWithWarnings = false;
-                fileViewModel.IsCompiledWithErrors = false;
-                fileViewModel.CanShowDetails = false;
-            }
-        }
+        
     }
 }

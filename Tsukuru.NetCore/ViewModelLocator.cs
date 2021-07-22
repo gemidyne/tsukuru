@@ -7,46 +7,23 @@ namespace Tsukuru
 {
     internal class ViewModelLocator
     {
-        private readonly SimpleIoc _ioc;
+        private static readonly SimpleIoc _ioc = SimpleIoc.Default;
 
-        public SourcePawnCompileViewModel SourcePawnCompileViewModel => _ioc.GetInstance<SourcePawnCompileViewModel>();
+        public SourcePawnCompileViewModel SourcePawnCompileViewModel => GetOrRegister<SourcePawnCompileViewModel>();
 
-        public ResultsWindowViewModel ResultsWindowViewModel => _ioc.GetInstance<ResultsWindowViewModel>();
-
-        public MainWindowViewModel MainWindowViewModel => _ioc.GetInstance<MainWindowViewModel>();
+        public MainWindowViewModel MainWindowViewModel => GetOrRegister<MainWindowViewModel>();
 
         public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
 
-        public ViewModelLocator()
+        private static T GetOrRegister<T>()
+            where T : class
         {
-            if (ViewModelBase.IsInDesignModeStatic)
+            if (!_ioc.IsRegistered<T>())
             {
-
-            }
-            else
-            {
-                _ioc = SimpleIoc.Default;
-
-                RegisterViewModels();
-            }
-        }
-
-        private void RegisterViewModels()
-        {
-            if (!_ioc.IsRegistered<MainWindowViewModel>())
-            {
-                _ioc.Register<MainWindowViewModel>();
+                _ioc.Register<T>();
             }
 
-            if (!_ioc.IsRegistered<SourcePawnCompileViewModel>())
-            {
-                _ioc.Register<SourcePawnCompileViewModel>();
-            }
-
-            if (!_ioc.IsRegistered<ResultsWindowViewModel>())
-            {
-                _ioc.Register<ResultsWindowViewModel>();
-            }
+            return _ioc.GetInstance<T>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             using (var input = MapCompileSessionInfo.Instance.GeneratedBspFile.OpenRead())
             using (var output = File.Create(MapCompileSessionInfo.Instance.GeneratedBspFile.FullName + ".bz2"))
             {
-                log.AppendLine("BZ2", "Compressing...");
+                log.AppendLine("BZ2", "Compressing... this might take some time.");
                 BZip2.Compress(input, output, true, 4096);
             }
 

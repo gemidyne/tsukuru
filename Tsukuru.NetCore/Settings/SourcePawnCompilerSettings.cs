@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Tsukuru.Settings
 {
@@ -15,5 +16,8 @@ namespace Tsukuru.Settings
 
         [JsonProperty("copyToClipboard")]
         public bool CopySmxOnSuccess { get; set; }
+
+        [JsonProperty("lastUsedFiles")]
+        public List<string> LastUsedFiles { get; set; } = new List<string>();
     }
 }

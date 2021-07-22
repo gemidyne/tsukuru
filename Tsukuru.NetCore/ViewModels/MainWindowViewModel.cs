@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using AdonisUI.Controls;
 using Chiaki;
 using GalaSoft.MvvmLight;
 
@@ -12,15 +12,22 @@ namespace Tsukuru.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private static readonly object _door = new object();
-        private readonly ObservableCollection<IApplicationContentView> _pages;
+        
+        private ObservableCollection<EShellNavigationPage> _navigationGroups;
+        private ICollectionView _pagesCollectionView;
+        private IApplicationContentView _selectedPage;
+        private ICollectionView _navigationGroupsCollectionView;
 
         public ReadOnlyObservableCollection<IApplicationContentView> Pages { get; }
 
-        public ICollectionView PagesCollectionView { get; }
+        public ICollectionView PagesCollectionView
+        {
+            get => _pagesCollectionView;
+            set => Set(() => PagesCollectionView, ref _pagesCollectionView, value);
+        }
 
         public ICollectionView PagesInSelectedGroupCollectionView { get; }
 
-        private IApplicationContentView _selectedPage;
 
         public IApplicationContentView SelectedPage
         {
@@ -38,21 +45,31 @@ namespace Tsukuru.ViewModels
                             value.IsLoading = true;
                             value.Init();
                         }).ContinueWith((task) => value.IsLoading = false);
+
+                        SelectedNavigationGroup = value.Group;
                     }
 
                     Set(() => SelectedPage, ref _selectedPage, value);
 
-                    PagesInSelectedGroupCollectionView.Refresh();
                     RaisePropertyChanged(nameof(SelectedNavigationGroup));
+
+                    PagesInSelectedGroupCollectionView.Refresh();
                 }
             }
         }
 
-        private readonly ObservableCollection<EShellNavigationPage> _navigationGroups;
+        public ObservableCollection<EShellNavigationPage> NavigationGroups
+        {
+            get => _navigationGroups;
+            set => Set(() => NavigationGroups, ref _navigationGroups, value);
+        }
 
-        public ReadOnlyObservableCollection<EShellNavigationPage> NavigationGroups { get; }
 
-        public ICollectionView NavigationGroupsCollectionView { get; }
+        public ICollectionView NavigationGroupsCollectionView
+        {
+            get => _navigationGroupsCollectionView;
+            set => Set(() => NavigationGroupsCollectionView, ref _navigationGroupsCollectionView, value);
+        }
 
         public EShellNavigationPage SelectedNavigationGroup
         {
@@ -61,24 +78,53 @@ namespace Tsukuru.ViewModels
             {
                 SelectedPage = Pages.FirstOrDefault(p => p.Group == value);
                 PagesInSelectedGroupCollectionView.Refresh();
+                RaisePropertyChanged(nameof(SelectedNavigationGroup));
             }
         }
 
         public MainWindowViewModel()
         {
-            _pages = new ObservableCollection<IApplicationContentView>(CreateAllPages().ToList());
-            Pages = new ReadOnlyObservableCollection<IApplicationContentView>(_pages);
+            var pages = new ObservableCollection<IApplicationContentView>(
+                new IApplicationContentView[]
+                {
+
+                    new SourcePawn.ViewModels.SettingsViewModel(),
+                    new SourcePawn.ViewModels.PostBuildActionsViewModel(),
+                    new SourcePawn.ViewModels.SourcePawnCompileViewModel(),
+
+                    new Maps.Compiler.ViewModels.ImportSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.ExportSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.GameInfoViewModel(),
+                    new Maps.Compiler.ViewModels.MapSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.VbspCompilationSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.VvisCompilationSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.VradCompilationSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.ResourcePackingViewModel(),
+                    new Maps.Compiler.ViewModels.TemplatingSettingsViewModel(),
+                    new Maps.Compiler.ViewModels.BspRepackViewModel(),
+                    new Maps.Compiler.ViewModels.PostCompileActionsViewModel(),
+                    new Maps.Compiler.ViewModels.CompileConfirmationViewModel(),
+                    new Maps.Compiler.ViewModels.ResultsViewModel(),
+
+                    new Translator.ViewModels.TranslatorImportViewModel(),
+                    new Translator.ViewModels.TranslatorExportViewModel(),
+
+                    new AboutViewModel(),
+                    new OptionsViewModel()
+                });
+
+            Pages = new ReadOnlyObservableCollection<IApplicationContentView>(pages);
             PagesCollectionView = CollectionViewSource.GetDefaultView(Pages);
-            PagesCollectionView.Filter = FilterPages;
+            PagesCollectionView.Filter = _ => true;
             PagesCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(IApplicationContentView.Group)));
             PagesInSelectedGroupCollectionView = new CollectionViewSource { Source = Pages }.View;
             PagesInSelectedGroupCollectionView.Filter = FilterPagesInSelectedGroup;
-            SelectedPage = Pages.FirstOrDefault();
 
-            _navigationGroups = new ObservableCollection<EShellNavigationPage>(Enum<EShellNavigationPage>.GetValues());
-            NavigationGroups = new ReadOnlyObservableCollection<EShellNavigationPage>(_navigationGroups);
+            NavigationGroups = new ObservableCollection<EShellNavigationPage>(Enum<EShellNavigationPage>.GetValues());
             NavigationGroupsCollectionView = CollectionViewSource.GetDefaultView(NavigationGroups);
-            NavigationGroupsCollectionView.Filter = FilterNavigationGroups;
+            NavigationGroupsCollectionView.Filter = _ => true;
+
+            NavigateToPage<SourcePawn.ViewModels.SettingsViewModel>();
         }
 
         public void NavigateToPage<T>()
@@ -88,63 +134,18 @@ namespace Tsukuru.ViewModels
 
             if (page == null)
             {
+                MessageBox.Show($"No page found of type: {typeof(T)}");
                 return;
             }
 
             SelectedPage = page;
         }
 
-        private IEnumerable<IApplicationContentView> CreateAllPages()
-        {
-            // SourcePawn Compiler
-            yield return new SourcePawn.ViewModels.SettingsViewModel();
-            yield return new SourcePawn.ViewModels.SourcePawnCompileViewModel();
-            yield return new SourcePawn.ViewModels.PostBuildActionsViewModel();
-
-            yield return new Maps.Compiler.ViewModels.ImportSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.ExportSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.GameInfoViewModel();
-            yield return new Maps.Compiler.ViewModels.MapSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.VbspCompilationSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.VvisCompilationSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.VradCompilationSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.ResourcePackingViewModel();
-            yield return new Maps.Compiler.ViewModels.TemplatingSettingsViewModel();
-            yield return new Maps.Compiler.ViewModels.BspRepackViewModel();
-            yield return new Maps.Compiler.ViewModels.PostCompileActionsViewModel();
-            yield return new Maps.Compiler.ViewModels.CompileConfirmationViewModel();
-            yield return new Maps.Compiler.ViewModels.ResultsViewModel();
-
-            yield return new Translator.ViewModels.TranslatorImportViewModel();
-            yield return new Translator.ViewModels.TranslatorExportViewModel();
-
-            yield return new AboutViewModel();
-            yield return new OptionsViewModel();
-        }
-
-        private bool FilterPages(object item)
-        {
-            var page = (IApplicationContentView)item;
-
-
-            return true;
-        }
-
         private bool FilterPagesInSelectedGroup(object item)
         {
             var page = (IApplicationContentView)item;
 
-            if (SelectedPage == null)
-                return false;
-
-            return page.Group == SelectedPage.Group && FilterPages(page);
-        }
-
-        private bool FilterNavigationGroups(object item)
-        {
-            var group = (EShellNavigationPage)item;
-
-            return true;
+            return SelectedPage != null && page.Group == SelectedPage.Group;
         }
     }
 }

@@ -10,45 +10,74 @@
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:ResourceFolderViewModel}">
     <UserControl.Resources>
-        <converters:BooleanToPackingModeConverter x:Key="BooleanToPackingModeConverter" />
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converters:DirectoryInfoNameConverter x:Key="DirectoryInfoNameConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="6">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <GroupBox.Header>
+            <TextBlock Text="{Binding Folder, Converter={StaticResource DirectoryInfoNameConverter}}" />
+        </GroupBox.Header>
 
-        <StackPanel>
+        <GroupBox.Content>
 
-           <StackPanel Orientation="Horizontal">
-                <TextBlock FontWeight="Bold" Text="Name" Width="100" VerticalAlignment="Center" />
+            <StackPanel>
+                <Grid Margin="{adonisUi:Space 0, 0, 0, 1}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding Name}" />
+                    <StackPanel Grid.Column="0">
+                        <Label>Path</Label>
+                        <TextBox 
+                            IsReadOnly="True"
+                            Text="{Binding Folder}"
+                            VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1" 
+                            Command="{Binding ChangePathCommand}"
+                            VerticalAlignment="Bottom">
+                        <Button.Content>
+                            Change folder...
+                        </Button.Content>
+                    </Button>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox 
+                        Grid.Column="0"
+                        ItemsSource="{Binding PackingModes}"
+                        SelectedItem="{Binding PackingMode}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=., Converter={StaticResource EnumDescriptionConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Button
+                        Grid.Column="2"
+                        Command="{Binding RemoveFolderCommand}"
+                        Height="30"
+                        VerticalAlignment="Center">
+                        <Button.Content>
+                            Remove folder
+                        </Button.Content>
+                    </Button>
+                </Grid>
+
+                
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontWeight="Bold" Text="Path" Width="100" VerticalAlignment="Center" />
+        </GroupBox.Content>
 
-                <TextBlock Text="{Binding Folder}" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontWeight="Bold" Text="Packing mode" 
-                           Width="100"
-                           VerticalAlignment="Center"/>
-
-                <TextBlock Text="{Binding Intelligent, Converter={StaticResource BooleanToPackingModeConverter}}" />
-            </StackPanel>
-        </StackPanel>
-
-        <Button Grid.Column="1" 
-                Command="{Binding RemoveFolderCommand}"
-                Height="30"
-                VerticalAlignment="Center">
-            <Button.Content>
-                Remove
-            </Button.Content>
-        </Button>
-    </Grid>
+    </GroupBox>
 </UserControl>

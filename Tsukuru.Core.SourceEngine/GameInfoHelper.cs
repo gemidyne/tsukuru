@@ -20,9 +20,16 @@ namespace Tsukuru.Core.SourceEngine
                 return null;
             }
 
-            int appId = gameInfo["FileSystem"]["SteamAppId"].AsInteger();
+            try
+            {
+                int appId = gameInfo["FileSystem"]["SteamAppId"].AsInteger();
 
-            return appId;
+                return appId;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static string GetGameInfo()
@@ -40,6 +47,11 @@ namespace Tsukuru.Core.SourceEngine
         public static IEnumerable<FileInfo> GetAllVpkPaths()
         {
             var gameInfo = TryGetGameInfo();
+
+            if (gameInfo == null)
+            {
+                yield break;
+            }
 
             var gameDir = VProjectHelper.Path.Substring(VProjectHelper.Path.Replace('\\', '/').LastIndexOf('/')).Trim('/', '\\');
 
@@ -71,6 +83,11 @@ namespace Tsukuru.Core.SourceEngine
 
         private static KeyValue TryGetGameInfo()
         {
+            if (string.IsNullOrWhiteSpace(VProjectHelper.Path))
+            {
+                return null;
+            }
+
             if (_gameInfoKeyValues != null)
             {
                 return _gameInfoKeyValues;

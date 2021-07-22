@@ -12,63 +12,28 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:SourcePawnCompileViewModel}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <StackPanel 
-            Grid.Row="0" 
-            HorizontalAlignment="Right" 
-            Orientation="Horizontal">
-                <Button
-                    Command="{Binding AddFileCommand}"
-                    FontSize="12"
-                    Height="Auto"
-                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="+"
-                                           FontSize="20"
-                                           FontWeight="Bold"
-                                           VerticalAlignment="Center"/>
-
-                        <TextBlock Text="Add file"
-                                           Margin="{adonisUi:Space 1, 0, 0, 0}"
-                                           VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button
-                    Command="{Binding RemoveFileCommand}"
-                    FontSize="12"
-                    Height="Auto"
-                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}" 
-                    Margin="10,0,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="-"
-                                           FontSize="20"
-                                           FontWeight="Bold"
-                                           VerticalAlignment="Center"/>
-
-                        <TextBlock Text="Remove file"
-                                           Margin="{adonisUi:Space 1, 0, 0, 0}"
-                                           VerticalAlignment="Center"/>
-                    </StackPanel>
+    <GroupBox>
+        <GroupBox.Header>
+            <StackPanel HorizontalAlignment="Right">
+                <Button Command="{Binding AddFileCommand}">
+                    Add file
                 </Button>
             </StackPanel>
+        </GroupBox.Header>
 
-        <ListBox
-            Grid.Row="1"
-            HorizontalContentAlignment="Stretch"
-            ItemsSource="{Binding FilesToCompile}"
-            SelectedItem="{Binding SelectedFile}"
-            SelectionMode="Single">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <views:SourcePawnFileView />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-    </Grid>
+        <GroupBox.Content>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl
+                    HorizontalContentAlignment="Stretch"
+                    ItemsSource="{Binding FilesToCompile}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:SourcePawnFileView HorizontalAlignment="Stretch"
+                                                      Margin="{adonisUi:Space 0, 0, 0, 1}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </GroupBox.Content>
+    </GroupBox>
 </UserControl>

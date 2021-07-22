@@ -9,10 +9,10 @@ namespace Tsukuru.Maps.Compiler.ViewModels
         private bool _isLoading;
         private bool _performRepack;
 
-        public string Name => "Repack";
+        public string Name => "BSP Repack";
 
         public string Description =>
-            "Repacking your map can significantly decrease the file size. This will compress data within the map. You must have Resource Packing enabled to use this feature.";
+            "Repacking your map can significantly decrease the file size. This will compress all data within the map. NOTE: You must have Resource Packing enabled to use this feature.";
 
         public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
 

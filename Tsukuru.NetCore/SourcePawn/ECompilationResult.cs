@@ -1,6 +1,6 @@
 ﻿namespace Tsukuru.SourcePawn
 {
-    public enum CompilationResult
+    public enum ECompilationResult
     {
         Unknown,
         Compiling,

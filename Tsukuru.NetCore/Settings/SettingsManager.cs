@@ -57,7 +57,14 @@ namespace Tsukuru.Settings
 
             var serialised = JsonConvert.SerializeObject(Manifest, Formatting.Indented);
 
-            File.WriteAllText(_settingsPath.FullName, serialised);
+            try
+            {
+                File.WriteAllText(_settingsPath.FullName, serialised);
+            }
+            catch (Exception ex)
+            {
+                // Ignore for now
+            }
         }
 
         private static FileInfo GetSettingsFilePath()

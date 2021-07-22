@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Shell;
+using Chiaki;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Ookii.Dialogs.Wpf;
@@ -25,7 +27,11 @@ namespace Tsukuru.SourcePawn.ViewModels
         private bool _isWatchingOrBuilding;
         private bool _isLoading;
 
-        public ObservableCollection<CompilationFileViewModel> FilesToCompile => _filesToCompile ?? (_filesToCompile = new ObservableCollection<CompilationFileViewModel>());
+        public ObservableCollection<CompilationFileViewModel> FilesToCompile
+        {
+            get => _filesToCompile;
+            set => Set(() => FilesToCompile, ref _filesToCompile, value);
+        }
 
         public bool AreCommandButtonsEnabled
         {
@@ -109,7 +115,6 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public RelayCommand AddFileCommand { get; private set; }
         public RelayCommand BuildCommand { get; private set; }
-        public RelayCommand RemoveFileCommand { get; private set; }
 
         public RelayCommand WatchCommand { get; }
 
@@ -127,10 +132,22 @@ namespace Tsukuru.SourcePawn.ViewModels
 
         public SourcePawnCompileViewModel()
         {
+            FilesToCompile = new ObservableCollection<CompilationFileViewModel>();
+
             AddFileCommand = new RelayCommand(AddFile);
-            RemoveFileCommand = new RelayCommand(RemoveFile);
             BuildCommand = new RelayCommand(Build);
             WatchCommand = new RelayCommand(Watch);
+
+            AddExistingFiles(SettingsManager.Manifest?.SourcePawnCompiler?.LastUsedFiles, doSave: false);
+        }
+
+        public void Init()
+        {
+        }
+
+        public void RemoveFile(string path)
+        {
+
         }
 
         private async void Build()
@@ -206,18 +223,16 @@ namespace Tsukuru.SourcePawn.ViewModels
             AreCommandButtonsEnabled = true;
         }
 
-
-
         private void AddFile()
         {
             var dialog = new VistaOpenFileDialog
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                Multiselect = false,
+                Multiselect = true,
                 Filter = "SourcePawn Files|*.sp",
-                InitialDirectory = System.IO.Directory.GetCurrentDirectory(),
-                Title = "Choose a file."
+                InitialDirectory = Directory.GetCurrentDirectory(),
+                Title = "Choose one or more files to add."
             };
 
             if (!dialog.ShowDialog().GetValueOrDefault())
@@ -225,20 +240,34 @@ namespace Tsukuru.SourcePawn.ViewModels
                 return;
             }
 
-            if (FilesToCompile.All(c => c.File != dialog.FileName))
+            AddExistingFiles(dialog.FileNames);
+        }
+
+
+        private void AddExistingFiles(
+            IEnumerable<string> files,
+            bool doSave = true)
+        {
+            foreach (string file in files.IfNullThenEmpty())
             {
-                FilesToCompile.Add(new CompilationFileViewModel { File = dialog.FileName });
+                var fileInfo = new FileInfo(file);
+
+                if (!fileInfo.Exists)
+                {
+                    continue;
+                }
+
+                if (FilesToCompile.All(c => c.File != file))
+                {
+                    FilesToCompile.Add(new CompilationFileViewModel(this) { File = file });
+                }
             }
-        }
 
-        private void RemoveFile()
-        {
-            FilesToCompile.Remove(SelectedFile);
-        }
-
-
-        public void Init()
-        {
+            if (doSave)
+            {
+                SettingsManager.Manifest.SourcePawnCompiler.LastUsedFiles = FilesToCompile.Select(x => x.File).ToList();
+                SettingsManager.Save();
+            }
         }
     }
 }

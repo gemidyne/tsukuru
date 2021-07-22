@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Tsukuru.Maps.Compiler.ViewModels"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              mc:Ignorable="d" 
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"
@@ -12,16 +13,25 @@
              d:DesignHeight="250" d:DesignWidth="600" 
              d:DataContext="{d:DesignInstance viewModels:TemplatingSettingsViewModel}">
     <StackPanel Margin="32">
-        <TextBlock Margin="0,0,0,10"
+        <TextBlock Margin="{adonisUi:Space 0, 0, 0, 2}"
                    TextWrapping="WrapWithOverflow">
-            Template files must end in the ".tsutmpl" file extension, with the correct file extension before hand. 
+            Template files must end in the ".tsutmpl" file extension, with the correct file extension before hand.
+            For example, to make a map readme: {{map_name}}.txt.tmpl
         </TextBlock>
 
-        <TextBlock TextWrapping="WrapWithOverflow">
-            Within template files and template filenames, you can use the following tokens:
+        <TextBlock Margin="{adonisUi:Space 0, 0, 0, 2}"
+                   TextWrapping="WrapWithOverflow">
+            All template files you want to generate must be within a folder that will be resource packed using BSPZIP. 
         </TextBlock>
 
-        <StackPanel Margin="25,0,0,20">
+        <TextBlock 
+            Margin="{adonisUi:Space 0, 0, 0, 2}"
+            TextWrapping="WrapWithOverflow">
+            Within template files and template file names, you can use the following tokens:
+        </TextBlock>
+
+        <StackPanel 
+            Margin="{adonisUi:Space 2, 0, 0, 2}">
             <TextBlock TextWrapping="WrapWithOverflow">
                 {{map_name}}
             </TextBlock>

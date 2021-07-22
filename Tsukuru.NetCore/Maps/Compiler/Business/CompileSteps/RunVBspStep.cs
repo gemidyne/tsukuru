@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -16,30 +15,37 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
         public override bool Run(ResultsLogContainer log)
         {
-            CalculateVbspPath();
+            if (!CalculateExecutablePath(log))
+            {
+                return false;
+            }
 
             var settings = new VbspCompilationSettingsViewModel();
 
             using (new ApplicationContentViewLoader(settings))
-                return RunBspExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
+                return RunExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;
         }
 
-        private void CalculateVbspPath()
+        private bool CalculateExecutablePath(ResultsLogContainer log)
         {
             if (string.IsNullOrWhiteSpace(VProject))
             {
-                throw new NotSupportedException("VProject is not set");
+                log.AppendLine("VBSP", "VProject is not set. Set your VPROJECT environment variable in Windows system environment variables and then restart Tsukuru. It should be the full path to your game directory, for example: A:\\SteamLibrary\\steamapps\\common\\Team Fortress 2\\tf");
+                return false;
             }
 
             if (_executable == null)
             {
                 _executable = new FileInfo(Path.Combine(SdkToolsPath, "bin", "vbsp.exe"));
-
-                if (!_executable.Exists)
-                {
-                    throw new FileNotFoundException("VBSP executable not found.", _executable.FullName);
-                }
             }
+
+            if (_executable.Exists)
+            {
+                return true;
+            }
+
+            log.AppendLine("VBSP", $"Unable to find a vbsp.exe at expected path: {_executable.FullName}");
+            return false;
         }
 
         private string GenerateArgs(ICompilationSettings settings, string vmfPathWithoutExtension)
@@ -47,7 +53,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
             return $" -game \"{VProject}\" {settings.FormattedArguments} \"{vmfPathWithoutExtension}\"";
         }
 
-        private int RunBspExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
+        private int RunExecutable(ResultsLogContainer log, ICompilationSettings settings, string vmfPathWithoutExtension)
         {
             var startInfo = new ProcessStartInfo
             {
@@ -82,7 +88,7 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps
 
                     while ((ch = process.StandardOutput.Read()) >= 0)
                     {
-                        log.Append(((char)ch));
+                        log.Append((char)ch);
                     }
                 });
 

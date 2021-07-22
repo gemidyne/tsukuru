@@ -9,7 +9,6 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        FontFamily="{DynamicResource AppFont}"
         DataContext="{Binding ResultsWindowViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid>
         <TabControl>

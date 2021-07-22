@@ -20,6 +20,9 @@ namespace Tsukuru.Core.Translations.Data
         [JsonProperty("translations")]
         public Dictionary<string, string> Translations { get; set; }
 
+        [JsonProperty("ignoreEmptyValue")]
+        public bool IgnoreEmptyValue { get; set; }
+
         public Phrase()
         {
             FormatArguments = new List<IFormatArgument>();

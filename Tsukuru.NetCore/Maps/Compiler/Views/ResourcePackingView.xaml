@@ -19,28 +19,14 @@
         <converters:BooleanToPackingModeConverter x:Key="BooleanToPackingModeConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="32">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0"
-                    Margin="0,0,0,10">
-
-        </StackPanel>
-
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
+    <GroupBox Margin="32">
+        <GroupBox.Header>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+
                 <CheckBox 
                     Grid.Column="0"
                     IsChecked="{Binding PerformResourcePacking}" 
@@ -48,87 +34,24 @@
 
                 <Button
                     Grid.Column="1"
-                    Command="{Binding AddFolderCommand}"
-                    FontSize="12"
-                    Height="Auto"
-                    Style="{DynamicResource {x:Static adonisUi:Styles.AccentButton}}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="+"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   VerticalAlignment="Center"/>
-
-                        <TextBlock Text="Add folder"
-                                   Margin="{adonisUi:Space 1, 0, 0, 0}"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                    Command="{Binding AddFolderCommand}">
+                    Add folder
                 </Button>
             </Grid>
-                
-            <DataGrid 
-                Grid.Row="1" 
-                ItemsSource="{Binding FoldersToPack}"
-                AutoGenerateColumns="False"
-                FrozenColumnCount="1"
-                EnableRowVirtualization="True"
-                EnableColumnVirtualization="True"
-                VerticalScrollBarVisibility="Visible">
-                    <DataGrid.Resources>
-                        <Style x:Key="CellErrorStyle"
-                                   TargetType="{x:Type TextBlock}">
-                            <Setter Property="Validation.ErrorTemplate"
-                                        Value="{DynamicResource {x:Static adonisUi:Templates.ValidationErrorTemplate}}"/>
-                            <Style.Triggers>
-                                <Trigger Property="Validation.HasError" Value="True">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <SolidColorBrush Color="{DynamicResource {x:Static adonisUi:Colors.ErrorColor}}" Opacity="0.25"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
+        </GroupBox.Header>
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name"
-                                                Binding="{Binding Name, ValidatesOnDataErrors=True}"
-                                                ElementStyle="{StaticResource CellErrorStyle}"
-                                                MinWidth="200" 
-                                                IsReadOnly="True"
-                                                Width="Auto" />
-
-                        <DataGridTextColumn 
-                            Header="Path"
-                            Binding="{Binding Folder, ValidatesOnDataErrors=True}"
-                            ElementStyle="{StaticResource CellErrorStyle}"
-                            IsReadOnly="True"
-                            Width="*"/>
-
-                        <DataGridCheckBoxColumn 
-                            Header="Pack only used files?"
-                            Binding="{Binding Intelligent}"
-                            IsReadOnly="False"
-                            Width="Auto" />
-
-                        <DataGridCheckBoxColumn 
-                            Header="Pack all files?"
-                            Binding="{Binding NotIntelligent}"
-                            IsReadOnly="False"
-                            Width="Auto" />
-                </DataGrid.Columns>
-
-                    <DataGrid.RowDetailsTemplate>
+        <GroupBox.Content>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding FoldersToPack}">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:FolderDataGridTemplateView />
+                            <local:FolderDataGridTemplateView
+                                HorizontalAlignment="Stretch"
+                                Margin="{adonisUi:Space 0, 0, 0, 1}"/>
                         </DataTemplate>
-                    </DataGrid.RowDetailsTemplate>
-
-                    <DataGrid.RowValidationRules>
-                        <DataErrorValidationRule ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue" />
-                    </DataGrid.RowValidationRules>
-
-                </DataGrid>
-        </Grid>
-    </Grid>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </GroupBox.Content>
+    </GroupBox>
 </UserControl>

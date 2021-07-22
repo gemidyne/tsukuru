@@ -1,15 +1,59 @@
-﻿namespace Tsukuru.SourcePawn
+﻿using GalaSoft.MvvmLight;
+
+namespace Tsukuru.SourcePawn
 {
-    public class CompilationMessage
+    public class CompilationMessage : ViewModelBase
     {
-        public int? FirstLine { get; set; }
-        public int LastLine { get; set; }
+        private int? _firstLine;
+        private int _lastLine;
+        private string _fileName;
+        private string _prefix;
+        private string _message;
+        private string _rawLine;
 
-        public string FileName { get; set; }
-        public string Prefix { get; set; }
-        public string Message { get; set; }
+        public int? FirstLine
+        {
+            get => _firstLine;
+            set
+            {
+                Set(() => FirstLine, ref _firstLine, value);
+                RaisePropertyChanged(nameof(LineNumberDisplay));
+            }
+        }
 
-        public string RawLine { get; set; }
+        public int LastLine
+        {
+            get => _lastLine;
+            set
+            {
+                Set(() => LastLine, ref _lastLine, value);
+                RaisePropertyChanged(nameof(LineNumberDisplay));
+            }
+        }
+
+        public string FileName
+        {
+            get => _fileName;
+            set => Set(() => FileName, ref _fileName, value);
+        }
+
+        public string Prefix
+        {
+            get => _prefix;
+            set => Set(() => Prefix, ref _prefix, value);
+        }
+
+        public string Message
+        {
+            get => _message;
+            set => Set(() => Message, ref _message, value);
+        }
+
+        public string RawLine
+        {
+            get => _rawLine;
+            set => Set(() => RawLine, ref _rawLine, value);
+        }
 
         public string LineNumberDisplay => FirstLine.HasValue 
             ? FirstLine + " - " + LastLine 

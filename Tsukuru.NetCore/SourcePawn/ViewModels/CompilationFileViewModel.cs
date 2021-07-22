@@ -1,39 +1,46 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Ioc;
-using Tsukuru.SourcePawn.Views;
 
 namespace Tsukuru.SourcePawn.ViewModels
 {
     public class CompilationFileViewModel : ViewModelBase
     {
+        private readonly SourcePawnCompileViewModel _parentViewModel;
         private string _file;
         private ObservableCollection<CompilationMessage> _messages;
-        private CompilationResult _result = CompilationResult.Unknown;
+        private ObservableCollection<CompilationMessage> _errors;
+        private ObservableCollection<CompilationMessage> _warnings;
+
+        private string _errorsHeader;
+        private string _rawOutput;
+        private string _warningsHeader;
+        private ECompilationResult _result = ECompilationResult.Unknown;
         private bool _canShowDetails;
         private bool _isSuccessfulCompile;
         private bool _isBusy;
         private bool _isCompiledWithErrors;
         private bool _isCompiledWithWarnings;
         private bool _isUnknownState;
+        private string _shortStatus;
 
         public string File
         {
-            get { return _file; }
-            set { Set(() => File, ref _file, value); }
+            get => _file;
+            set => Set(() => File, ref _file, value);
         }
 
-        public CompilationResult Result
+        public ECompilationResult Result
         {
-            get { return _result; }
-            set { Set(() => Result, ref _result, value); }
+            get => _result;
+            set => Set(() => Result, ref _result, value);
         }
 
         public ObservableCollection<CompilationMessage> Messages
         {
-            get { return _messages ?? (_messages = new ObservableCollection<CompilationMessage>()); }
+            get => _messages;
+            set => Set(() => Messages, ref _messages, value);
         }
 
         public bool IsSuccessfulCompile
@@ -69,32 +76,131 @@ namespace Tsukuru.SourcePawn.ViewModels
         public bool CanShowDetails
         {
             get => _canShowDetails;
-            set
-            {
-                Set(() => CanShowDetails, ref _canShowDetails, value);
-            }
+            set => Set(() => CanShowDetails, ref _canShowDetails, value);
         }
 
-        public RelayCommand ShowDetailsCommand { get; private set; }
-
-        public CompilationFileViewModel()
+        public string ShortStatus
         {
-            ShowDetailsCommand = new RelayCommand(ShowDetails);
+            get => _shortStatus;
+            set => Set(() => ShortStatus, ref _shortStatus, value);
+        }
+
+        public ObservableCollection<CompilationMessage> Errors
+        {
+            get => _errors;
+            set => Set(() => Errors, ref _errors, value);
+        }
+
+        public ObservableCollection<CompilationMessage> Warnings
+        {
+            get => _warnings;
+            set => Set(() => Warnings, ref _warnings, value);
+        }
+
+        public string RawOutput
+        {
+            get => _rawOutput;
+            set => Set(() => RawOutput, ref _rawOutput, value);
+        }
+
+        public string ErrorsHeader
+        {
+            get => _errorsHeader;
+            set => Set(() => ErrorsHeader, ref _errorsHeader, value);
+        }
+
+        public string WarningsHeader
+        {
+            get => _warningsHeader;
+            set => Set(() => WarningsHeader, ref _warningsHeader, value);
+        }
+
+        public RelayCommand RemoveCommand { get; }
+
+        public CompilationFileViewModel(SourcePawnCompileViewModel parentViewModel)
+        {
+            _parentViewModel = parentViewModel;
+            RemoveCommand = new RelayCommand(RemoveFile);
             IsUnknownState = true;
+            ShortStatus = "Not compiled.";
+
+            Messages = new ObservableCollection<CompilationMessage>();
         }
 
-        private void ShowDetails()
+        public void UpdateStatus(bool isCompiling = false)
         {
-            var viewModel = SimpleIoc.Default.GetInstance<ResultsWindowViewModel>();
-
-            viewModel.SetResults(Messages, $"Results - {File} - Total {Messages.Count} message(s)");
-
-            var info = new SourcePawnResultsWindow
+            if (isCompiling)
             {
-                Owner = Application.Current.MainWindow
-            };
+                Result = ECompilationResult.Compiling;
+                IsBusy = true;
+                IsUnknownState = false;
+                IsSuccessfulCompile = false;
+                IsCompiledWithWarnings = false;
+                IsCompiledWithErrors = false;
+                CanShowDetails = false;
+                ShortStatus = "Compiling...";
+                return;
+            }
 
-            info.ShowDialog();
+            IsBusy = false;
+
+            if (!Messages.Any())
+            {
+                Result = ECompilationResult.Unknown;
+                IsUnknownState = true;
+                IsSuccessfulCompile = false;
+                IsCompiledWithWarnings = false;
+                IsCompiledWithErrors = false;
+                CanShowDetails = false;
+                ShortStatus = "Not compiled.";
+                return;
+            }
+
+            IsUnknownState = false;
+
+            int errorCount = Messages.Count(m => CompilationMessageParser.IsLineError(m.Prefix));
+            int warningCount = Messages.Count(m => CompilationMessageParser.IsLineWarning(m.Prefix));
+
+            if (errorCount > 0)
+            {
+                Result = ECompilationResult.FailedWithErrors;
+                IsSuccessfulCompile = false;
+                IsCompiledWithWarnings = false;
+                IsCompiledWithErrors = true;
+                CanShowDetails = true;
+                ShortStatus = "Failed to compile.";
+            }
+            else if (warningCount > 0)
+            {
+                Result = ECompilationResult.CompletedWithWarnings;
+                IsSuccessfulCompile = false;
+                IsCompiledWithWarnings = true;
+                IsCompiledWithErrors = false;
+                CanShowDetails = true;
+                ShortStatus = "Compiled with warning(s).";
+            }
+            else
+            {
+                Result = ECompilationResult.Completed;
+                IsSuccessfulCompile = true;
+                IsCompiledWithWarnings = false;
+                IsCompiledWithErrors = false;
+                CanShowDetails = false;
+                ShortStatus = "Compiled successfully.";
+            }
+
+            Errors = new ObservableCollection<CompilationMessage>(Messages.Where(m => CompilationMessageParser.IsLineError(m.Prefix)));
+            ErrorsHeader = $"Errors ({Errors.Count})";
+
+            Warnings = new ObservableCollection<CompilationMessage>(Messages.Where(m => CompilationMessageParser.IsLineWarning(m.Prefix)));
+            WarningsHeader = $"Warnings ({Warnings.Count})";
+
+            RawOutput = string.Join("\r\n", Messages.Select(m => m.RawLine));
+        }
+
+        private void RemoveFile()
+        {
+            _parentViewModel.FilesToCompile.Remove(this);
         }
     }
 }
