@@ -29,10 +29,15 @@ namespace Tsukuru.Core.Translations
 
         public void ExportToFileSystem()
         {
-            string englishTxtFile = _projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName;
+            var englishTxtFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName);
+
+            if (englishTxtFile.Directory != null && !englishTxtFile.Directory.Exists)
+            {
+                englishTxtFile.Directory.Create();
+            }
 
             GenerateExportEnglish()
-                .SaveToFile(englishTxtFile, asBinary: false);
+                .SaveToFile(englishTxtFile.FullName, asBinary: false);
 
             foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
             {
@@ -98,7 +103,7 @@ namespace Tsukuru.Core.Translations
 
             var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
 
-            if (!outputFile.Directory.Exists)
+            if (outputFile.Directory != null && !outputFile.Directory.Exists)
             {
                 outputFile.Directory.Create();
             }
