@@ -135,8 +135,8 @@ namespace Tsukuru.Core.Translations
                 }
 
                 string value = phrase.Translations.ContainsKey(languageCode)
-                    ? phrase.Translations[languageCode] ?? string.Empty
-                    : string.Empty;
+                    ? phrase.Translations[languageCode] ?? phrase.EnglishText
+                    : phrase.EnglishText;
 
                 kv.Children.Add(new KeyValue(languageCode, value));
 
