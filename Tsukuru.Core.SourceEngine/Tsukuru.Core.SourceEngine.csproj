@@ -10,7 +10,7 @@
     <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="ValvePak" Version="1.6.1.71" />
+    <PackageReference Include="ValvePak" Version="1.6.2.76" />
   </ItemGroup>
 
 </Project>
