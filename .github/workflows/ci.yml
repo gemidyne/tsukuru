@@ -9,16 +9,7 @@ on:
 jobs:
 
   build:
-
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
-    env:
-      Solution_Name: Tsukuru.sln
+    runs-on: windows-latest 
 
     steps:
     - name: Checkout
@@ -46,8 +37,8 @@ jobs:
     - name: Publish desktop app
       run: dotnet publish Tsukuru.NetCore/Tsukuru.csproj
 
-    #- name: Upload build artifacts
-    #  uses: actions/upload-artifact@v3
-    #  with:
-    #    name: Package
-    #    path: ${{ env.Wap_Project_Directory }}\AppPackages
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Package
+        path: Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
