@@ -36,16 +36,8 @@ jobs:
     - name: Publish desktop app
       run: dotnet publish Tsukuru.NetCore/Tsukuru.csproj
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: Package
-        path: Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
-        
-    - name: Zip artifact
-      uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r Tsukuru.zip Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
+    - name: Zip build artifacts
+      run: 7z a -tzip package_release/Tsukuru.zip Tsukuru.NetCore\bin\Release\net8.0-windows\publish\*
 
     - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -53,4 +45,4 @@ jobs:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         draft: true
         files: |
-          Tsukuru.zip
+          package_release/Tsukuru.zip
