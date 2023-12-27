@@ -16,6 +16,7 @@ namespace Tsukuru.SourcePawn.ViewModels;
 
 public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _areCommandButtonsEnabled = true;
 
     private int _progressBarValue;
@@ -129,15 +130,17 @@ public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
         set => SetProperty(ref _isLoading, value);
     }
 
-    public SourcePawnCompileViewModel()
+    public SourcePawnCompileViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
         FilesToCompile = new ObservableCollection<CompilationFileViewModel>();
 
         AddFileCommand = new RelayCommand(AddFile);
         BuildCommand = new RelayCommand(Build);
         WatchCommand = new RelayCommand(Watch);
 
-        AddExistingFiles(SettingsManager.Manifest?.SourcePawnCompiler?.LastUsedFiles, doSave: false);
+        AddExistingFiles(_settingsManager.Manifest?.SourcePawnCompiler?.LastUsedFiles, doSave: false);
     }
 
     public void Init()
@@ -150,13 +153,13 @@ public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
 
         await Task.Run(() =>
         {
-            var proc = new SourcePawnCompiler();
+            var proc = new SourcePawnCompiler(_settingsManager);
             proc.CompileBatch(this);
         });
 
         AreCommandButtonsEnabled = true;
 
-        if (SettingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess && FilesToCompile.All(x => x.IsSuccessfulCompile || x.IsCompiledWithWarnings))
+        if (_settingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess && FilesToCompile.All(x => x.IsSuccessfulCompile || x.IsCompiledWithWarnings))
         {
             var files = FilesToCompile
                 .Where(f => f != null && !string.IsNullOrWhiteSpace(f.File))
@@ -210,7 +213,7 @@ public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
 
         await Task.Run(() =>
         {
-            var proc = new SourcePawnCompiler();
+            var proc = new SourcePawnCompiler(_settingsManager);
             proc.Compile(this, FilesToCompile.First());
         });
 
@@ -259,8 +262,8 @@ public class SourcePawnCompileViewModel : ViewModelBase, IApplicationContentView
 
         if (doSave)
         {
-            SettingsManager.Manifest.SourcePawnCompiler.LastUsedFiles = FilesToCompile.Select(x => x.File).ToList();
-            SettingsManager.Save();
+            _settingsManager.Manifest.SourcePawnCompiler.LastUsedFiles = FilesToCompile.Select(x => x.File).ToList();
+            _settingsManager.Save();
         }
     }
 }

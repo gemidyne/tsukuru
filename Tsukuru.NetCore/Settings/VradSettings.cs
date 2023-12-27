@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class VradSettings
+public class VradSettings
 {
     [JsonProperty("fast")]
     public bool Fast { get; set; }

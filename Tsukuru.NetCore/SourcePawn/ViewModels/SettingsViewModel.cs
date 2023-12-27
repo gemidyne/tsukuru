@@ -7,6 +7,7 @@ namespace Tsukuru.SourcePawn.ViewModels;
 
 public class SettingsViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private string _sourcePawnCompiler;
     private bool _isLoading;
 
@@ -17,11 +18,11 @@ public class SettingsViewModel : ViewModelBase, IApplicationContentView
         {
             SetProperty(ref _sourcePawnCompiler, value);
 
-            SettingsManager.Manifest.SourcePawnCompiler.CompilerPath = value;
+            _settingsManager.Manifest.SourcePawnCompiler.CompilerPath = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -40,14 +41,17 @@ public class SettingsViewModel : ViewModelBase, IApplicationContentView
         set => SetProperty(ref _isLoading, value);
     }
 
-    public SettingsViewModel()
+    public SettingsViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+        
         BrowseCompilerCommand = new RelayCommand(BrowseCompiler);
     }
 
     public void Init()
     {
-        SourcePawnCompiler = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
+        SourcePawnCompiler = _settingsManager.Manifest.SourcePawnCompiler.CompilerPath;
     }
 
     private void BrowseCompiler()

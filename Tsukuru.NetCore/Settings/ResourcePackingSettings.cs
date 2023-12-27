@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Tsukuru.Settings;
 
-internal class ResourcePackingSettings
+public class ResourcePackingSettings
 {
     [JsonProperty("enabled")]
     public bool IsEnabled { get; set; }

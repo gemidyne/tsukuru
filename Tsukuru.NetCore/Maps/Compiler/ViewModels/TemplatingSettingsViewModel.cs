@@ -5,6 +5,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class TemplatingSettingsViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
     private bool _runTemplating;
 
@@ -27,17 +28,23 @@ public class TemplatingSettingsViewModel : ViewModelBase, IApplicationContentVie
         {
             SetProperty(ref _runTemplating, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles = value;
+            _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
 
+    public TemplatingSettingsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        RunTemplating = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles;
+        RunTemplating = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles;
     }
 }

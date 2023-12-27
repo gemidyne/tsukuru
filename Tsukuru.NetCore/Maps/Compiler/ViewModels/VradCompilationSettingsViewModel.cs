@@ -5,6 +5,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _ldr;
     private bool _hdr;
     private bool _fast;
@@ -26,11 +27,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _ldr, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -43,11 +44,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _hdr, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -60,11 +61,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _fast, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.Fast = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -77,11 +78,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _final, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.Final = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -94,11 +95,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _staticPropLighting, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -111,11 +112,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _staticPropPolys, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -128,11 +129,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _textureShadows, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -145,11 +146,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _lowPriority, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -161,11 +162,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
         {
             SetProperty(ref _useModifiedVrad, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -178,11 +179,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _otherArguments, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -195,11 +196,11 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _largeDispSampleRadius, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius = value;
+            _settingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -217,19 +218,25 @@ public class VradCompilationSettingsViewModel : BaseCompilationSettings, IApplic
         set => SetProperty(ref _isLoading, value);
     }
 
+    public VradCompilationSettingsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        LDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr;
-        HDR = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr;
-        Fast = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Fast;
-        Final = SettingsManager.Manifest.MapCompilerSettings.VradSettings.Final;
-        StaticPropLighting = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting;
-        StaticPropPolys = SettingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys;
-        TextureShadows = SettingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows;
-        LowPriority = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority;
-        UseModifiedVrad = SettingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad;
-        LargeDispSampleRadius = SettingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius;
-        OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments;
+        LDR = _settingsManager.Manifest.MapCompilerSettings.VradSettings.Ldr;
+        HDR = _settingsManager.Manifest.MapCompilerSettings.VradSettings.Hdr;
+        Fast = _settingsManager.Manifest.MapCompilerSettings.VradSettings.Fast;
+        Final = _settingsManager.Manifest.MapCompilerSettings.VradSettings.Final;
+        StaticPropLighting = _settingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropLighting;
+        StaticPropPolys = _settingsManager.Manifest.MapCompilerSettings.VradSettings.StaticPropPolys;
+        TextureShadows = _settingsManager.Manifest.MapCompilerSettings.VradSettings.TextureShadows;
+        LowPriority = _settingsManager.Manifest.MapCompilerSettings.VradSettings.LowPriority;
+        UseModifiedVrad = _settingsManager.Manifest.MapCompilerSettings.VradSettings.UseModifiedVrad;
+        LargeDispSampleRadius = _settingsManager.Manifest.MapCompilerSettings.VradSettings.LargeDispSampleRadius;
+        OtherArguments = _settingsManager.Manifest.MapCompilerSettings.VradSettings.OtherArguments;
     }
 
     public override string BuildArguments()

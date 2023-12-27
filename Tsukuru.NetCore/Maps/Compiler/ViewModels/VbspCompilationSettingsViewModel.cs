@@ -5,6 +5,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _onlyEntities;
     private bool _onlyProps;
     private bool _noDetailEntities;
@@ -22,11 +23,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _onlyEntities, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -39,11 +40,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _onlyProps, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -56,11 +57,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _noDetailEntities, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -73,11 +74,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _noWaterBrushes, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -90,11 +91,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _lowPriority, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.LowPriority = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.LowPriority = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -107,11 +108,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _keepStalePackedData, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -124,11 +125,11 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _otherArguments, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OtherArguments = value;
+            _settingsManager.Manifest.MapCompilerSettings.VbspSettings.OtherArguments = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -146,15 +147,21 @@ public class VbspCompilationSettingsViewModel : BaseCompilationSettings, IApplic
         set => SetProperty(ref _isLoading, value);
     }
 
+    public VbspCompilationSettingsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        OnlyEntities = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities;
-        OnlyProps = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps;
-        NoDetailEntities = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities;
-        NoWaterBrushes = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes;
-        KeepStalePackedData = SettingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData;
-        LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
-        OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
+        OnlyEntities = _settingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyEntities;
+        OnlyProps = _settingsManager.Manifest.MapCompilerSettings.VbspSettings.OnlyProps;
+        NoDetailEntities = _settingsManager.Manifest.MapCompilerSettings.VbspSettings.NoDetailEntities;
+        NoWaterBrushes = _settingsManager.Manifest.MapCompilerSettings.VbspSettings.NoWaterBrushes;
+        KeepStalePackedData = _settingsManager.Manifest.MapCompilerSettings.VbspSettings.KeepStalePackedData;
+        LowPriority = _settingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
+        OtherArguments = _settingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
     }
 
     public override string BuildArguments()

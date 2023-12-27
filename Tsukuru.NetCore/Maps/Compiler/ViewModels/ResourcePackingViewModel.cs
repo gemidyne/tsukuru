@@ -12,6 +12,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private static readonly object _door = new();
 
     private ObservableCollection<ResourceFolderViewModel> _foldersToPack;
@@ -25,11 +26,11 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
         {
             SetProperty(ref _performResourcePacking, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled = value;
+            _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -54,16 +55,19 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
         set => SetProperty(ref _isLoading, value);
     }
 
-    public ResourcePackingViewModel()
+    public ResourcePackingViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+        
         AddFolderCommand = new RelayCommand(AddFolderToPack);
         FoldersToPack = new AsyncObservableCollection<ResourceFolderViewModel>();
 
         if (IsInDesignMode)
         {
-            FoldersToPack.Add(new ResourceFolderViewModel("c:\\test", intelligent: true));
-            FoldersToPack.Add(new ResourceFolderViewModel("c:\\test2", intelligent: false));
-            FoldersToPack.Add(new ResourceFolderViewModel("c:\\test3", intelligent: true));
+            FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, "c:\\test", intelligent: true));
+            FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, "c:\\test2", intelligent: false));
+            FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, "c:\\test3", intelligent: true));
         }
         else
         {
@@ -77,11 +81,16 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
         {
             FoldersToPack.Clear();
 
-            PerformResourcePacking = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
+            PerformResourcePacking = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
-            foreach (var folder in SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray())
+            foreach (var folder in _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray())
             {
-                FoldersToPack.Add(new ResourceFolderViewModel(folder.Path, folder.Intelligent));
+                if (FoldersToPack.Any(x => x.Folder == folder.Path))
+                {
+                    continue;
+                }
+                
+                FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, folder.Path, folder.Intelligent));
             }
         }
     }
@@ -95,16 +104,20 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
             return;
         }
 
-        if (FoldersToPack.All(x => x.Folder != dialog.SelectedPath))
+        lock (_door)
         {
-            FoldersToPack.Add(new ResourceFolderViewModel(dialog.SelectedPath, false));
-
-            SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Add(new ResourcePackingFolderSetting
+            if (FoldersToPack.All(x => x.Folder != dialog.SelectedPath))
             {
-                Path = dialog.SelectedPath,
-                Intelligent = false
-            });
-            SettingsManager.Save();
+                FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, dialog.SelectedPath, false));
+
+                _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Add(
+                    new ResourcePackingFolderSetting
+                    {
+                        Path = dialog.SelectedPath,
+                        Intelligent = false
+                    });
+                _settingsManager.Save();
+            }
         }
     }
 
@@ -119,15 +132,15 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
 
         FoldersToPack.Remove(folder);
 
-        var settingsFolder = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.SingleOrDefault(f => f.Path == folder.Folder);
+        var settingsFolder = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.SingleOrDefault(f => f.Path == folder.Folder);
 
         if (settingsFolder == null)
         {
             return;
         }
 
-        SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Remove(settingsFolder);
-        SettingsManager.Save();
+        _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Remove(settingsFolder);
+        _settingsManager.Save();
     }
 
 

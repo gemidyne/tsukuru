@@ -13,7 +13,14 @@ namespace Tsukuru.SourcePawn;
 
 public class SourcePawnCompiler
 {
+    private readonly ISettingsManager _settingsManager;
     private static readonly object _door = new object();
+
+    public SourcePawnCompiler(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
 
     public void CompileBatch(SourcePawnCompileViewModel viewModel)
     {
@@ -52,15 +59,17 @@ public class SourcePawnCompiler
 
             string rewrittenFilePath;
 
-            bool incrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
-            bool runPostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
+            bool incrementVersion = _settingsManager.Manifest.SourcePawnCompiler.Versioning;
+            bool runPostBuildScripts = _settingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
 
             if (incrementVersion)
             {
                 Version ver;
 
-                GetAndIncrementVersionFile(Path.GetDirectoryName(compilationFileViewModel.File),
-                    incrementVersion, out ver);
+                GetAndIncrementVersionFile(
+                    workingDirectory: Path.GetDirectoryName(compilationFileViewModel.File),
+                    increment: true,
+                    version: out ver);
 
                 rewrittenFilePath = RewriteSourceFile(compilationFileViewModel.File, ver);
             }
@@ -69,12 +78,11 @@ public class SourcePawnCompiler
                 rewrittenFilePath = file;
             }
 
-
             try
             {
                 using (var compiler = new Process())
                 {
-                    compiler.StartInfo.FileName = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
+                    compiler.StartInfo.FileName = _settingsManager.Manifest.SourcePawnCompiler.CompilerPath;
                     compiler.StartInfo.Arguments = string.Format(
                         "{0} -o=\"{1}.smx\"",
                         rewrittenFilePath,

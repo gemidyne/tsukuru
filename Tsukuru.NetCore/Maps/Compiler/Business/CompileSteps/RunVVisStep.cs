@@ -4,15 +4,22 @@ using System.Text;
 using System.Threading;
 using Chiaki;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps;
 
 internal class RunVVisStep : BaseVProjectStep
 {
+    private readonly ISettingsManager _settingsManager;
     private FileInfo _executable;
 
     public override string StepName => "VVIS";
+
+    public RunVVisStep(ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
 
     public override bool Run(ResultsLogContainer log)
     {
@@ -21,7 +28,7 @@ internal class RunVVisStep : BaseVProjectStep
             return false;
         }
 
-        var settings = new VvisCompilationSettingsViewModel();
+        var settings = new VvisCompilationSettingsViewModel(_settingsManager);
 
         using (new ApplicationContentViewLoader(settings))
         {

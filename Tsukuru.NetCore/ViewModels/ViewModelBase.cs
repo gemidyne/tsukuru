@@ -7,5 +7,5 @@ public abstract class ViewModelBase : ObservableObject
 {
     protected IMessenger Messenger => WeakReferenceMessenger.Default;
 
-    protected bool IsInDesignMode => ViewModelLocator.IsDesignMode;
+    protected bool IsInDesignMode => App.IsInDesignMode;
 }

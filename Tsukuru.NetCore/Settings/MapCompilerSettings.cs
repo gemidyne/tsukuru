@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class MapCompilerSettings
+public class MapCompilerSettings
 {
     [JsonProperty("vmfPath")]
     public string LastVmfPath { get; set; }

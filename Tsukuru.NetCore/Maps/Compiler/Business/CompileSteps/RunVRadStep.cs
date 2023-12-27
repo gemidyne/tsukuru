@@ -4,19 +4,27 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps;
 
 internal class RunVRadStep : BaseVProjectStep
 {
+    private readonly ISettingsManager _settingsManager;
     private FileInfo _executable;
 
     public override string StepName => "VRAD";
 
+    public RunVRadStep(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public override bool Run(ResultsLogContainer log)
     {
-        var settings = new VradCompilationSettingsViewModel();
+        var settings = new VradCompilationSettingsViewModel(_settingsManager);
 
         using (new ApplicationContentViewLoader(settings))
         {

@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class VbspSettings
+public class VbspSettings
 {
     [JsonProperty("entitiesOnly")]
     public bool OnlyEntities { get; set; }

@@ -12,6 +12,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class ResourceFolderViewModel : ViewModelBase
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _suppressSave;
     private string _folder;
     private EResourceFolderPackingMode _packingMode;
@@ -31,7 +32,7 @@ public class ResourceFolderViewModel : ViewModelBase
         {
             SetProperty(ref _packingMode, value);
 
-            var folder = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.SingleOrDefault(f => f.Path == Folder);
+            var folder = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.SingleOrDefault(f => f.Path == Folder);
 
             if (folder == null)
             {
@@ -42,7 +43,7 @@ public class ResourceFolderViewModel : ViewModelBase
 
             if (!_suppressSave)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -51,8 +52,9 @@ public class ResourceFolderViewModel : ViewModelBase
 
     public RelayCommand ChangePathCommand { get; }
 
-    public ResourceFolderViewModel(string folder, bool intelligent)
+    public ResourceFolderViewModel(ISettingsManager settingsManager, string folder, bool intelligent)
     {
+        _settingsManager = settingsManager;
         _suppressSave = true;
 
         RemoveFolderCommand = new RelayCommand(RemoveSelectedFolder);

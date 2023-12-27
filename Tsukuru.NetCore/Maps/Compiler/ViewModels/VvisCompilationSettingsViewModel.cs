@@ -5,6 +5,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _fast;
     private bool _lowPriority;
     private string _otherArguments;
@@ -18,11 +19,11 @@ public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _fast, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast = value;
+            _settingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -35,11 +36,11 @@ public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _lowPriority, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority = value;
+            _settingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -52,11 +53,11 @@ public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplic
             SetProperty(ref _otherArguments, value);
             OnArgumentChanged();
 
-            SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments = value;
+            _settingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -74,11 +75,17 @@ public class VvisCompilationSettingsViewModel : BaseCompilationSettings, IApplic
         set => SetProperty(ref _isLoading, value);
     }
 
+    public VvisCompilationSettingsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        Fast = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast;
-        LowPriority = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
-        OtherArguments = SettingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
+        Fast = _settingsManager.Manifest.MapCompilerSettings.VvisSettings.Fast;
+        LowPriority = _settingsManager.Manifest.MapCompilerSettings.VvisSettings.LowPriority;
+        OtherArguments = _settingsManager.Manifest.MapCompilerSettings.VvisSettings.OtherArguments;
     }
 
     public override string BuildArguments()

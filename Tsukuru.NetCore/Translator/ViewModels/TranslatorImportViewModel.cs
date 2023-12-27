@@ -9,6 +9,7 @@ namespace Tsukuru.Translator.ViewModels;
 
 public class TranslatorImportViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ITranslatorEngine _translatorEngine;
     private string _selectedFile;
     private bool _isLoading;
 
@@ -33,8 +34,10 @@ public class TranslatorImportViewModel : ViewModelBase, IApplicationContentView
     public RelayCommand BrowseFileCommand { get; }
     public RelayCommand ImportCommand { get; }
 
-    public TranslatorImportViewModel()
+    public TranslatorImportViewModel(
+        ITranslatorEngine translatorEngine)
     {
+        _translatorEngine = translatorEngine;
         BrowseFileCommand = new RelayCommand(BrowseFile);
         ImportCommand = new RelayCommand(DoImport);
     }
@@ -69,9 +72,7 @@ public class TranslatorImportViewModel : ViewModelBase, IApplicationContentView
 
         await Task.Run(() =>
         {
-            var engine = new TranslatorEngine();
-
-            result = engine.ImportFromSourceMod(SelectedFile);
+            result = _translatorEngine.ImportFromSourceMod(SelectedFile);
         });
 
         switch (result)

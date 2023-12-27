@@ -9,6 +9,7 @@ namespace Tsukuru.Translator.ViewModels;
 
 public class TranslatorExportViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ITranslatorEngine _translatorEngine;
     private string _selectedFile;
     private bool _isLoading;
 
@@ -33,8 +34,9 @@ public class TranslatorExportViewModel : ViewModelBase, IApplicationContentView
         set => SetProperty(ref _isLoading, value);
     }
 
-    public TranslatorExportViewModel()
+    public TranslatorExportViewModel(ITranslatorEngine translatorEngine)
     {
+        _translatorEngine = translatorEngine;
         BrowseFileCommand = new RelayCommand(BrowseFile);
         ExportCommand = new RelayCommand(DoExport);
     }
@@ -67,9 +69,7 @@ public class TranslatorExportViewModel : ViewModelBase, IApplicationContentView
     {
         await Task.Run(() =>
         {
-            var engine = new TranslatorEngine();
-
-            engine.ExportToSourceMod(SelectedFile);
+            _translatorEngine.ExportToSourceMod(SelectedFile);
         });
 
         MessageBox.Show(
@@ -78,5 +78,4 @@ public class TranslatorExportViewModel : ViewModelBase, IApplicationContentView
             buttons: MessageBoxButton.OK,
             icon: MessageBoxImage.Information);
     }
-
 }

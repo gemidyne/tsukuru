@@ -1,15 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AdonisUI.Controls;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Newtonsoft.Json;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Maps.Compiler.Messages;
+using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class ExportSettingsViewModel : ViewModelBaseWithValidation, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
 
     public string Name => "Export settings";
@@ -43,8 +47,11 @@ public class ExportSettingsViewModel : ViewModelBaseWithValidation, IApplication
 
     public RelayCommand ExportCommand { get; }
 
-    public ExportSettingsViewModel()
+    public ExportSettingsViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+        
         SelectFileCommand = new RelayCommand(SelectFile);
         ExportCommand = new RelayCommand(DoExport);
 
@@ -93,7 +100,7 @@ public class ExportSettingsViewModel : ViewModelBaseWithValidation, IApplication
     {
         var file = new FileInfo(SettingsFilePath);
 
-        var result = SettingsExporter.Export(file);
+        var result = DoExport(file);
 
         if (result)
         {
@@ -110,6 +117,21 @@ public class ExportSettingsViewModel : ViewModelBaseWithValidation, IApplication
                 caption: "Export error",
                 buttons: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
+        }
+    }
+    
+    private bool DoExport(FileInfo file)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(_settingsManager.Manifest.MapCompilerSettings, Formatting.Indented);
+
+            File.WriteAllText(file.FullName, json);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 }

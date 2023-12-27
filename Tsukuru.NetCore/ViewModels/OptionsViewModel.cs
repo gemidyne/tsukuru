@@ -4,6 +4,7 @@ namespace Tsukuru.ViewModels;
 
 public class OptionsViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _checkForUpdatesOnStartup;
     private bool _isLoading;
 
@@ -14,11 +15,11 @@ public class OptionsViewModel : ViewModelBase, IApplicationContentView
         {
             SetProperty(ref _checkForUpdatesOnStartup, value);
 
-            SettingsManager.Manifest.CheckForUpdatesOnStartup = value;
+            _settingsManager.Manifest.CheckForUpdatesOnStartup = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
@@ -35,8 +36,14 @@ public class OptionsViewModel : ViewModelBase, IApplicationContentView
         set => SetProperty(ref _isLoading, value);
     }
 
+    public OptionsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        CheckForUpdatesOnStartup = SettingsManager.Manifest.CheckForUpdatesOnStartup;
+        CheckForUpdatesOnStartup = _settingsManager.Manifest.CheckForUpdatesOnStartup;
     }
 }

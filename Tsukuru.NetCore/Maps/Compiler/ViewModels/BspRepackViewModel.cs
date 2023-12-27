@@ -5,6 +5,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class BspRepackViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
     private bool _performRepack;
 
@@ -28,17 +29,23 @@ public class BspRepackViewModel : ViewModelBase, IApplicationContentView
         {
             SetProperty(ref _performRepack, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress = value;
+            _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
         }
     }
 
+    public BspRepackViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
     public void Init()
     {
-        PerformRepack = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress;
+        PerformRepack = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress;
     }
 }

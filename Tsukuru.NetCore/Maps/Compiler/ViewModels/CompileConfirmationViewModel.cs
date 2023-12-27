@@ -15,6 +15,8 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class CompileConfirmationViewModel : ViewModelBase, IApplicationContentView
 {
+    private readonly IMapCompiler _mapCompiler;
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
     private string _vbspFormattedArgs;
     private string _vvisFormattedArgs;
@@ -89,19 +91,24 @@ public class CompileConfirmationViewModel : ViewModelBase, IApplicationContentVi
         set => SetProperty(ref _isButtonEnabled, value);
     }
 
-    public CompileConfirmationViewModel()
+    public CompileConfirmationViewModel(
+        IMapCompiler mapCompiler,
+        ISettingsManager settingsManager)
     {
+        _mapCompiler = mapCompiler;
+        _settingsManager = settingsManager;
+        
         MapCompileCommand = new RelayCommand(DoMapCompile);
         LaunchMapCommand = new RelayCommand(DoMapLaunch);
 
         IsButtonEnabled = true;
     }
-
+    
     public void Init()
     {
-        var vbsp = new VbspCompilationSettingsViewModel();
-        var vvis = new VvisCompilationSettingsViewModel();
-        var vrad = new VradCompilationSettingsViewModel();
+        var vbsp = new VbspCompilationSettingsViewModel(_settingsManager);
+        var vvis = new VvisCompilationSettingsViewModel(_settingsManager);
+        var vrad = new VradCompilationSettingsViewModel(_settingsManager);
 
         using (new ApplicationContentViewLoader(vbsp))
             VbspFormattedArgs = vbsp.FormattedArguments;
@@ -112,19 +119,19 @@ public class CompileConfirmationViewModel : ViewModelBase, IApplicationContentVi
         using (new ApplicationContentViewLoader(vrad))
             VradFormattedArgs = vrad.FormattedArguments;
 
-        TemplatingInfo = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles
+        TemplatingInfo = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles
             ? "Templating will be run to generate files after the map is compiled."
             : "Templating will not be run.";
 
-        RepackInfo = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress
+        RepackInfo = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress
             ? "The map will be repacked to compress file size even further."
             : "The map will NOT be repacked.";
 
-        IsPackingEnabled = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
+        IsPackingEnabled = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
 
         if (IsPackingEnabled)
         {
-            FolderPackInfo = "The following folders will be packed into the BSP file:\n" + string.Join("\n", SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Select(x =>
+            FolderPackInfo = "The following folders will be packed into the BSP file:\n" + string.Join("\n", _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Select(x =>
             {
                 string mode = x.Intelligent ? "Only used files" : "All files";
                 return $"{x.Path} (Pack mode: {mode})";
@@ -146,7 +153,7 @@ public class CompileConfirmationViewModel : ViewModelBase, IApplicationContentVi
             .GetRequiredService<MainWindowViewModel>()
             .NavigateToPage<ResultsViewModel>();
 
-        bool result = await MapCompileInitialiser.ExecuteAsync(this);
+        bool result = await _mapCompiler.ExecuteAsync();
 
         if (result)
         {
@@ -157,8 +164,8 @@ public class CompileConfirmationViewModel : ViewModelBase, IApplicationContentVi
             SystemSounds.Exclamation.Play();
         }
 
-        SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber++;
-        SettingsManager.Save();
+        _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber++;
+        _settingsManager.Save();
 
         IsButtonEnabled = true;
         Messenger.Send(new MapCompileEndMessage());

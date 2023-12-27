@@ -16,7 +16,7 @@
         <TextBlock Margin="{adonisUi:Space 0, 0, 0, 2}"
                    TextWrapping="WrapWithOverflow">
             Template files must end in the ".tsutmpl" file extension, with the correct file extension before hand.
-            For example, to make a map readme: {{map_name}}.txt.tmpl
+            For example, to make a map readme: {{map_name}}.txt.tsutmpl
         </TextBlock>
 
         <TextBlock Margin="{adonisUi:Space 0, 0, 0, 2}"

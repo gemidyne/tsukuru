@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using AdonisUI.Controls;
 using Chiaki;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Tsukuru.ViewModels;
 
@@ -81,38 +83,12 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IServiceProvider serviceProvider)
     {
-        var pages = new ObservableCollection<IApplicationContentView>(
-            new IApplicationContentView[]
-            {
-
-                new SourcePawn.ViewModels.SettingsViewModel(),
-                new SourcePawn.ViewModels.PostBuildActionsViewModel(),
-                new SourcePawn.ViewModels.SourcePawnCompileViewModel(),
-
-                new Maps.Compiler.ViewModels.ImportSettingsViewModel(),
-                new Maps.Compiler.ViewModels.ExportSettingsViewModel(),
-                new Maps.Compiler.ViewModels.GameInfoViewModel(),
-                new Maps.Compiler.ViewModels.MapSettingsViewModel(),
-                new Maps.Compiler.ViewModels.VbspCompilationSettingsViewModel(),
-                new Maps.Compiler.ViewModels.VvisCompilationSettingsViewModel(),
-                new Maps.Compiler.ViewModels.VradCompilationSettingsViewModel(),
-                new Maps.Compiler.ViewModels.ResourcePackingViewModel(),
-                new Maps.Compiler.ViewModels.TemplatingSettingsViewModel(),
-                new Maps.Compiler.ViewModels.BspRepackViewModel(),
-                new Maps.Compiler.ViewModels.PostCompileActionsViewModel(),
-                new Maps.Compiler.ViewModels.CompileConfirmationViewModel(),
-                new Maps.Compiler.ViewModels.ResultsViewModel(),
-
-                new Translator.ViewModels.TranslatorImportViewModel(),
-                new Translator.ViewModels.TranslatorExportViewModel(),
-
-                new AboutViewModel(),
-                new OptionsViewModel()
-            });
-
-        Pages = new ReadOnlyObservableCollection<IApplicationContentView>(pages);
+        Pages = new ReadOnlyObservableCollection<IApplicationContentView>(
+            new ObservableCollection<IApplicationContentView>(
+                serviceProvider.GetServices<IApplicationContentView>()));
+        
         PagesCollectionView = CollectionViewSource.GetDefaultView(Pages);
         PagesCollectionView.Filter = _ => true;
         PagesCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(IApplicationContentView.Group)));

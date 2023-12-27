@@ -3,8 +3,11 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Tsukuru.Core.SourceEngine;
+using Tsukuru.Services;
 using Tsukuru.Settings;
+using Tsukuru.ViewModels;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
@@ -14,22 +17,31 @@ namespace Tsukuru.Views;
 
 public partial class MainWindow : AdonisWindow
 {
+    private readonly IAppUpdateProvider _updateProvider;
+
     public MainWindow()
     {
         InitializeComponent();
-        Title = $"Tsukuru - v{UpdateManager.Instance.AppVersion}";
 
-        if (SettingsManager.Manifest.CheckForUpdatesOnStartup)
+        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
+
+        _updateProvider = App.Services.GetRequiredService<IAppUpdateProvider>();
+        
+        Title = $"Tsukuru - v{_updateProvider.AppVersion}";
+
+        var settingsManager = App.Services.GetRequiredService<ISettingsManager>();
+        
+        if (settingsManager.Manifest.CheckForUpdatesOnStartup)
         {
             Task.Run(RunUpdateCheck);
         }
     }
 
-    private static async Task RunUpdateCheck()
+    private async Task RunUpdateCheck()
     {
         try
         {
-            var latestRelease = await UpdateManager.Instance.Check();
+            var latestRelease = await _updateProvider.CheckAsync();
 
             if (latestRelease == null)
             {

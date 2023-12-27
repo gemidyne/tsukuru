@@ -20,7 +20,6 @@
               Loaded="MainWindow_OnLoaded"
               TitleBarBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
               TitleBarForeground="White"
-              DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
               UseLayoutRounding="True">
     <Window.Resources>
         <ResourceDictionary>

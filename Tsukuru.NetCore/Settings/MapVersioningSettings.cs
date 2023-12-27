@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class MapVersioningSettings
+public class MapVersioningSettings
 {
     [JsonProperty("mode")]
     public EMapVersionMode Mode { get; set; } = EMapVersionMode.VersionedDateTime;

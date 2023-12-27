@@ -13,6 +13,7 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
 
     public string Name => "Map information";
@@ -53,11 +54,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
         {
             SetProperty(ref _versioningMode, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode = value;
+            _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
 
             SetMapName();
@@ -77,11 +78,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
         {
             SetProperty(ref _fileNamePrefix, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix = value;
+            _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
 
             SetMapName();
@@ -95,11 +96,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
         {
             SetProperty(ref _fileNameSuffix, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix = value;
+            _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
 
             SetMapName();
@@ -113,11 +114,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
         {
             SetProperty(ref _buildNumber, value);
 
-            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber = value;
+            _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber = value;
 
             if (!IsLoading)
             {
-                SettingsManager.Save();
+                _settingsManager.Save();
             }
 
             SetMapName();
@@ -138,11 +139,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
             }
             else
             {
-                SettingsManager.Manifest.MapCompilerSettings.LastVmfPath = VmfPath;
+                _settingsManager.Manifest.MapCompilerSettings.LastVmfPath = VmfPath;
 
                 if (!IsLoading)
                 {
-                    SettingsManager.Save();
+                    _settingsManager.Save();
                 }
 
                 SetMapName();
@@ -152,8 +153,11 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
 
     public RelayCommand SelectVmfFileCommand { get; }
 
-    public MapSettingsViewModel()
+    public MapSettingsViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+        
         SelectVmfFileCommand = new RelayCommand(SelectVmfFile);
 
         VersioningModes = new Dictionary<EMapVersionMode, string>
@@ -179,17 +183,17 @@ public class MapSettingsViewModel : ViewModelBaseWithValidation, IApplicationCon
 
     public void Init()
     {
-        VmfPath = SettingsManager.Manifest.MapCompilerSettings.LastVmfPath;
+        VmfPath = _settingsManager.Manifest.MapCompilerSettings.LastVmfPath;
 
-        if (SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings == null)
+        if (_settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings == null)
         {
-            SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings = new MapVersioningSettings();
+            _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings = new MapVersioningSettings();
         }
 
-        VersioningMode = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode;
-        FileNamePrefix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix;
-        FileNameSuffix = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix;
-        BuildNumber = SettingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber;
+        VersioningMode = _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.Mode;
+        FileNamePrefix = _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNamePrefix;
+        FileNameSuffix = _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.FileNameSuffix;
+        BuildNumber = _settingsManager.Manifest.MapCompilerSettings.MapVersioningSettings.NextBuildNumber;
     }
 
     private void OnMapCompileEnd(object recipient, MapCompileEndMessage obj)

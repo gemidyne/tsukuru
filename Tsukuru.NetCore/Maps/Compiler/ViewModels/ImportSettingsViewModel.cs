@@ -1,15 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AdonisUI.Controls;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Newtonsoft.Json;
 using Ookii.Dialogs.Wpf;
 using Tsukuru.Maps.Compiler.Messages;
+using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.ViewModels;
 
 public class ImportSettingsViewModel : ViewModelBaseWithValidation, IApplicationContentView
 {
+    private readonly ISettingsManager _settingsManager;
     private bool _isLoading;
 
     public string Name => "Import settings";
@@ -52,8 +56,11 @@ public class ImportSettingsViewModel : ViewModelBaseWithValidation, IApplication
 
     public RelayCommand ImportCommand { get; }
 
-    public ImportSettingsViewModel()
+    public ImportSettingsViewModel(
+        ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+        
         SelectFileCommand = new RelayCommand(SelectFile);
         ImportCommand = new RelayCommand(DoImport);
 
@@ -127,7 +134,7 @@ public class ImportSettingsViewModel : ViewModelBaseWithValidation, IApplication
             return;
         }
 
-        var result = SettingsImporter.Import(file);
+        var result = DoImport(file);
 
         if (result)
         {
@@ -144,6 +151,33 @@ public class ImportSettingsViewModel : ViewModelBaseWithValidation, IApplication
                 caption: "Import error",
                 buttons: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
+        }
+    }
+    
+    private bool DoImport(FileInfo file)
+    {
+        if (!file.Exists)
+        {
+            return false;
+        }
+
+        using (var stream = file.OpenText())
+        {
+            try
+            {
+                var json = stream.ReadToEnd();
+
+                var settings = JsonConvert.DeserializeObject<MapCompilerSettings>(json);
+
+                _settingsManager.Manifest.MapCompilerSettings = settings;
+                _settingsManager.Save();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

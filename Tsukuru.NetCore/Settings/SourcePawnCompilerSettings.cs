@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Tsukuru.Settings;
 
-internal class SourcePawnCompilerSettings
+public class SourcePawnCompilerSettings
 {
     [JsonProperty("compilerPath")]
     public string CompilerPath { get; set; }

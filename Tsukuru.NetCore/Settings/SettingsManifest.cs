@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class SettingsManifest
+public class SettingsManifest
 {
     [JsonProperty("sourcePawnSettings")]
     public SourcePawnCompilerSettings SourcePawnCompiler { get; set; }

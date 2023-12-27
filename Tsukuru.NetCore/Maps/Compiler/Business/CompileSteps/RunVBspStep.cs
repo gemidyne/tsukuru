@@ -3,15 +3,23 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Tsukuru.Maps.Compiler.ViewModels;
+using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
 namespace Tsukuru.Maps.Compiler.Business.CompileSteps;
 
 internal class RunVBspStep : BaseVProjectStep
 {
+    private readonly ISettingsManager _settingsManager;
     private FileInfo _executable;
 
     public override string StepName => "VBSP";
+
+    public RunVBspStep(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
 
     public override bool Run(ResultsLogContainer log)
     {
@@ -20,7 +28,7 @@ internal class RunVBspStep : BaseVProjectStep
             return false;
         }
 
-        var settings = new VbspCompilationSettingsViewModel();
+        var settings = new VbspCompilationSettingsViewModel(_settingsManager);
 
         using (new ApplicationContentViewLoader(settings))
             return RunExecutable(log, settings, MapCompileSessionInfo.Instance.GeneratedFileNameNoExtension) == 0;

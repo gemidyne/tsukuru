@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class VvisSettings
+public class VvisSettings
 {
     [JsonProperty("fast")]
     public bool Fast { get; set; }

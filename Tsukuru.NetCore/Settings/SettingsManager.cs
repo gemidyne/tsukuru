@@ -4,66 +4,73 @@ using Newtonsoft.Json;
 
 namespace Tsukuru.Settings;
 
-internal class SettingsManager
+internal class SettingsManager : ISettingsManager
 {
     private static readonly FileInfo _settingsPath = GetSettingsFilePath();
+    private static readonly object _door = new object();
 
-    public static SettingsManifest Manifest { get; private set; }
+    public SettingsManifest Manifest { get; private set; }
 
-    static SettingsManager()
+    public SettingsManager()
     {
         Load();
     }
 
-    public static void Load()
+    public void Load()
     {
-        if (ViewModelLocator.IsDesignMode)
+        if (App.IsInDesignMode)
         {
             Manifest = new SettingsManifest();
             return;
         }
 
-        if (!_settingsPath.Exists)
+        lock (_door)
         {
-            Manifest = new SettingsManifest();
-        }
-        else
-        {
-            try
-            {
-                using (var stream = _settingsPath.OpenText())
-                {
-                    var data = stream.ReadToEnd();
-
-                    Manifest = JsonConvert.DeserializeObject<SettingsManifest>(data);
-                }
-            }
-            catch (Exception)
+            if (!_settingsPath.Exists)
             {
                 Manifest = new SettingsManifest();
+            }
+            else
+            {
+                try
+                {
+                    using (var stream = _settingsPath.OpenText())
+                    {
+                        var data = stream.ReadToEnd();
+
+                        Manifest = JsonConvert.DeserializeObject<SettingsManifest>(data);
+                    }
+                }
+                catch (Exception)
+                {
+                    Manifest = new SettingsManifest();
+                }
             }
         }
     }
 
-    public static void Save()
+    public void Save()
     {
-        if (ViewModelLocator.IsDesignMode)
+        if (App.IsInDesignMode)
         {
             Manifest = new SettingsManifest();
             return;
         }
 
-        EnsureDirectoryExists();
-
-        var serialised = JsonConvert.SerializeObject(Manifest, Formatting.Indented);
-
-        try
+        lock (_door)
         {
-            File.WriteAllText(_settingsPath.FullName, serialised);
-        }
-        catch (Exception ex)
-        {
-            // Ignore for now
+            EnsureDirectoryExists();
+
+            var serialised = JsonConvert.SerializeObject(Manifest, Formatting.Indented);
+
+            try
+            {
+                File.WriteAllText(_settingsPath.FullName, serialised);
+            }
+            catch (Exception ex)
+            {
+                // Ignore for now
+            }
         }
     }
 

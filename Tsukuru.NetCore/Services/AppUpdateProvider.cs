@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Chiaki;
 using Octokit;
 
-namespace Tsukuru;
+namespace Tsukuru.Services;
 
-internal class UpdateManager : Singleton<UpdateManager>
+internal class AppUpdateProvider : IAppUpdateProvider
 {
     private const long _repositoryId = 40837172;
     
     public Version AppVersion { get; }
 
-    public UpdateManager()
+    public AppUpdateProvider()
     {
         AppVersion = Assembly.GetExecutingAssembly().GetName().Version;
     }
 
-    public async Task<Release> Check()
+    public async Task<Release> CheckAsync()
     {
         var client = new GitHubClient(ProductHeaderValue.Parse($"Tsukuru/{AppVersion}"));
 

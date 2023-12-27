@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using Chiaki;
+using Humanizer;
 using Tsukuru.Maps.Compiler.ViewModels;
 using Tsukuru.Maps.Packer;
 using Tsukuru.Settings;
@@ -9,11 +10,18 @@ namespace Tsukuru.Maps.Compiler.Business.CompileSteps;
 
 internal class ResourcePackingStep : BaseVProjectStep
 {
+    private readonly ISettingsManager _settingsManager;
     public override string StepName => "Pack resources into BSP";
+
+    public ResourcePackingStep(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
 
     public override bool Run(ResultsLogContainer log)
     {
-        var folders = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray();
+        var folders = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray();
 
         var session = new PackerSessionDetails
         {
@@ -30,9 +38,11 @@ internal class ResourcePackingStep : BaseVProjectStep
             return false;
         }
 
+        long sizeBeforePacking = MapCompileSessionInfo.Instance.GeneratedBspFile.Length;
+
         var packer = new BspPackEngine(log, session);
 
-        if (SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles)
+        if (_settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.GenerateMapSpecificFiles)
         {
             var allFolders = session.CompleteFoldersToAdd.Concat(session.IntelligentFoldersToAdd).ToList();
 
@@ -49,6 +59,12 @@ internal class ResourcePackingStep : BaseVProjectStep
             log.AppendLine("ResourcePackingStep", "Performing resource packing...");
             packer.PackData();
         }
+
+        long sizeAfterPacking = MapCompileSessionInfo.Instance.GeneratedBspFile.Length;
+        
+        log.AppendLine("Info", $"BSP Size before resource packing: {sizeBeforePacking.Bytes().ToString()}");
+        log.AppendLine("Info", $"BSP Size after resource packing: {sizeAfterPacking.Bytes().ToString()}");
+        log.AppendLine("Info", $"Packed resource size: {(sizeAfterPacking - sizeBeforePacking).Bytes().ToString()}");
 
         return true;
     }

@@ -2,7 +2,7 @@
 
 namespace Tsukuru.Settings;
 
-internal class ResourcePackingFolderSetting
+public class ResourcePackingFolderSetting
 {
 	[JsonProperty("path")]
 	public string Path { get; set; }

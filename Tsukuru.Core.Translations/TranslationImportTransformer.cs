@@ -2,130 +2,130 @@
 using System.IO;
 using System.Linq;
 using Chiaki;
-using Newtonsoft.Json;
 using SteamKit2;
 using Tsukuru.Core.Translations.Data;
 
-namespace Tsukuru.Core.Translations
+namespace Tsukuru.Core.Translations;
+
+public class TranslationImportTransformer
 {
-    public class TranslationImportTransformer
+    private readonly FileInfo _sourceFile;
+    private readonly ITranslationProjectSerializer _translationProjectSerializer;
+    private KeyValue _baseTranslationSet;
+    private TranslatorProjectSchema _project;
+
+    public TranslationImportTransformer(
+        FileInfo sourceFile,
+        ITranslationProjectSerializer translationProjectSerializer)
     {
-        private readonly FileInfo _sourceFile;
-        private KeyValue _baseTranslationSet;
-        private TranslatorProjectSchema _project;
+        _sourceFile = sourceFile;
+        _translationProjectSerializer = translationProjectSerializer;
+    }
 
-        public TranslationImportTransformer(FileInfo sourceFile)
+    public EProjectGenerateResult GenerateProject()
+    {
+        if (!_sourceFile.Exists)
         {
-            _sourceFile = sourceFile;
+            return EProjectGenerateResult.SourceFileNotFound;
         }
 
-        public EProjectGenerateResult GenerateProject()
+        _baseTranslationSet = KeyValue.LoadAsText(_sourceFile.FullName);
+
+        if (_baseTranslationSet == null)
         {
-            if (!_sourceFile.Exists)
-            {
-                return EProjectGenerateResult.SourceFileNotFound;
-            }
-
-            _baseTranslationSet = KeyValue.LoadAsText(_sourceFile.FullName);
-
-            if (_baseTranslationSet == null)
-            {
-                return EProjectGenerateResult.BadRootTranslationFile;
-            }
-
-            if (!DoGenerateProject())
-            {
-                return EProjectGenerateResult.GeneralFailure;
-            }
-
-            TryPopulateOtherCultures();
-
-            var destination = new FileInfo(_sourceFile.DirectoryName.AppendIfNeeded('\\') + "translations.tsutproj");
-
-            string converted = JsonConvert.SerializeObject(_project, TranslationSerialization.Settings);
-
-            File.WriteAllText(destination.FullName, converted);
-
-            return EProjectGenerateResult.CompleteNoErrors;
+            return EProjectGenerateResult.BadRootTranslationFile;
         }
 
-        private bool DoGenerateProject()
+        if (!DoGenerateProject())
         {
-            _project = new TranslatorProjectSchema();
+            return EProjectGenerateResult.GeneralFailure;
+        }
 
-            _project.Languages.Add(new Language { Code = "en" });
+        TryPopulateOtherCultures();
 
-            foreach (var item in _baseTranslationSet.Children)
+        var destination = new FileInfo(_sourceFile.DirectoryName.AppendIfNeeded('\\') + "translations.tsutproj");
+
+        _translationProjectSerializer.SerializeToDisk(destination.FullName, _project);
+        
+        return EProjectGenerateResult.CompleteNoErrors;
+    }
+
+    private bool DoGenerateProject()
+    {
+        _project = new TranslatorProjectSchema();
+
+        _project.Languages.Add(new Language { Code = "en" });
+
+        foreach (var item in _baseTranslationSet.Children)
+        {
+            var kvFormatting = item.Children.FirstOrDefault(x => x.Name == "#format");
+            var kvPhrase = item.Children.First(x => x.Name != "#format");
+
+            var phrase = new Phrase
             {
-                var kvFormatting = item.Children.FirstOrDefault(x => x.Name == "#format");
-                var kvPhrase = item.Children.First(x => x.Name != "#format");
+                Key = item.Name,
+                EnglishText = kvPhrase.Value,
+            };
 
-                var phrase = new Phrase
+            if (kvFormatting != null)
+            {
+                var arguments = FormatArgumentFactory.CreateFromString(kvFormatting.Value);
+
+                if (arguments == null)
                 {
-                    Key = item.Name,
-                    EnglishText = kvPhrase.Value,
-                };
-
-                if (kvFormatting != null)
-                {
-                    var arguments = FormatArgumentFactory.CreateFromString(kvFormatting.Value);
-
-                    if (arguments == null)
-                    {
-                        return false;
-                    }
-
-                    phrase.FormatArguments.AddRange(arguments);
+                    return false;
                 }
 
-                _project.Phrases.Add(phrase);
+                phrase.FormatArguments.AddRange(arguments);
             }
 
-            return true;
+            _project.Phrases.Add(phrase);
         }
 
-        private void TryPopulateOtherCultures()
+        return true;
+    }
+
+    private void TryPopulateOtherCultures()
+    {
+        var files = GenerateFilesToTest().Where(x => x.Value.Exists).ToArray();
+
+        foreach (var pair in files)
         {
-            var files = GenerateFilesToTest().Where(x => x.Value.Exists).ToArray();
+            KeyValue kv = KeyValue.LoadAsText(pair.Value.FullName);
 
-            foreach (var pair in files)
+            if (kv == null)
             {
-                KeyValue kv = KeyValue.LoadAsText(pair.Value.FullName);
+                continue;
+            }
 
-                if (kv == null)
+            _project.Languages.Add(new Language { Code = pair.Key });
+
+            foreach (var item in kv.Children)
+            {
+                var kvPhrase = item.Children.First(x => x.Name != "#format");
+
+                var phrase = _project.Phrases.SingleOrDefault(x => x.Key == item.Name);
+
+                if (phrase == null)
                 {
                     continue;
                 }
 
-                _project.Languages.Add(new Language { Code = pair.Key });
-
-                foreach (var item in kv.Children)
-                {
-                    var kvPhrase = item.Children.First(x => x.Name != "#format");
-
-                    var phrase = _project.Phrases.SingleOrDefault(x => x.Key == item.Name);
-
-                    if (phrase == null)
-                    {
-                        continue;
-                    }
-
-                    phrase.Translations[pair.Key] = kvPhrase.Value;
-                }
+                phrase.Translations[pair.Key] = kvPhrase.Value;
             }
         }
+    }
 
-        private IEnumerable<KeyValuePair<string, FileInfo>> GenerateFilesToTest()
+    private IEnumerable<KeyValuePair<string, FileInfo>> GenerateFilesToTest()
+    {
+        string directory = _sourceFile.DirectoryName;
+        string file = _sourceFile.Name;
+
+        foreach (string language in SourceModLanguageList.Instance.Languages)
         {
-            string directory = _sourceFile.DirectoryName;
-            string file = _sourceFile.Name;
+            string path = directory.AppendIfNeeded('\\') + language.AppendIfNeeded('\\') + file;
 
-            foreach (string language in SourceModLanguageList.Instance.Languages)
-            {
-                string path = directory.AppendIfNeeded('\\') + language.AppendIfNeeded('\\') + file;
-
-                yield return new KeyValuePair<string, FileInfo>(language, new FileInfo(path));
-            }
+            yield return new KeyValuePair<string, FileInfo>(language, new FileInfo(path));
         }
     }
 }
