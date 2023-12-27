@@ -1,82 +1,87 @@
-﻿using GalaSoft.MvvmLight;
-using Tsukuru.Settings;
+﻿using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
-namespace Tsukuru.SourcePawn.ViewModels
+namespace Tsukuru.SourcePawn.ViewModels;
+
+public class PostBuildActionsViewModel : ViewModelBase, IApplicationContentView
 {
-    public class PostBuildActionsViewModel : ViewModelBase, IApplicationContentView
+    private readonly ISettingsManager _settingsManager;
+    private bool _isLoading;
+    private bool _copySmxToClipboardOnCompile;
+    private bool _executePostBuildScripts;
+    private bool _incrementVersion;
+
+    public string Name => "Post-build actions";
+
+    public string Description =>
+        "This page allows you to toggle actions that will be run once the plugins have been compiled.";
+
+    public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
+
+    public bool IsLoading
     {
-        private bool _isLoading;
-        private bool _copySmxToClipboardOnCompile;
-        private bool _executePostBuildScripts;
-        private bool _incrementVersion;
+        get => _isLoading;
+        set => SetProperty(ref _isLoading, value);
+    }
 
-        public string Name => "Post-build actions";
-
-        public string Description =>
-            "This page allows you to toggle actions that will be run once the plugins have been compiled.";
-
-        public EShellNavigationPage Group => EShellNavigationPage.SourcePawnCompiler;
-
-        public bool IsLoading
+    public bool CopySmxToClipboardOnCompile
+    {
+        get => _copySmxToClipboardOnCompile;
+        set
         {
-            get => _isLoading;
-            set => Set(() => IsLoading, ref _isLoading, value);
-        }
+            SetProperty(ref _copySmxToClipboardOnCompile, value);
 
-        public bool CopySmxToClipboardOnCompile
-        {
-            get => _copySmxToClipboardOnCompile;
-            set
+            _settingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess = value;
+
+            if (!IsLoading)
             {
-                Set(() => CopySmxToClipboardOnCompile, ref _copySmxToClipboardOnCompile, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public bool ExecutePostBuildScripts
+    public bool ExecutePostBuildScripts
+    {
+        get => _executePostBuildScripts;
+        set
         {
-            get => _executePostBuildScripts;
-            set
+            SetProperty(ref _executePostBuildScripts, value);
+
+            _settingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts = value;
+
+            if (!IsLoading)
             {
-                Set(() => ExecutePostBuildScripts, ref _executePostBuildScripts, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public bool IncrementVersion
+    public bool IncrementVersion
+    {
+        get => _incrementVersion;
+        set
         {
-            get => _incrementVersion;
-            set
+            SetProperty(ref _incrementVersion, value);
+
+            _settingsManager.Manifest.SourcePawnCompiler.Versioning = value;
+
+            if (!IsLoading)
             {
-                Set(() => IncrementVersion, ref _incrementVersion, value);
-
-                SettingsManager.Manifest.SourcePawnCompiler.Versioning = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public void Init()
-        {
-            ExecutePostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
-            IncrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
-            CopySmxToClipboardOnCompile = SettingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess;
-        }
+    public PostBuildActionsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
+    public void Init()
+    {
+        ExecutePostBuildScripts = _settingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
+        IncrementVersion = _settingsManager.Manifest.SourcePawnCompiler.Versioning;
+        CopySmxToClipboardOnCompile = _settingsManager.Manifest.SourcePawnCompiler.CopySmxOnSuccess;
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+public partial class ExportSettingsView : UserControl
 {
-    public partial class ExportSettingsView : UserControl
+    public ExportSettingsView()
     {
-        public ExportSettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

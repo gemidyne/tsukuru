@@ -1,40 +1,39 @@
 ﻿using System.IO;
 using Tsukuru.Core.SourceEngine.Mdl.Header;
 
-namespace Tsukuru.Core.SourceEngine.Mdl
+namespace Tsukuru.Core.SourceEngine.Mdl;
+
+public class BodyPart
 {
-    public class BodyPart
+    public BodyPartHeader Header
+    { get; private set; }
+
+    public Model[] Models
+    { get; private set; }
+
+    public string Name
+    { get; private set; }
+
+    public BodyPart(BodyPartHeader header, BinaryReader reader)
     {
-        public BodyPartHeader Header
-        { get; private set; }
+        Header = header;
+        var start = reader.BaseStream.Position;
 
-        public Model[] Models
-        { get; private set; }
+        reader.BaseStream.Position = start + header.NameIndex;
+        Name = reader.ReadNullTerminatedAsciiString();
+        reader.BaseStream.Position = start;
 
-        public string Name
-        { get; private set; }
-
-        public BodyPart(BodyPartHeader header, BinaryReader reader)
+        reader.BaseStream.Position = start + header.ModelOffset;
+        Models = new Model[header.ModelCount];
+        for (var i = 0; i < header.ModelCount; i++)
         {
-            Header = header;
-            var start = reader.BaseStream.Position;
-
-            reader.BaseStream.Position = start + header.NameIndex;
-            Name = reader.ReadNullTerminatedAsciiString();
-            reader.BaseStream.Position = start;
-
-            reader.BaseStream.Position = start + header.ModelOffset;
-            Models = new Model[header.ModelCount];
-            for (var i = 0; i < header.ModelCount; i++)
-            {
-                var modelHeader = reader.ReadStruct<ModelHeader>();
-                Models[i] = new Model(modelHeader, reader);
-            }
+            var modelHeader = reader.ReadStruct<ModelHeader>();
+            Models[i] = new Model(modelHeader, reader);
         }
+    }
 
-        public override string ToString()
-        {
-            return $"Body part {Name} with {Header.ModelCount} models";
-        }
+    public override string ToString()
+    {
+        return $"Body part {Name} with {Header.ModelCount} models";
     }
 }

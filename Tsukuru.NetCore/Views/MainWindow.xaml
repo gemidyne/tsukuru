@@ -20,7 +20,6 @@
               Loaded="MainWindow_OnLoaded"
               TitleBarBackground="{DynamicResource {x:Static adonisUi:Brushes.AccentBrush}}"
               TitleBarForeground="White"
-              DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}"
               UseLayoutRounding="True">
     <Window.Resources>
         <ResourceDictionary>
@@ -36,8 +35,7 @@
                 <Setter Property="Margin" Value="15,10" />
             </Style>
 
-            <Style x:Key="BreadcrumbSeparatorStyle"
-                   TargetType="ContentControl">
+            <Style x:Key="BreadcrumbSeparatorStyle" TargetType="ContentControl">
                 <Setter Property="Margin" Value="{adonisUi:Space 1, 0, 0, 0}"/>
                 <Setter Property="Focusable" Value="False"/>
                 <Setter Property="ContentTemplate">

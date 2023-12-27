@@ -5,104 +5,103 @@ using System.Linq;
 using Chiaki;
 using SteamKit2;
 
-namespace Tsukuru.Core.SourceEngine
+namespace Tsukuru.Core.SourceEngine;
+
+public static class GameInfoHelper
 {
-    public static class GameInfoHelper
+    private static KeyValue _gameInfoKeyValues;
+
+    public static int? GetAppId()
     {
-        private static KeyValue _gameInfoKeyValues;
+        var gameInfo = TryGetGameInfo();
 
-        public static int? GetAppId()
+        if (gameInfo == null)
         {
-            var gameInfo = TryGetGameInfo();
-
-            if (gameInfo == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                int appId = gameInfo["FileSystem"]["SteamAppId"].AsInteger();
-
-                return appId;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return null;
         }
 
-        public static string GetGameInfo()
+        try
         {
-            var gameInfo = TryGetGameInfo();
+            int appId = gameInfo["FileSystem"]["SteamAppId"].AsInteger();
 
-            if (gameInfo == null)
-            {
-                return null;
-            }
+            return appId;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 
-            return $"{gameInfo["game"].Value}";
+    public static string GetGameInfo()
+    {
+        var gameInfo = TryGetGameInfo();
+
+        if (gameInfo == null)
+        {
+            return null;
         }
 
-        public static IEnumerable<FileInfo> GetAllVpkPaths()
+        return $"{gameInfo["game"].Value}";
+    }
+
+    public static IEnumerable<FileInfo> GetAllVpkPaths()
+    {
+        var gameInfo = TryGetGameInfo();
+
+        if (gameInfo == null)
         {
-            var gameInfo = TryGetGameInfo();
-
-            if (gameInfo == null)
-            {
-                yield break;
-            }
-
-            var gameDir = VProjectHelper.Path.Substring(VProjectHelper.Path.Replace('\\', '/').LastIndexOf('/')).Trim('/', '\\');
-
-            var kv = gameInfo["FileSystem"]["SearchPaths"];
-
-            var paths = kv.Children
-                .Select(x => x.Value)
-                .Where(x => !string.IsNullOrWhiteSpace(x) && x.EndsWith(".vpk", StringComparison.InvariantCultureIgnoreCase))
-                .Select(x => x.Replace("|all_source_engine_paths|", "../"))
-                .Select(x => x.TrimStart(gameDir).TrimStart("/"))
-                .Select(x => Path.Combine(VProjectHelper.Path, x))
-                .Select(x => new FileInfo(x))
-                .ToList();
-
-            foreach (FileInfo fileInfo in paths)
-            {
-                var directoryVpk = new FileInfo(fileInfo.FullName.Replace(".vpk", "_dir.vpk"));
-
-                if (directoryVpk.Exists)
-                {
-                    yield return directoryVpk;
-                }
-                else if (fileInfo.Exists)
-                {
-                    yield return directoryVpk;
-                }
-            }
+            yield break;
         }
 
-        private static KeyValue TryGetGameInfo()
+        var gameDir = VProjectHelper.Path.Substring(VProjectHelper.Path.Replace('\\', '/').LastIndexOf('/')).Trim('/', '\\');
+
+        var kv = gameInfo["FileSystem"]["SearchPaths"];
+
+        var paths = kv.Children
+            .Select(x => x.Value)
+            .Where(x => !string.IsNullOrWhiteSpace(x) && x.EndsWith(".vpk", StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Replace("|all_source_engine_paths|", "../"))
+            .Select(x => x.TrimStart(gameDir).TrimStart("/"))
+            .Select(x => Path.Combine(VProjectHelper.Path, x))
+            .Select(x => new FileInfo(x))
+            .ToList();
+
+        foreach (FileInfo fileInfo in paths)
         {
-            if (string.IsNullOrWhiteSpace(VProjectHelper.Path))
+            var directoryVpk = new FileInfo(fileInfo.FullName.Replace(".vpk", "_dir.vpk"));
+
+            if (directoryVpk.Exists)
             {
-                return null;
+                yield return directoryVpk;
             }
-
-            if (_gameInfoKeyValues != null)
+            else if (fileInfo.Exists)
             {
-                return _gameInfoKeyValues;
+                yield return directoryVpk;
             }
+        }
+    }
 
-            var file = new FileInfo(Path.Combine(VProjectHelper.Path, "gameinfo.txt"));
+    private static KeyValue TryGetGameInfo()
+    {
+        if (string.IsNullOrWhiteSpace(VProjectHelper.Path))
+        {
+            return null;
+        }
 
-            if (!file.Exists)
-            {
-                return null;
-            }
-
-            _gameInfoKeyValues = KeyValue.LoadAsText(file.FullName);
-
+        if (_gameInfoKeyValues != null)
+        {
             return _gameInfoKeyValues;
         }
+
+        var file = new FileInfo(Path.Combine(VProjectHelper.Path, "gameinfo.txt"));
+
+        if (!file.Exists)
+        {
+            return null;
+        }
+
+        _gameInfoKeyValues = KeyValue.LoadAsText(file.FullName);
+
+        return _gameInfoKeyValues;
     }
 }

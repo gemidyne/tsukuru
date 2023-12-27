@@ -1,15 +1,14 @@
-﻿namespace Tsukuru.ViewModels
+﻿namespace Tsukuru.ViewModels;
+
+public interface IApplicationContentView
 {
-    public interface IApplicationContentView
-    {
-        string Name { get; }
+    string Name { get; }
 
-        string Description { get; }
+    string Description { get; }
 
-        EShellNavigationPage Group { get; }
+    EShellNavigationPage Group { get; }
 
-        bool IsLoading { get; set; }
+    bool IsLoading { get; set; }
 
-        void Init();
-    }
+    void Init();
 }

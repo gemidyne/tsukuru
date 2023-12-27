@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+public partial class EnvironmentVariableNotSetView : UserControl
 {
-    public partial class EnvironmentVariableNotSetView : UserControl
+    public EnvironmentVariableNotSetView()
     {
-        public EnvironmentVariableNotSetView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

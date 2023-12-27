@@ -1,10 +1,9 @@
-﻿namespace Tsukuru.ViewModels
+﻿namespace Tsukuru.ViewModels;
+
+public enum EShellNavigationPage
 {
-    public enum EShellNavigationPage
-    {
-        SourcePawnCompiler = 0,
-        SourceMapCompiler,
-        Translations,
-        Meta
-    }
+    SourcePawnCompiler = 0,
+    SourceMapCompiler,
+    Translations,
+    Meta
 }

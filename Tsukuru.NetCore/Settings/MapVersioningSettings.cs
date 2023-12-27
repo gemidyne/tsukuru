@@ -1,19 +1,18 @@
 ﻿using Newtonsoft.Json;
 
-namespace Tsukuru.Settings
+namespace Tsukuru.Settings;
+
+public class MapVersioningSettings
 {
-    internal class MapVersioningSettings
-    {
-        [JsonProperty("mode")]
-        public EMapVersionMode Mode { get; set; } = EMapVersionMode.VersionedDateTime;
+    [JsonProperty("mode")]
+    public EMapVersionMode Mode { get; set; } = EMapVersionMode.VersionedDateTime;
 
-        [JsonProperty("fileNamePrefix")] 
-        public string FileNamePrefix { get; set; } = "TsukuruMap-";
+    [JsonProperty("fileNamePrefix")] 
+    public string FileNamePrefix { get; set; } = "TsukuruMap-";
 
-        [JsonProperty("fileNameSuffix")]
-        public string FileNameSuffix { get; set; }
+    [JsonProperty("fileNameSuffix")]
+    public string FileNameSuffix { get; set; }
 
-        [JsonProperty("nextBuildNumber")] 
-        public int NextBuildNumber { get; set; } = 1;
-    }
+    [JsonProperty("nextBuildNumber")] 
+    public int NextBuildNumber { get; set; } = 1;
 }

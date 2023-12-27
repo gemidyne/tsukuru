@@ -1,82 +1,87 @@
-﻿using GalaSoft.MvvmLight;
-using Tsukuru.Settings;
+﻿using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler.ViewModels
+namespace Tsukuru.Maps.Compiler.ViewModels;
+
+public class PostCompileActionsViewModel : ViewModelBase, IApplicationContentView
 {
-    public class PostCompileActionsViewModel : ViewModelBase, IApplicationContentView
+    private readonly ISettingsManager _settingsManager;
+    private bool _isLoading;
+    private bool _copyMapToGameMapsFolder;
+    private bool _launchMapInGame;
+    private bool _compressMapToBZip2;
+
+    public string Name => "Post compile actions";
+
+    public string Description =>
+        "These actions can be toggled to run once the map has been compiled (and packed if enabled).";
+
+    public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+    public bool IsLoading
     {
-        private bool _isLoading;
-        private bool _copyMapToGameMapsFolder;
-        private bool _launchMapInGame;
-        private bool _compressMapToBZip2;
+        get => _isLoading;
+        set => SetProperty(ref _isLoading, value);
+    }
 
-        public string Name => "Post compile actions";
-
-        public string Description =>
-            "These actions can be toggled to run once the map has been compiled (and packed if enabled).";
-
-        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
-
-        public bool IsLoading
+    public bool CompressMapToBZip2
+    {
+        get => _compressMapToBZip2;
+        set
         {
-            get => _isLoading;
-            set => Set(() => IsLoading, ref _isLoading, value);
-        }
+            SetProperty(ref _compressMapToBZip2, value);
 
-        public bool CompressMapToBZip2
-        {
-            get => _compressMapToBZip2;
-            set
+            _settingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2 = value;
+
+            if (!IsLoading)
             {
-                Set(() => CompressMapToBZip2, ref _compressMapToBZip2, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2 = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public bool CopyMapToGameMapsFolder
+    public bool CopyMapToGameMapsFolder
+    {
+        get => _copyMapToGameMapsFolder;
+        set
         {
-            get => _copyMapToGameMapsFolder;
-            set
+            SetProperty(ref _copyMapToGameMapsFolder, value);
+
+            _settingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder = value;
+
+            if (!IsLoading)
             {
-                Set(() => CopyMapToGameMapsFolder, ref _copyMapToGameMapsFolder, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public bool LaunchMapInGame
+    public bool LaunchMapInGame
+    {
+        get => _launchMapInGame;
+        set
         {
-            get => _launchMapInGame;
-            set
+            SetProperty(ref _launchMapInGame, value);
+
+            _settingsManager.Manifest.MapCompilerSettings.LaunchMapInGame = value;
+
+            if (!IsLoading)
             {
-                Set(() => LaunchMapInGame, ref _launchMapInGame, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                _settingsManager.Save();
             }
         }
+    }
 
-        public void Init()
-        {
-            CompressMapToBZip2 = SettingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2;
-            CopyMapToGameMapsFolder = SettingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder;
-            LaunchMapInGame = SettingsManager.Manifest.MapCompilerSettings.LaunchMapInGame;
-        }
+    public PostCompileActionsViewModel(
+        ISettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
+
+    public void Init()
+    {
+        CompressMapToBZip2 = _settingsManager.Manifest.MapCompilerSettings.CompressMapToBZip2;
+        CopyMapToGameMapsFolder = _settingsManager.Manifest.MapCompilerSettings.CopyMapToGameMapsFolder;
+        LaunchMapInGame = _settingsManager.Manifest.MapCompilerSettings.LaunchMapInGame;
     }
 }

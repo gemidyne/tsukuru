@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+public partial class CompileConfirmationView : UserControl
 {
-    public partial class CompileConfirmationView : UserControl
+    public CompileConfirmationView()
     {
-        public CompileConfirmationView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

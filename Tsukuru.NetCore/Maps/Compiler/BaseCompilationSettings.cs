@@ -1,33 +1,29 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler
+namespace Tsukuru.Maps.Compiler;
+
+public abstract class BaseCompilationSettings : ViewModelBase, ICompilationSettings
 {
-    public abstract class BaseCompilationSettings : ViewModelBase, ICompilationSettings
+    private string _formattedArguments;
+
+    public string FormattedArguments
     {
-        private string _formattedArguments;
+        get => _formattedArguments;
+        set => SetProperty(ref _formattedArguments, value);
+    }
 
-        public string FormattedArguments
-        {
-            get => _formattedArguments;
-            set
-            {
-                Set(() => FormattedArguments, ref _formattedArguments, value);
-            }
-        }
+    public abstract string BuildArguments();
 
-        public abstract string BuildArguments();
+    public void OnArgumentChanged()
+    {
+        FormattedArguments = BuildArguments();
+    }
 
-        public void OnArgumentChanged()
-        {
-            FormattedArguments = BuildArguments();
-        }
-
-        protected string ConditionalArg(Func<bool> input, string commandLineArgument)
-        {
-            return input()
-                ? $"{commandLineArgument} "
-                : string.Empty;
-        }
+    protected string ConditionalArg(Func<bool> input, string commandLineArgument)
+    {
+        return input()
+            ? $"{commandLineArgument} "
+            : string.Empty;
     }
 }

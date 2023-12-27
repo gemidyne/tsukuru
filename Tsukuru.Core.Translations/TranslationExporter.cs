@@ -2,148 +2,153 @@
 using System.IO;
 using System.Linq;
 using Chiaki;
-using Newtonsoft.Json;
 using SteamKit2;
 using Tsukuru.Core.Translations.Data;
 
-namespace Tsukuru.Core.Translations
+namespace Tsukuru.Core.Translations;
+
+public class TranslationExporter
 {
-    public class TranslationExporter
+    private readonly ITranslationProjectSerializer _translationProjectSerializer;
+    private FileInfo _projectFilePath;
+    private TranslatorProjectSchema _project;
+
+    public TranslationExporter(
+        ITranslationProjectSerializer translationProjectSerializer)
     {
-        private FileInfo _projectFilePath;
-        private TranslatorProjectSchema _project;
+        _translationProjectSerializer = translationProjectSerializer;
+    }
 
-        public void Load(FileInfo projectFilePath)
+    public void Load(FileInfo projectFilePath)
+    {
+        _projectFilePath = projectFilePath;
+
+        string json = File.ReadAllText(_projectFilePath.FullName);
+
+        LoadString(json);
+    }
+
+    public void LoadString(string json)
+    {
+        _project = _translationProjectSerializer.Deserialize(json);
+    }
+
+    public void ExportToFileSystem()
+    {
+        var englishTxtFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName);
+
+        if (englishTxtFile.Directory != null && !englishTxtFile.Directory.Exists)
         {
-            _projectFilePath = projectFilePath;
-
-            string json = File.ReadAllText(_projectFilePath.FullName);
-
-            LoadString(json);
+            englishTxtFile.Directory.Create();
         }
 
-        public void LoadString(string json)
+        GenerateExportEnglish()
+            .SaveToFile(englishTxtFile.FullName, asBinary: false);
+
+        foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
         {
-            _project = JsonConvert.DeserializeObject<TranslatorProjectSchema>(json, TranslationSerialization.Settings);
+            DoLanguageExportToFileSystem(language);
         }
+    }
 
-        public void ExportToFileSystem()
+    public Dictionary<string, KeyValue> GetLanguageExports()
+    {
+        var result = new Dictionary<string, KeyValue>
         {
-            var englishTxtFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName);
+            ["en"] = GenerateExportEnglish()
+        };
 
-            if (englishTxtFile.Directory != null && !englishTxtFile.Directory.Exists)
-            {
-                englishTxtFile.Directory.Create();
-            }
-
-            GenerateExportEnglish()
-                .SaveToFile(englishTxtFile.FullName, asBinary: false);
-
-            foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
-            {
-                DoLanguageExportToFileSystem(language);
-            }
-        }
-
-        public Dictionary<string, KeyValue> GetLanguageExports()
+        foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
         {
-            var result = new Dictionary<string, KeyValue>
-            {
-                ["en"] = GenerateExportEnglish()
-            };
-
-            foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
-            {
-                var kv = GenerateExportForLanguage(language);
-
-                if (kv == null)
-                {
-                    continue;
-                }
-
-                result[language] = kv;
-            }
-
-            return result;
-        }
-
-        private KeyValue GenerateExportEnglish()
-        {
-            var root = new KeyValue("Phrases");
-
-            foreach (var phrase in _project.Phrases)
-            {
-                var kv = new KeyValue(phrase.Key);
-
-                if (phrase.FormatArguments.Any())
-                {
-                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
-
-                    string combined = string.Join(",", arguments);
-
-                    kv.Children.Add(new KeyValue("#format", combined));
-                }
-
-                kv.Children.Add(new KeyValue("en", phrase.EnglishText));
-
-                root.Children.Add(kv);
-            }
-
-            return root;
-        }
-
-        private void DoLanguageExportToFileSystem(string languageCode)
-        {
-            var kv = GenerateExportForLanguage(languageCode);
+            var kv = GenerateExportForLanguage(language);
 
             if (kv == null)
             {
-                return;
+                continue;
             }
 
-            var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
-
-            if (outputFile.Directory != null && !outputFile.Directory.Exists)
-            {
-                outputFile.Directory.Create();
-            }
-
-            kv.SaveToFile(outputFile.FullName, asBinary: false);
+            result[language] = kv;
         }
 
-        private KeyValue GenerateExportForLanguage(string languageCode)
+        return result;
+    }
+
+    private KeyValue GenerateExportEnglish()
+    {
+        var root = new KeyValue("Phrases");
+
+        foreach (var phrase in _project.Phrases)
         {
-            if (_project.Phrases.Select(x => x.Translations.ContainsKey(languageCode) && !string.IsNullOrWhiteSpace(x.Translations[languageCode])).All(x => !x))
+            var kv = new KeyValue(phrase.Key);
+
+            if (phrase.FormatArguments.Any())
             {
-                // If all text for this language is not set, don't output file
-                return null;
+                var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
+
+                string combined = string.Join(",", arguments);
+
+                kv.Children.Add(new KeyValue("#format", combined));
             }
 
-            var root = new KeyValue("Phrases");
+            kv.Children.Add(new KeyValue("en", phrase.EnglishText));
 
-            foreach (var phrase in _project.Phrases)
-            {
-                var kv = new KeyValue(phrase.Key);
-
-                if (phrase.FormatArguments.Any())
-                {
-                    var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
-
-                    string combined = string.Join(",", arguments);
-
-                    kv.Children.Add(new KeyValue("#format", combined));
-                }
-
-                string value = phrase.Translations.ContainsKey(languageCode)
-                    ? phrase.Translations[languageCode] ?? phrase.EnglishText
-                    : phrase.EnglishText;
-
-                kv.Children.Add(new KeyValue(languageCode, value));
-
-                root.Children.Add(kv);
-            }
-
-            return root;
+            root.Children.Add(kv);
         }
+
+        return root;
+    }
+
+    private void DoLanguageExportToFileSystem(string languageCode)
+    {
+        var kv = GenerateExportForLanguage(languageCode);
+
+        if (kv == null)
+        {
+            return;
+        }
+
+        var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
+
+        if (outputFile.Directory != null && !outputFile.Directory.Exists)
+        {
+            outputFile.Directory.Create();
+        }
+
+        kv.SaveToFile(outputFile.FullName, asBinary: false);
+    }
+
+    private KeyValue GenerateExportForLanguage(string languageCode)
+    {
+        if (_project.Phrases.Select(x => x.Translations.ContainsKey(languageCode) && !string.IsNullOrWhiteSpace(x.Translations[languageCode])).All(x => !x))
+        {
+            // If all text for this language is not set, don't output file
+            return null;
+        }
+
+        var root = new KeyValue("Phrases");
+
+        foreach (var phrase in _project.Phrases)
+        {
+            var kv = new KeyValue(phrase.Key);
+
+            if (phrase.FormatArguments.Any())
+            {
+                var arguments = phrase.FormatArguments.Select((arg, idx) => arg.Render(idx + 1)).ToArray();
+
+                string combined = string.Join(",", arguments);
+
+                kv.Children.Add(new KeyValue("#format", combined));
+            }
+
+            string value = phrase.Translations.ContainsKey(languageCode)
+                ? phrase.Translations[languageCode] ?? phrase.EnglishText
+                : phrase.EnglishText;
+
+            kv.Children.Add(new KeyValue(languageCode, value));
+
+            root.Children.Add(kv);
+        }
+
+        return root;
     }
 }

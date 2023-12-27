@@ -1,10 +1,9 @@
-﻿namespace Tsukuru.Core.Translations
+﻿namespace Tsukuru.Core.Translations;
+
+public enum EProjectGenerateResult
 {
-    public enum EProjectGenerateResult
-    {
-        CompleteNoErrors = 0,
-        SourceFileNotFound,
-        BadRootTranslationFile,
-        GeneralFailure
-    }
+    CompleteNoErrors = 0,
+    SourceFileNotFound,
+    BadRootTranslationFile,
+    GeneralFailure
 }

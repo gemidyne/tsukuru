@@ -1,11 +1,10 @@
 ﻿using Tsukuru.Maps.Compiler.ViewModels;
 
-namespace Tsukuru.Maps.Compiler.Business
-{
-    internal interface ICompileStep
-    {
-        string StepName { get; }
+namespace Tsukuru.Maps.Compiler.Business;
 
-        bool Run(ResultsLogContainer log);
-    }
+internal interface ICompileStep
+{
+    string StepName { get; }
+
+    bool Run(ResultsLogContainer log);
 }

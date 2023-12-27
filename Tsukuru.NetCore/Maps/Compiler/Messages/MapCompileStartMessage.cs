@@ -1,6 +1,5 @@
-﻿namespace Tsukuru.Maps.Compiler.Messages
+﻿namespace Tsukuru.Maps.Compiler.Messages;
+
+public class MapCompileStartMessage
 {
-    public class MapCompileStartMessage
-    {
-    }
 }

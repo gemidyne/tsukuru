@@ -2,27 +2,30 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Tsukuru.Settings
+namespace Tsukuru.Settings;
+
+internal class SettingsManager : ISettingsManager
 {
-    internal class SettingsManager
+    private static readonly FileInfo _settingsPath = GetSettingsFilePath();
+    private static readonly object _door = new object();
+
+    public SettingsManifest Manifest { get; private set; }
+
+    public SettingsManager()
     {
-        private static readonly FileInfo _settingsPath = GetSettingsFilePath();
+        Load();
+    }
 
-        public static SettingsManifest Manifest { get; private set; }
-
-        static SettingsManager()
+    public void Load()
+    {
+        if (App.IsInDesignMode)
         {
-            Load();
+            Manifest = new SettingsManifest();
+            return;
         }
 
-        public static void Load()
+        lock (_door)
         {
-            if (ViewModelLocator.IsDesignMode)
-            {
-                Manifest = new SettingsManifest();
-                return;
-            }
-
             if (!_settingsPath.Exists)
             {
                 Manifest = new SettingsManifest();
@@ -44,15 +47,18 @@ namespace Tsukuru.Settings
                 }
             }
         }
+    }
 
-        public static void Save()
+    public void Save()
+    {
+        if (App.IsInDesignMode)
         {
-            if (ViewModelLocator.IsDesignMode)
-            {
-                Manifest = new SettingsManifest();
-                return;
-            }
+            Manifest = new SettingsManifest();
+            return;
+        }
 
+        lock (_door)
+        {
             EnsureDirectoryExists();
 
             var serialised = JsonConvert.SerializeObject(Manifest, Formatting.Indented);
@@ -66,25 +72,25 @@ namespace Tsukuru.Settings
                 // Ignore for now
             }
         }
+    }
 
-        private static FileInfo GetSettingsFilePath()
+    private static FileInfo GetSettingsFilePath()
+    {
+        return new FileInfo(Path.Combine(GetLocalAppDataDirectory(), "GEMINIDevelopments", "Tsukuru", "settings.json"));
+    }
+
+    private static string GetLocalAppDataDirectory()
+    {
+        return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    }
+
+    private static void EnsureDirectoryExists()
+    {
+        _settingsPath.Refresh();
+
+        if (!_settingsPath.Directory.Exists)
         {
-            return new FileInfo(Path.Combine(GetLocalAppDataDirectory(), "GEMINIDevelopments", "Tsukuru", "settings.json"));
-        }
-
-        private static string GetLocalAppDataDirectory()
-        {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        }
-
-        private static void EnsureDirectoryExists()
-        {
-            _settingsPath.Refresh();
-
-            if (!_settingsPath.Directory.Exists)
-            {
-                _settingsPath.Directory.Create();
-            }
+            _settingsPath.Directory.Create();
         }
     }
 }

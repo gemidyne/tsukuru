@@ -3,46 +3,45 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Tsukuru
+namespace Tsukuru;
+
+public class AsyncObservableCollection<T> : ObservableCollection<T>
 {
-    public class AsyncObservableCollection<T> : ObservableCollection<T>
+    private AsyncOperation _asyncOp = null;
+
+    public AsyncObservableCollection()
     {
-        private AsyncOperation _asyncOp = null;
+        CreateAsyncOp();
+    }
 
-        public AsyncObservableCollection()
-        {
-            CreateAsyncOp();
-        }
+    public AsyncObservableCollection(IEnumerable<T> list)
+        : base(list)
+    {
+        CreateAsyncOp();
+    }
 
-        public AsyncObservableCollection(IEnumerable<T> list)
-            : base(list)
-        {
-            CreateAsyncOp();
-        }
+    private void CreateAsyncOp()
+    {
+        _asyncOp = AsyncOperationManager.CreateOperation(null);
+    }
 
-        private void CreateAsyncOp()
-        {
-            _asyncOp = AsyncOperationManager.CreateOperation(null);
-        }
+    protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+    {
+        _asyncOp.Post(RaiseCollectionChanged, e);
+    }
 
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            _asyncOp.Post(RaiseCollectionChanged, e);
-        }
+    private void RaiseCollectionChanged(object param)
+    {
+        base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+    }
 
-        private void RaiseCollectionChanged(object param)
-        {
-            base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
-        }
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        _asyncOp.Post(RaisePropertyChanged, e);
+    }
 
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            _asyncOp.Post(RaisePropertyChanged, e);
-        }
-
-        private void RaisePropertyChanged(object param)
-        {
-            base.OnPropertyChanged((PropertyChangedEventArgs)param);
-        }
+    private void RaisePropertyChanged(object param)
+    {
+        base.OnPropertyChanged((PropertyChangedEventArgs)param);
     }
 }

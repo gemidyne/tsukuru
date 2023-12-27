@@ -1,35 +1,34 @@
 ﻿using System.IO;
 using Tsukuru.Core.SourceEngine.Mdl.Header;
 
-namespace Tsukuru.Core.SourceEngine.Mdl
+namespace Tsukuru.Core.SourceEngine.Mdl;
+
+public class Model
 {
-    public class Model
+    public ModelHeader Header
+    { get; private set; }
+
+    public Mesh[] Meshes
     {
-        public ModelHeader Header
-        { get; private set; }
+        get; private set;
+    }
 
-        public Mesh[] Meshes
+    public Model(ModelHeader header, BinaryReader reader)
+    {
+        this.Header = header;
+        var start = reader.BaseStream.Position;
+        reader.BaseStream.Position = start + header.MeshIndex;
+        Meshes = new Mesh[header.MeshCount];
+        for (var i = 0; i < header.MeshCount; i++)
         {
-            get; private set;
+            var modelHeader = reader.ReadStruct<MeshHeader>();
+            Meshes[i] = new Mesh(modelHeader, reader);
         }
-
-        public Model(ModelHeader header, BinaryReader reader)
-        {
-            this.Header = header;
-            var start = reader.BaseStream.Position;
-            reader.BaseStream.Position = start + header.MeshIndex;
-            Meshes = new Mesh[header.MeshCount];
-            for (var i = 0; i < header.MeshCount; i++)
-            {
-                var modelHeader = reader.ReadStruct<MeshHeader>();
-                Meshes[i] = new Mesh(modelHeader, reader);
-            }
-        }
+    }
 
 
-        public override string ToString()
-        {
-            return $"Model {Header.Name} with {Header.MeshCount} models";
-        }
+    public override string ToString()
+    {
+        return $"Model {Header.Name} with {Header.MeshCount} models";
     }
 }

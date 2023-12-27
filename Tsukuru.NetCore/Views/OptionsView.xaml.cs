@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Views
+namespace Tsukuru.Views;
+
+public partial class OptionsView : UserControl
 {
-    public partial class OptionsView : UserControl
+    public OptionsView()
     {
-        public OptionsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

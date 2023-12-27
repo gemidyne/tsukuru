@@ -1,37 +1,36 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Tsukuru.Core.SourceEngine.Bsp.LumpData
+namespace Tsukuru.Core.SourceEngine.Bsp.LumpData;
+
+public class TextureDataString: LumpData
 {
-	public class TextureDataString: LumpData
+    public string All
     {
-        public string All
-        {
-            get; private set;
-        }
-        public TextureDataString(BinaryReader reader, int length)
-        {
-            var bytes = reader.ReadBytes(length);
-            All = Encoding.ASCII.GetString(bytes);
-        }
+        get; private set;
+    }
+    public TextureDataString(BinaryReader reader, int length)
+    {
+        var bytes = reader.ReadBytes(length);
+        All = Encoding.ASCII.GetString(bytes);
+    }
 
-        private string GetPart(int offset)
+    private string GetPart(int offset)
+    {
+        var textureName = "";
+        for (var i = offset; i < All.Length; i++)
         {
-            var textureName = "";
-            for (var i = offset; i < All.Length; i++)
+            if (All[i] == '\0')
             {
-                if (All[i] == '\0')
-                {
-                    break;
-                }
-                textureName += All[i];
+                break;
             }
-            return textureName;
+            textureName += All[i];
         }
+        return textureName;
+    }
 
-        public string this[int i]
-        {
-            get { return GetPart(i); }
-        }
+    public string this[int i]
+    {
+        get { return GetPart(i); }
     }
 }
