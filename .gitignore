@@ -141,3 +141,4 @@ App_Data/*.ldf
 
 rel/
 sm-env/
+.idea/
