@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <Authors>gemidyne</Authors>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Tsukuru CLI</Title>
+        <Description>Command line interface for Tsukuru Source Engine build tool</Description>
+        <PackageProjectUrl>https://github.com/gemidyne/tsukuru</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/gemidyne/tsukuru/blob/master/LICENSE.md</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/gemidyne/tsukuru</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tsukuru.Core.Translations\Tsukuru.Core.Translations.csproj" />
+    </ItemGroup>
+
+</Project>
