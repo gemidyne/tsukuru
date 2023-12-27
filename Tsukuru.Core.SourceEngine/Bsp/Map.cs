@@ -18,59 +18,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.IO;
 
-namespace Tsukuru.Core.SourceEngine.Bsp
+namespace Tsukuru.Core.SourceEngine.Bsp;
+
+public struct Map
 {
-    public struct Map
+    public string Name;
+
+    /// <summary>
+    /// BSP file identifier
+    /// </summary>
+    public int Identifier;
+    /// <summary>
+    /// BSP file version
+    /// </summary>
+    public int Version;
+    /// <summary>
+    /// lump directory array
+    /// </summary>
+    public Lump[] Lumps;
+    /// <summary>
+    /// Map's revision number
+    /// </summary>
+    public int MapRevision;
+
+    public static Map Load(BinaryReader reader)
     {
-        public string Name;
+        Map info = new Map();
 
-        /// <summary>
-        /// BSP file identifier
-        /// </summary>
-        public int Identifier;
-        /// <summary>
-        /// BSP file version
-        /// </summary>
-        public int Version;
-        /// <summary>
-        /// lump directory array
-        /// </summary>
-        public Lump[] Lumps;
-        /// <summary>
-        /// Map's revision number
-        /// </summary>
-        public int MapRevision;
+        //Read identifier
+        info.Identifier = reader.ReadInt32();
 
-        public static Map Load(BinaryReader reader)
+        //Validate identifier
+        //Little-endian "VBSP"   0x50534256
+        if (info.Identifier != 0x50534256)
         {
-            Map info = new Map();
-
-            //Read identifier
-            info.Identifier = reader.ReadInt32();
-
-            //Validate identifier
-            //Little-endian "VBSP"   0x50534256
-            if (info.Identifier != 0x50534256)
-            {
-                throw new IOException("Wrong file format");
-            }
-
-            //Read version
-            info.Version = reader.ReadInt32();
-
-            //Read game lumps
-            info.Lumps = new Lump[64];
-
-            for (int i = 0; i < 64; i++)
-            {
-                info.Lumps[i] = Lump.Read(reader, (LumpType)i);
-            }
-
-            //Read map revision number
-            info.MapRevision = reader.ReadInt32();
-
-            //Return value
-            return info;
+            throw new IOException("Wrong file format");
         }
+
+        //Read version
+        info.Version = reader.ReadInt32();
+
+        //Read game lumps
+        info.Lumps = new Lump[64];
+
+        for (int i = 0; i < 64; i++)
+        {
+            info.Lumps[i] = Lump.Read(reader, (LumpType)i);
+        }
+
+        //Read map revision number
+        info.MapRevision = reader.ReadInt32();
+
+        //Return value
+        return info;
     }
 }

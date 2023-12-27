@@ -1,17 +1,16 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Tsukuru.Core.SourceEngine.Mdl.Header
-{
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Header2
-    {
-        public int SrcBoneTransformCount;
-        public int SrcBoneTransformIndex;
-        public int IllumPositionAttachmentIndex;
-        public float FlMaxEyeDeflection;
-        public int LinearBoneIndex;
+namespace Tsukuru.Core.SourceEngine.Mdl.Header;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-        public int[] Unknown;                
-    }
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Header2
+{
+    public int SrcBoneTransformCount;
+    public int SrcBoneTransformIndex;
+    public int IllumPositionAttachmentIndex;
+    public float FlMaxEyeDeflection;
+    public int LinearBoneIndex;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+    public int[] Unknown;                
 }

@@ -1,9 +1,8 @@
-﻿namespace Tsukuru.Settings
+﻿namespace Tsukuru.Settings;
+
+public enum EMapVersionMode
 {
-    public enum EMapVersionMode
-    {
-        NoVersioning = 0,
-        VersionedDateTime = 1,
-        VersionedBuildNumber = 2
-    }
+    NoVersioning = 0,
+    VersionedDateTime = 1,
+    VersionedBuildNumber = 2
 }

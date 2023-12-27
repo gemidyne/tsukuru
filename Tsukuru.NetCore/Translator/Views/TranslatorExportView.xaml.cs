@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.Translator.Views
+namespace Tsukuru.Translator.Views;
+
+public partial class TranslatorExportView : UserControl
 {
-    public partial class TranslatorExportView : UserControl
+    public TranslatorExportView()
     {
-        public TranslatorExportView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

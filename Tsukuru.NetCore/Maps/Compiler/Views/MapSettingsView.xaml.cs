@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for MainSettingsView.xaml
+/// </summary>
+public partial class MapSettingsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for MainSettingsView.xaml
-    /// </summary>
-    public partial class MapSettingsView : UserControl
+    public MapSettingsView()
     {
-        public MapSettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

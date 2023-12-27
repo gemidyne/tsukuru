@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for RadCompilerSettingsView.xaml
+/// </summary>
+public partial class RadCompilerSettingsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for RadCompilerSettingsView.xaml
-    /// </summary>
-    public partial class RadCompilerSettingsView : UserControl
+    public RadCompilerSettingsView()
     {
-        public RadCompilerSettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

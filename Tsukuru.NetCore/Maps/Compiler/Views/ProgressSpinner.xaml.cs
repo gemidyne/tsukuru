@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for ProgressSpinner.xaml
+/// </summary>
+public partial class ProgressSpinner : UserControl
 {
-    /// <summary>
-    /// Interaction logic for ProgressSpinner.xaml
-    /// </summary>
-    public partial class ProgressSpinner : UserControl
+    public ProgressSpinner()
     {
-        public ProgressSpinner()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

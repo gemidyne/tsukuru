@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.SourcePawn.Views
+namespace Tsukuru.SourcePawn.Views;
+
+/// <summary>
+/// Interaction logic for PostBuildActionsView.xaml
+/// </summary>
+public partial class PostBuildActionsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for PostBuildActionsView.xaml
-    /// </summary>
-    public partial class PostBuildActionsView : UserControl
+    public PostBuildActionsView()
     {
-        public PostBuildActionsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace Tsukuru.SourcePawn.Views
+namespace Tsukuru.SourcePawn.Views;
+
+public partial class SourcePawnCompilerView : UserControl
 {
-    public partial class SourcePawnCompilerView : UserControl
+    public SourcePawnCompilerView()
     {
-        public SourcePawnCompilerView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

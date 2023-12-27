@@ -1,11 +1,10 @@
-﻿namespace Tsukuru.SourcePawn
+﻿namespace Tsukuru.SourcePawn;
+
+public enum ECompilationResult
 {
-    public enum ECompilationResult
-    {
-        Unknown,
-        Compiling,
-        Completed,
-        CompletedWithWarnings,
-        FailedWithErrors
-    }
+    Unknown,
+    Compiling,
+    Completed,
+    CompletedWithWarnings,
+    FailedWithErrors
 }

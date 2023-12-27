@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for VisCompilerSettingsView.xaml
+/// </summary>
+public partial class VisCompilerSettingsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for VisCompilerSettingsView.xaml
-    /// </summary>
-    public partial class VisCompilerSettingsView : UserControl
+    public VisCompilerSettingsView()
     {
-        public VisCompilerSettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

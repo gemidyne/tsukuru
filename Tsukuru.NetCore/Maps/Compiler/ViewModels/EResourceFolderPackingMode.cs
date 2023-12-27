@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 
-namespace Tsukuru.Maps.Compiler.ViewModels
-{
-    public enum EResourceFolderPackingMode
-    {
-        [Description("Pack all files")]
-        Everything,
+namespace Tsukuru.Maps.Compiler.ViewModels;
 
-        [Description("Pack necessary assets only")]
-        NecessaryAssetsOnly
-    }
+public enum EResourceFolderPackingMode
+{
+    [Description("Pack all files")]
+    Everything,
+
+    [Description("Pack necessary assets only")]
+    NecessaryAssetsOnly
 }

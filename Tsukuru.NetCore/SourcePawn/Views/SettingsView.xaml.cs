@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.SourcePawn.Views
+namespace Tsukuru.SourcePawn.Views;
+
+/// <summary>
+/// Interaction logic for SettingsView.xaml
+/// </summary>
+public partial class SettingsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SettingsView.xaml
-    /// </summary>
-    public partial class SettingsView : UserControl
+    public SettingsView()
     {
-        public SettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

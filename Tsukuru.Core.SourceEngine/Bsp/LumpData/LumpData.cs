@@ -1,7 +1,6 @@
-﻿namespace Tsukuru.Core.SourceEngine.Bsp.LumpData
-{
-	public class LumpData
-    {
+﻿namespace Tsukuru.Core.SourceEngine.Bsp.LumpData;
 
-    }
+public class LumpData
+{
+
 }

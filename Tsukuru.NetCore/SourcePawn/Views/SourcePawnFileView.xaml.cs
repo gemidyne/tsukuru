@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.SourcePawn.Views
+namespace Tsukuru.SourcePawn.Views;
+
+/// <summary>
+/// Interaction logic for SourcePawnFileView.xaml
+/// </summary>
+public partial class SourcePawnFileView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SourcePawnFileView.xaml
-    /// </summary>
-    public partial class SourcePawnFileView : UserControl
+    public SourcePawnFileView()
     {
-        public SourcePawnFileView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

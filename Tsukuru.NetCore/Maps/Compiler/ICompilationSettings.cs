@@ -1,7 +1,6 @@
-﻿namespace Tsukuru.Maps.Compiler
+﻿namespace Tsukuru.Maps.Compiler;
+
+public interface ICompilationSettings
 {
-    public interface ICompilationSettings
-    {
-        string FormattedArguments { get; }
-    }
+    string FormattedArguments { get; }
 }

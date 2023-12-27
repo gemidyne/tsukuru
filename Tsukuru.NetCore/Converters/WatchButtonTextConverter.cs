@@ -2,27 +2,26 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Tsukuru.Converters
+namespace Tsukuru.Converters;
+
+internal class WatchButtonTextConverter : IValueConverter
 {
-    internal class WatchButtonTextConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var flag = value as bool?;
+        var flag = value as bool?;
 
-            if (flag.GetValueOrDefault())
-            {
-                return "Stop watching";
-            }
-            else
-            {
-                return "Watch";
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        if (flag.GetValueOrDefault())
         {
-            throw new NotImplementedException();
+            return "Stop watching";
         }
+        else
+        {
+            return "Watch";
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -3,59 +3,58 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Tsukuru.Maps.Compiler.ViewModels;
 
-namespace Tsukuru.Maps.Compiler.Business
+namespace Tsukuru.Maps.Compiler.Business;
+
+internal class CompileStepRunner
 {
-    internal class CompileStepRunner
+    private readonly ResultsViewModel _log;
+    private readonly List<ICompileStep> _steps = new();
+
+    public CompileStepRunner(ResultsViewModel log)
     {
-        private readonly ResultsViewModel _log;
-        private readonly List<ICompileStep> _steps = new List<ICompileStep>();
+        _log = log;
+    }
 
-        public CompileStepRunner(ResultsViewModel log)
+    public void AddStep(ICompileStep step)
+    {
+        _steps.Add(step);
+    }
+
+    public async Task<bool> RunAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+
+        _log.ProgressMaximum = _steps.Count;
+
+        for (var i = 0; i < _steps.Count; i++)
         {
-            _log = log;
-        }
+            ICompileStep step = _steps[i];
 
-        public void AddStep(ICompileStep step)
-        {
-            _steps.Add(step);
-        }
+            _log.Subtitle = $"Running: \"{step.StepName}\"... ({i}/{_steps.Count})";
 
-        public async Task<bool> RunAsync()
-        {
-            var stopwatch = Stopwatch.StartNew();
+            var receiver = _log.GetLogDestination(step.StepName);
 
-            _log.ProgressMaximum = _steps.Count;
+            _log.NavigateToLogTab(step.StepName);
 
-            for (var i = 0; i < _steps.Count; i++)
+            bool result = await Task.Run(() => step.Run(receiver));
+
+            if (result)
             {
-                ICompileStep step = _steps[i];
-
-                _log.Subtitle = $"Running: \"{step.StepName}\"... ({i}/{_steps.Count})";
-
-                var receiver = _log.GetLogDestination(step.StepName);
-
-                _log.NavigateToLogTab(step.StepName);
-
-                bool result = await Task.Run(() => step.Run(receiver));
-
-                if (result)
-                {
-                    _log.ProgressValue++;
-                    continue;
-                }
-
-                stopwatch.Stop();
-
-                _log.Heading = "An error was encountered during compilation.";
-                _log.NotifyComplete(stopwatch.Elapsed);
-
-                return false;
+                _log.ProgressValue++;
+                continue;
             }
 
             stopwatch.Stop();
+
+            _log.Heading = "An error was encountered during compilation.";
             _log.NotifyComplete(stopwatch.Elapsed);
 
-            return true;
+            return false;
         }
+
+        stopwatch.Stop();
+        _log.NotifyComplete(stopwatch.Elapsed);
+
+        return true;
     }
 }

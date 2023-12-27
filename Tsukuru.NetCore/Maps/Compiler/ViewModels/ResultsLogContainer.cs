@@ -1,63 +1,62 @@
 ﻿using System.Text;
-using GalaSoft.MvvmLight;
+using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler.ViewModels
+namespace Tsukuru.Maps.Compiler.ViewModels;
+
+public class ResultsLogContainer : ViewModelBase
 {
-    public class ResultsLogContainer : ViewModelBase
+    private readonly StringBuilder _builder = new StringBuilder();
+    private readonly object _door = new object();
+    private string _category;
+    private string _text;
+
+    public string Category
     {
-        private readonly StringBuilder _builder = new StringBuilder();
-        private readonly object _door = new object();
-        private string _category;
-        private string _text;
+        get => _category;
+        set => SetProperty(ref _category, value);
+    }
 
-        public string Category
+    public string ConsoleText
+    {
+        get => _text;
+        set => SetProperty(ref _text, value);
+    }
+
+    public void Append(char c)
+    {
+        lock (_door)
         {
-            get => _category;
-            set => Set(() => Category, ref _category, value);
+            _builder.Append(c);
+
+            RebuildStringCache();
         }
+    }
 
-        public string ConsoleText
+    public void Append(string text)
+    {
+        lock (_door)
         {
-            get => _text;
-            set => Set(() => ConsoleText, ref _text, value);
+            _builder.Append(text);
+
+            RebuildStringCache();
         }
+    }
 
-        public void Append(char c)
+    public void AppendLine(string category, string message)
+    {
+        lock (_door)
         {
-            lock (_door)
-            {
-                _builder.Append(c);
+            _builder.AppendFormat("[{0}]: {1}", category, message).AppendLine();
 
-                RebuildStringCache();
-            }
+            RebuildStringCache();
         }
+    }
 
-        public void Append(string text)
+    private void RebuildStringCache()
+    {
+        lock (_door)
         {
-            lock (_door)
-            {
-                _builder.Append(text);
-
-                RebuildStringCache();
-            }
-        }
-
-        public void AppendLine(string category, string message)
-        {
-            lock (_door)
-            {
-                _builder.AppendFormat("[{0}]: {1}", category, message).AppendLine();
-
-                RebuildStringCache();
-            }
-        }
-
-        private void RebuildStringCache()
-        {
-            lock (_door)
-            {
-                ConsoleText = _builder.ToString();
-            }
+            ConsoleText = _builder.ToString();
         }
     }
 }

@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for TemplatingSettingsView.xaml
+/// </summary>
+public partial class TemplatingSettingsView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for TemplatingSettingsView.xaml
-    /// </summary>
-    public partial class TemplatingSettingsView : UserControl
+    public TemplatingSettingsView()
     {
-        public TemplatingSettingsView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

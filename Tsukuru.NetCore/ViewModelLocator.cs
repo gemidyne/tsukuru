@@ -1,29 +1,28 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Tsukuru.SourcePawn.ViewModels;
 using Tsukuru.ViewModels;
 
-namespace Tsukuru
+namespace Tsukuru;
+
+internal class ViewModelLocator
 {
-    internal class ViewModelLocator
+    private static readonly Ioc _ioc;
+    
+    public SourcePawnCompileViewModel SourcePawnCompileViewModel => _ioc.GetRequiredService<SourcePawnCompileViewModel>();
+
+    public MainWindowViewModel MainWindowViewModel => _ioc.GetRequiredService<MainWindowViewModel>();
+
+    public static bool IsDesignMode => false;
+
+    static ViewModelLocator()
     {
-        private static readonly SimpleIoc _ioc = SimpleIoc.Default;
-
-        public SourcePawnCompileViewModel SourcePawnCompileViewModel => GetOrRegister<SourcePawnCompileViewModel>();
-
-        public MainWindowViewModel MainWindowViewModel => GetOrRegister<MainWindowViewModel>();
-
-        public static bool IsDesignMode => ViewModelBase.IsInDesignModeStatic;
-
-        private static T GetOrRegister<T>()
-            where T : class
-        {
-            if (!_ioc.IsRegistered<T>())
-            {
-                _ioc.Register<T>();
-            }
-
-            return _ioc.GetInstance<T>();
-        }
+        _ioc = Ioc.Default;
+        
+        _ioc.ConfigureServices(
+            new ServiceCollection()
+                .AddSingleton<SourcePawnCompileViewModel>()
+                .AddSingleton<MainWindowViewModel>()
+                .BuildServiceProvider());
     }
 }

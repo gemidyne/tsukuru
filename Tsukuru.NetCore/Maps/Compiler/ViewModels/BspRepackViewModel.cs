@@ -1,46 +1,44 @@
-﻿using GalaSoft.MvvmLight;
-using Tsukuru.Settings;
+﻿using Tsukuru.Settings;
 using Tsukuru.ViewModels;
 
-namespace Tsukuru.Maps.Compiler.ViewModels
+namespace Tsukuru.Maps.Compiler.ViewModels;
+
+public class BspRepackViewModel : ViewModelBase, IApplicationContentView
 {
-    public class BspRepackViewModel : ViewModelBase, IApplicationContentView
+    private bool _isLoading;
+    private bool _performRepack;
+
+    public string Name => "BSP Repack";
+
+    public string Description =>
+        "Repacking your map can significantly decrease the file size. This will compress all data within the map. NOTE: You must have Resource Packing enabled to use this feature.";
+
+    public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
+
+    public bool IsLoading
     {
-        private bool _isLoading;
-        private bool _performRepack;
+        get => _isLoading;
+        set => SetProperty(ref _isLoading, value);
+    }
 
-        public string Name => "BSP Repack";
-
-        public string Description =>
-            "Repacking your map can significantly decrease the file size. This will compress all data within the map. NOTE: You must have Resource Packing enabled to use this feature.";
-
-        public EShellNavigationPage Group => EShellNavigationPage.SourceMapCompiler;
-
-        public bool IsLoading
+    public bool PerformRepack
+    {
+        get => _performRepack;
+        set
         {
-            get => _isLoading;
-            set => Set(() => IsLoading, ref _isLoading, value);
-        }
+            SetProperty(ref _performRepack, value);
 
-        public bool PerformRepack
-        {
-            get => _performRepack;
-            set
+            SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress = value;
+
+            if (!IsLoading)
             {
-                Set(() => PerformRepack, ref _performRepack, value);
-
-                SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress = value;
-
-                if (!IsLoading)
-                {
-                    SettingsManager.Save();
-                }
+                SettingsManager.Save();
             }
         }
+    }
 
-        public void Init()
-        {
-            PerformRepack = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress;
-        }
+    public void Init()
+    {
+        PerformRepack = SettingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.PerformRepackCompress;
     }
 }

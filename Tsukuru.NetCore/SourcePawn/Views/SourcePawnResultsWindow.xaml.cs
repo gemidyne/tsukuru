@@ -1,12 +1,11 @@
 ﻿using System.Windows;
 
-namespace Tsukuru.SourcePawn.Views
+namespace Tsukuru.SourcePawn.Views;
+
+public partial class SourcePawnResultsWindow : Window
 {
-	public partial class SourcePawnResultsWindow : Window
+    public SourcePawnResultsWindow()
     {
-        public SourcePawnResultsWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

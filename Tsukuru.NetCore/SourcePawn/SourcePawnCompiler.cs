@@ -9,216 +9,215 @@ using System.Windows;
 using Tsukuru.Settings;
 using Tsukuru.SourcePawn.ViewModels;
 
-namespace Tsukuru.SourcePawn
+namespace Tsukuru.SourcePawn;
+
+public class SourcePawnCompiler
 {
-    public class SourcePawnCompiler
+    private static readonly object _door = new object();
+
+    public void CompileBatch(SourcePawnCompileViewModel viewModel)
     {
-        private static readonly object _door = new object();
+        viewModel.ProgressBarValue = 0;
+        viewModel.ProgressBarMaximum = viewModel.FilesToCompile.Count;
 
-        public void CompileBatch(SourcePawnCompileViewModel viewModel)
+        foreach (var compilationFile in viewModel.FilesToCompile)
         {
-            viewModel.ProgressBarValue = 0;
-            viewModel.ProgressBarMaximum = viewModel.FilesToCompile.Count;
+            compilationFile.UpdateStatus(isCompiling: true);
+        }
 
-            foreach (var compilationFile in viewModel.FilesToCompile)
+        foreach (var compilationFile in viewModel.FilesToCompile)
+        {
+            Compile(viewModel, compilationFile);
+            viewModel.ProgressBarValue++;
+        }
+
+        viewModel.ProgressBarValue = 0;
+
+        if (viewModel.FilesToCompile.Any(f => f.IsCompiledWithErrors || f.IsCompiledWithWarnings))
+        {
+            SystemSounds.Exclamation.Play();
+        }
+        else
+        {
+            SystemSounds.Asterisk.Play();
+        }
+    }
+
+    public void Compile(SourcePawnCompileViewModel vm, CompilationFileViewModel compilationFileViewModel)
+    {
+        lock (_door)
+        {
+            string file = compilationFileViewModel.File;
+            compilationFileViewModel.Messages.Clear();
+
+            string rewrittenFilePath;
+
+            bool incrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
+            bool runPostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
+
+            if (incrementVersion)
             {
-                compilationFile.UpdateStatus(isCompiling: true);
-            }
+                Version ver;
 
-            foreach (var compilationFile in viewModel.FilesToCompile)
-            {
-                Compile(viewModel, compilationFile);
-                viewModel.ProgressBarValue++;
-            }
+                GetAndIncrementVersionFile(Path.GetDirectoryName(compilationFileViewModel.File),
+                    incrementVersion, out ver);
 
-            viewModel.ProgressBarValue = 0;
-
-            if (viewModel.FilesToCompile.Any(f => f.IsCompiledWithErrors || f.IsCompiledWithWarnings))
-            {
-                SystemSounds.Exclamation.Play();
+                rewrittenFilePath = RewriteSourceFile(compilationFileViewModel.File, ver);
             }
             else
             {
-                SystemSounds.Asterisk.Play();
+                rewrittenFilePath = file;
             }
-        }
 
-        public void Compile(SourcePawnCompileViewModel vm, CompilationFileViewModel compilationFileViewModel)
-        {
-            lock (_door)
+
+            try
             {
-                string file = compilationFileViewModel.File;
-                compilationFileViewModel.Messages.Clear();
-
-                string rewrittenFilePath;
-
-                bool incrementVersion = SettingsManager.Manifest.SourcePawnCompiler.Versioning;
-                bool runPostBuildScripts = SettingsManager.Manifest.SourcePawnCompiler.ExecutePostBuildScripts;
-
-                if (incrementVersion)
+                using (var compiler = new Process())
                 {
-                    Version ver;
+                    compiler.StartInfo.FileName = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
+                    compiler.StartInfo.Arguments = string.Format(
+                        "{0} -o=\"{1}.smx\"",
+                        rewrittenFilePath,
+                        Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file)));
 
-                    GetAndIncrementVersionFile(Path.GetDirectoryName(compilationFileViewModel.File),
-                        incrementVersion, out ver);
+                    compiler.StartInfo.UseShellExecute = false;
+                    compiler.StartInfo.RedirectStandardOutput = true;
+                    compiler.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    compiler.StartInfo.CreateNoWindow = true;
+                    compiler.EnableRaisingEvents = true;
+                    compiler.Start();
 
-                    rewrittenFilePath = RewriteSourceFile(compilationFileViewModel.File, ver);
-                }
-                else
-                {
-                    rewrittenFilePath = file;
-                }
+                    string output = compiler.StandardOutput.ReadToEnd();
 
-
-                try
-                {
-                    using (var compiler = new Process())
+                    if (incrementVersion && File.Exists(rewrittenFilePath))
                     {
-                        compiler.StartInfo.FileName = SettingsManager.Manifest.SourcePawnCompiler.CompilerPath;
-                        compiler.StartInfo.Arguments = string.Format(
-                            "{0} -o=\"{1}\"",
-                            rewrittenFilePath,
-                            Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file)));
-
-                        compiler.StartInfo.UseShellExecute = false;
-                        compiler.StartInfo.RedirectStandardOutput = true;
-                        compiler.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        compiler.StartInfo.CreateNoWindow = true;
-                        compiler.EnableRaisingEvents = true;
-                        compiler.Start();
-
-                        string output = compiler.StandardOutput.ReadToEnd();
-
-                        if (incrementVersion && File.Exists(rewrittenFilePath))
-                        {
-                            File.Delete(rewrittenFilePath);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(output))
-                        {
-                            foreach (CompilationMessage message in GetCompilationMessagesFromOutput(output.Split('\n')))
-                            {
-                                compilationFileViewModel.Messages.Add(message);
-                            }
-                        }
-
-                        compilationFileViewModel.UpdateStatus();
-
-                        if (!compilationFileViewModel.Messages.Any(m =>
-                                CompilationMessageParser.IsLineError(m.Prefix)) && runPostBuildScripts)
-                        {
-                            RunPostBuildScript(Path.GetDirectoryName(file));
-                        }
+                        File.Delete(rewrittenFilePath);
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-            }
-        }
 
-        private static void RunPostBuildScript(string workingDirectory)
-        {
-            string postBuildFile = Path.Combine(workingDirectory, "post_build.cmd");
-
-            if (!File.Exists(postBuildFile))
-            {
-                return;
-            }
-
-            var process = Process.Start(new ProcessStartInfo(postBuildFile)
-            {
-                WorkingDirectory = workingDirectory,
-                CreateNoWindow = true
-            });
-
-            process?.WaitForExit();
-        }
-
-        private static string RewriteSourceFile(string file, Version version)
-        {
-            var fileTxt = new StringBuilder();
-            string output = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_v" + version + Path.GetExtension(file));
-
-            foreach (string line in File.ReadAllLines(file))
-            {
-                fileTxt.AppendLine(line.Replace("{TsukuruVersion}", version.ToString()));
-            }
-
-            File.WriteAllText(output, fileTxt.ToString());
-
-            return output;
-        }
-
-        private static void GetAndIncrementVersionFile(string workingDirectory, bool increment, out Version version)
-        {
-            string versionFile = Path.Combine(workingDirectory, "version");
-            version = new Version(1, 0, 0, 0);
-
-            if (File.Exists(versionFile))
-            {
-                string text = File.ReadAllText(versionFile);
-
-                if (Version.TryParse(text, out version))
-                {
-                    int newMinor = version.Minor;
-                    int newBuild = version.Build;
-                    int newRev = version.Revision;
-
-                    if (increment)
+                    if (!string.IsNullOrWhiteSpace(output))
                     {
-                        newRev++;
-
-                        if (newRev == 9)
+                        foreach (CompilationMessage message in GetCompilationMessagesFromOutput(output.Split('\n')))
                         {
-                            newBuild++;
-                            newRev = 0;
-                        }
-
-                        if (newBuild == 9)
-                        {
-                            newRev = 0;
-                            newBuild = 0;
-                            newMinor++;
+                            compilationFileViewModel.Messages.Add(message);
                         }
                     }
 
-                    version = new Version(version.Major, newMinor, newBuild, newRev);
-                }
-                else
-                {
-                    version = new Version(1, 0, 0, 0);
+                    compilationFileViewModel.UpdateStatus();
+
+                    if (!compilationFileViewModel.Messages.Any(m =>
+                            CompilationMessageParser.IsLineError(m.Prefix)) && runPostBuildScripts)
+                    {
+                        RunPostBuildScript(Path.GetDirectoryName(file));
+                    }
                 }
             }
-
-            File.WriteAllText(versionFile, version.ToString());
-        }
-
-        private static IEnumerable<CompilationMessage> GetCompilationMessagesFromOutput(string[] lines)
-        {
-            var messages = new List<CompilationMessage>();
-
-            foreach (string line in lines)
+            catch (Exception ex)
             {
-                if (string.IsNullOrWhiteSpace(line))
+                MessageBox.Show(ex.ToString());
+            }
+        }
+    }
+
+    private static void RunPostBuildScript(string workingDirectory)
+    {
+        string postBuildFile = Path.Combine(workingDirectory, "post_build.cmd");
+
+        if (!File.Exists(postBuildFile))
+        {
+            return;
+        }
+
+        var process = Process.Start(new ProcessStartInfo(postBuildFile)
+        {
+            WorkingDirectory = workingDirectory,
+            CreateNoWindow = true
+        });
+
+        process?.WaitForExit();
+    }
+
+    private static string RewriteSourceFile(string file, Version version)
+    {
+        var fileTxt = new StringBuilder();
+        string output = Path.Combine(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_v" + version + Path.GetExtension(file));
+
+        foreach (string line in File.ReadAllLines(file))
+        {
+            fileTxt.AppendLine(line.Replace("{TsukuruVersion}", version.ToString()));
+        }
+
+        File.WriteAllText(output, fileTxt.ToString());
+
+        return output;
+    }
+
+    private static void GetAndIncrementVersionFile(string workingDirectory, bool increment, out Version version)
+    {
+        string versionFile = Path.Combine(workingDirectory, "version");
+        version = new Version(1, 0, 0, 0);
+
+        if (File.Exists(versionFile))
+        {
+            string text = File.ReadAllText(versionFile);
+
+            if (Version.TryParse(text, out version))
+            {
+                int newMinor = version.Minor;
+                int newBuild = version.Build;
+                int newRev = version.Revision;
+
+                if (increment)
                 {
-                    continue;
+                    newRev++;
+
+                    if (newRev == 9)
+                    {
+                        newBuild++;
+                        newRev = 0;
+                    }
+
+                    if (newBuild == 9)
+                    {
+                        newRev = 0;
+                        newBuild = 0;
+                        newMinor++;
+                    }
                 }
 
-                CompilationMessage msg = CompilationMessageParser.ParseFromString(line);
+                version = new Version(version.Major, newMinor, newBuild, newRev);
+            }
+            else
+            {
+                version = new Version(1, 0, 0, 0);
+            }
+        }
 
-                if (msg == null)
-                {
-                    continue;
-                }
+        File.WriteAllText(versionFile, version.ToString());
+    }
 
-                messages.Add(msg);
+    private static IEnumerable<CompilationMessage> GetCompilationMessagesFromOutput(string[] lines)
+    {
+        var messages = new List<CompilationMessage>();
+
+        foreach (string line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
             }
 
-            return messages;
+            CompilationMessage msg = CompilationMessageParser.ParseFromString(line);
+
+            if (msg == null)
+            {
+                continue;
+            }
+
+            messages.Add(msg);
         }
+
+        return messages;
+    }
 
         
-    }
 }

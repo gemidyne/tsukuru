@@ -1,22 +1,21 @@
 ﻿using System;
 
-namespace Tsukuru.Core.SourceEngine
+namespace Tsukuru.Core.SourceEngine;
+
+public static class VProjectHelper
 {
-    public static class VProjectHelper
+    private static string _path;
+
+    public static string Path
     {
-        private static string _path;
-
-        public static string Path
+        get
         {
-            get
+            if (string.IsNullOrWhiteSpace(_path))
             {
-                if (string.IsNullOrWhiteSpace(_path))
-                {
-                    _path = Environment.GetEnvironmentVariable("VPROJECT", EnvironmentVariableTarget.User) ?? Environment.GetEnvironmentVariable("VPROJECT");
-                }
-
-                return _path;
+                _path = Environment.GetEnvironmentVariable("VPROJECT", EnvironmentVariableTarget.User) ?? Environment.GetEnvironmentVariable("VPROJECT");
             }
+
+            return _path;
         }
     }
 }

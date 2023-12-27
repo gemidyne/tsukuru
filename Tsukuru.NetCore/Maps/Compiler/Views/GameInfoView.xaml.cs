@@ -11,16 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tsukuru.Maps.Compiler.Views
+namespace Tsukuru.Maps.Compiler.Views;
+
+/// <summary>
+/// Interaction logic for GameInfoView.xaml
+/// </summary>
+public partial class GameInfoView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for GameInfoView.xaml
-    /// </summary>
-    public partial class GameInfoView : UserControl
+    public GameInfoView()
     {
-        public GameInfoView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
