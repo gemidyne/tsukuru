@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    tags:
+      - "v*"
 
 jobs:
 
@@ -42,4 +41,16 @@ jobs:
       with:
         name: Package
         path: Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
-    
+        
+    - name: Zip artifact
+      uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r Tsukuru.zip Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
+
+    - name: Create release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        draft: true
+        files: |
+          Tsukuru.zip
