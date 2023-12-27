@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tsukuru", "Tsukuru.NetCore\Tsukuru.csproj", "{1329764A-0B4B-4BE5-BFAD-A36BC392459E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tsukuru", "Tsukuru.App\Tsukuru.App.csproj", "{1329764A-0B4B-4BE5-BFAD-A36BC392459E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tsukuru.Core.SourceEngine", "Tsukuru.Core.SourceEngine\Tsukuru.Core.SourceEngine.csproj", "{2515A2C9-BBF9-46AF-B0CE-54E8268DC0AD}"
 EndProject

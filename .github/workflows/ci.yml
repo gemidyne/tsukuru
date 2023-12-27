@@ -35,11 +35,11 @@ jobs:
       run: dotnet test
 
     - name: Publish desktop app
-      run: dotnet publish Tsukuru.NetCore/Tsukuru.csproj
+      run: dotnet publish Tsukuru.App/Tsukuru.App.csproj
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: Package
-        path: Tsukuru.NetCore\bin\Release\net8.0-windows\publish\
+        path: Tsukuru.App\bin\Release\net8.0-windows\publish\
     

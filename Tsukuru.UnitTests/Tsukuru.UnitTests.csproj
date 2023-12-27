@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tsukuru.NetCore\Tsukuru.csproj" />
+    <ProjectReference Include="..\Tsukuru.App\Tsukuru.App.csproj" />
   </ItemGroup>
 
 </Project>

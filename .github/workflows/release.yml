@@ -34,10 +34,10 @@ jobs:
       run: dotnet test
 
     - name: Publish desktop app
-      run: dotnet publish Tsukuru.NetCore/Tsukuru.csproj
+      run: dotnet publish Tsukuru.App/Tsukuru.App.csproj
 
     - name: Zip build artifacts
-      run: 7z a -tzip package_release/Tsukuru.zip Tsukuru.NetCore\bin\Release\net8.0-windows\publish\*
+      run: 7z a -tzip package_release/Tsukuru.zip Tsukuru.App\bin\Release\net8.0-windows\publish\*
 
     - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
