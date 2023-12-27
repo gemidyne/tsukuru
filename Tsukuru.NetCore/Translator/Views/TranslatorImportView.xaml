@@ -28,7 +28,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <Label>SourceMod root translation file (xxx.phrases.txt)</Label>
+                    <Label>SourceMod root phrase file (xxx.phrases.txt)</Label>
                     <TextBox 
                         IsReadOnly="True"
                         Text="{Binding SelectedFile}"
@@ -48,7 +48,7 @@
                        FontSize="11"
                        Margin="0,5,0,0"
                        TextWrapping="WrapWithOverflow">
-                This is the file path to your english SourceMod translation file. If other languages of the same translation file exist in language folders, they will automatically be imported to your project.
+                This is the file path to your english SourceMod translation file. If other languages of the same translation file exist in language folders, they will automatically be imported to your project by Tsukuru.
             </TextBlock>
         </StackPanel>
 

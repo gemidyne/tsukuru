@@ -45,7 +45,7 @@ public class TranslationExporter
         GenerateExportEnglish()
             .SaveToFile(englishTxtFile.FullName, asBinary: false);
 
-        foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
+        foreach (var language in SourceModLanguageList.Languages.Where(x => x != "en"))
         {
             DoLanguageExportToFileSystem(language);
         }
@@ -58,7 +58,7 @@ public class TranslationExporter
             ["en"] = GenerateExportEnglish()
         };
 
-        foreach (var language in SourceModLanguageList.Instance.Languages.Where(x => x != "en"))
+        foreach (var language in SourceModLanguageList.Languages.Where(x => x != "en"))
         {
             var kv = GenerateExportForLanguage(language);
 

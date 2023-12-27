@@ -48,7 +48,7 @@
                        FontSize="11"
                        Margin="0,5,0,0"
                        TextWrapping="WrapWithOverflow">
-                The file path of your Tsukuru translator project file. If you do not have one, you can create one by importing your SourceMod translations.
+                The file path of your Tsukuru translator project file. If you do not have one, you can create one by importing your SourceMod translations using the SourceMod Translation Import view on the left sidebar.
             </TextBlock>
         </StackPanel>
 

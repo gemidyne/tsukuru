@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Tsukuru.Converters;
 
-internal class BooleanToPackingModeConverter : IValueConverter
+public class BooleanToPackingModeConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -22,6 +22,8 @@ internal class BooleanToPackingModeConverter : IValueConverter
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return Equals(value, "Only used files by the map");
+        string stringValue = value?.ToString() ?? string.Empty;
+        
+        return stringValue == "Only files used by the map";
     }
 }

@@ -13,7 +13,6 @@ namespace Tsukuru.Maps.Compiler.ViewModels;
 public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
 {
     private readonly ISettingsManager _settingsManager;
-    private static readonly object _door = new();
 
     private ObservableCollection<ResourceFolderViewModel> _foldersToPack;
     private bool _performResourcePacking;
@@ -77,21 +76,18 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
 
     public void Init()
     {
-        lock (_door)
+        FoldersToPack.Clear();
+
+        PerformResourcePacking = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
+
+        foreach (var folder in _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray())
         {
-            FoldersToPack.Clear();
-
-            PerformResourcePacking = _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.IsEnabled;
-
-            foreach (var folder in _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.IfNullThenEmpty().ToArray())
+            if (FoldersToPack.Any(x => x.Folder == folder.Path))
             {
-                if (FoldersToPack.Any(x => x.Folder == folder.Path))
-                {
-                    continue;
-                }
-                
-                FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, folder.Path, folder.Intelligent));
+                continue;
             }
+                
+            FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, folder.Path, folder.Intelligent));
         }
     }
 
@@ -104,20 +100,17 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
             return;
         }
 
-        lock (_door)
+        if (FoldersToPack.All(x => x.Folder != dialog.SelectedPath))
         {
-            if (FoldersToPack.All(x => x.Folder != dialog.SelectedPath))
-            {
-                FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, dialog.SelectedPath, false));
+            FoldersToPack.Add(new ResourceFolderViewModel(_settingsManager, dialog.SelectedPath, false));
 
-                _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Add(
-                    new ResourcePackingFolderSetting
-                    {
-                        Path = dialog.SelectedPath,
-                        Intelligent = false
-                    });
-                _settingsManager.Save();
-            }
+            _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Add(
+                new ResourcePackingFolderSetting
+                {
+                    Path = dialog.SelectedPath,
+                    Intelligent = false
+                });
+            _settingsManager.Save();
         }
     }
 
@@ -142,6 +135,4 @@ public class ResourcePackingViewModel : ViewModelBase, IApplicationContentView
         _settingsManager.Manifest.MapCompilerSettings.ResourcePackingSettings.Folders.Remove(settingsFolder);
         _settingsManager.Save();
     }
-
-
 }

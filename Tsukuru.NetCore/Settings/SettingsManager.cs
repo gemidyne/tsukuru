@@ -67,7 +67,7 @@ internal class SettingsManager : ISettingsManager
             {
                 File.WriteAllText(_settingsPath.FullName, serialised);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Ignore for now
             }

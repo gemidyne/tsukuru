@@ -121,7 +121,7 @@ public class TranslationImportTransformer
         string directory = _sourceFile.DirectoryName;
         string file = _sourceFile.Name;
 
-        foreach (string language in SourceModLanguageList.Instance.Languages)
+        foreach (string language in SourceModLanguageList.Languages)
         {
             string path = directory.AppendIfNeeded('\\') + language.AppendIfNeeded('\\') + file;
 

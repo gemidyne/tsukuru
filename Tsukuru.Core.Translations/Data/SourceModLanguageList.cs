@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Chiaki;
 
 namespace Tsukuru.Core.Translations.Data;
 
-public class SourceModLanguageList : Singleton<SourceModLanguageList>
+public static class SourceModLanguageList 
 {
-    private readonly string[] _codes = new[]
+    public static IReadOnlyList<string> Languages = new List<string>(new[]
     {
         "en",
         "ar",
@@ -38,7 +37,5 @@ public class SourceModLanguageList : Singleton<SourceModLanguageList>
         "th",
         "tr",
         "ua",
-    };
-
-    public IReadOnlyList<string> Languages => _codes;
+    });
 }
