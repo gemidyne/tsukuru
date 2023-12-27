@@ -8,6 +8,8 @@ namespace Tsukuru;
 
 internal class UpdateManager : Singleton<UpdateManager>
 {
+    private const long _repositoryId = 40837172;
+    
     public Version AppVersion { get; }
 
     public UpdateManager()
@@ -19,7 +21,7 @@ internal class UpdateManager : Singleton<UpdateManager>
     {
         var client = new GitHubClient(ProductHeaderValue.Parse($"Tsukuru/{AppVersion}"));
 
-        var release = await client.Repository.Release.GetLatest(40837172);
+        var release = await client.Repository.Release.GetLatest(_repositoryId);
 
         Version latestVersion;
 
