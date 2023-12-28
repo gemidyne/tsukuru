@@ -34,9 +34,21 @@ static int DoValidateTranslations(TranslationValidationOptions options)
         
         Console.WriteLine($"Project file loaded successfully: {project.ProjectName} by {project.Author} ({project.Website})");
         
-        Console.WriteLine($"{project.Languages.Count} languages in project");
-        Console.WriteLine($"{project.Phrases.Count} phrases in project");
+        Console.WriteLine($"{project.Languages.Count} languages in project:");
 
+        foreach (var language in project.Languages)
+        {
+            Console.WriteLine($"* {language.Code}");
+        }
+        
+        Console.WriteLine();
+        Console.WriteLine($"{project.Phrases.Count} phrases in project:");
+
+        foreach (var phrase in project.Phrases)
+        {
+            Console.WriteLine($"* {phrase.Key}");
+        }
+        
         return 0;
     }
     catch (Exception ex)

@@ -35,7 +35,10 @@ public class TranslationExporter
 
     public void ExportToFileSystem()
     {
-        var englishTxtFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + _project.OutputFileName);
+        var englishTxtFile = new FileInfo(
+            _projectFilePath
+                .DirectoryName
+                .AppendIfNeeded(Path.DirectorySeparatorChar) + _project.OutputFileName);
 
         if (englishTxtFile.Directory != null && !englishTxtFile.Directory.Exists)
         {
@@ -107,7 +110,7 @@ public class TranslationExporter
             return;
         }
 
-        var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded('\\') + languageCode.AppendIfNeeded('\\') + _project.OutputFileName);
+        var outputFile = new FileInfo(_projectFilePath.DirectoryName.AppendIfNeeded(Path.DirectorySeparatorChar) + languageCode.AppendIfNeeded(Path.DirectorySeparatorChar) + _project.OutputFileName);
 
         if (outputFile.Directory != null && !outputFile.Directory.Exists)
         {

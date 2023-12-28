@@ -7,11 +7,22 @@
         <Nullable>disable</Nullable>
         <Authors>gemidyne</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>tsukuru</ToolCommandName>
+        <PackageOutputPath>../nupkg</PackageOutputPath>
+        <PackageId>Tsukuru</PackageId>
         <Title>Tsukuru CLI</Title>
         <Description>Command line interface for Tsukuru Source Engine build tool</Description>
         <PackageProjectUrl>https://github.com/gemidyne/tsukuru</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/gemidyne/tsukuru/blob/master/LICENSE.md</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/gemidyne/tsukuru</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Tsukuru;gemidyne;Source;Engine;Build;Tool;vbsp;vvis;vrad;bspzip;sourcemod</PackageTags>
+        <PackageIcon>appicon.png</PackageIcon>
+        <NeutralLanguage>en</NeutralLanguage>
+        <Copyright>2023 gemidyne &amp; Safalin</Copyright>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +31,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Tsukuru.Core.Translations\Tsukuru.Core.Translations.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="appicon.png" Pack="true" PackagePath="" />
+      <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

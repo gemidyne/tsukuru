@@ -43,7 +43,7 @@ public class TranslationImportTransformer
 
         TryPopulateOtherCultures();
 
-        var destination = new FileInfo(_sourceFile.DirectoryName.AppendIfNeeded('\\') + "translations.tsutproj");
+        var destination = new FileInfo(_sourceFile.DirectoryName.AppendIfNeeded(Path.DirectorySeparatorChar) + "translations.tsutproj");
 
         _translationProjectSerializer.SerializeToDisk(destination.FullName, _project);
         
