@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Tsukuru.Core.Translations.Data;
+namespace Tsukuru.Schemas.Translations;
 
 public class Language
 {

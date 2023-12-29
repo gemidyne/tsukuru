@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Chiaki;
+﻿using Chiaki;
 
-namespace Tsukuru.Core.Translations.Data;
+namespace Tsukuru.Schemas.Translations;
 
 public static class FormatArgumentFactory
 {

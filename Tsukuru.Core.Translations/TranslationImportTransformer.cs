@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Chiaki;
 using SteamKit2;
-using Tsukuru.Core.Translations.Data;
+using Tsukuru.Schemas.Translations;
 
 namespace Tsukuru.Core.Translations;
 
@@ -121,7 +121,7 @@ public class TranslationImportTransformer
         string directory = _sourceFile.DirectoryName;
         string file = _sourceFile.Name;
 
-        foreach (string language in SourceModLanguageList.Languages)
+        foreach (string language in SourceModLanguages.Codes)
         {
             string path = directory.AppendIfNeeded('\\') + language.AppendIfNeeded('\\') + file;
 

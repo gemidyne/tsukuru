@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Tsukuru.Schemas.Translations;
 
 namespace Tsukuru.Core.Translations;
 

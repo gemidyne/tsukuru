@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Sentry;
 using Tsukuru.Core.Translations;
 using Tsukuru.Maps.Compiler;
+using Tsukuru.Schemas.Translations;
 using Tsukuru.Services;
 using Tsukuru.Settings;
 using Tsukuru.ViewModels;

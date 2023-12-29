@@ -1,6 +1,4 @@
-﻿using Tsukuru.Core.Translations.Data;
-
-namespace Tsukuru.Core.Translations;
+﻿namespace Tsukuru.Schemas.Translations;
 
 public interface ITranslationProjectSerializer
 {

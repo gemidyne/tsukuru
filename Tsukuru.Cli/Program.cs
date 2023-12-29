@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Tsukuru.Cli;
 using Tsukuru.Core.Translations;
+using Tsukuru.Schemas.Translations;
 
 return Parser
     .Default

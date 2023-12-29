@@ -1,4 +1,4 @@
-﻿namespace Tsukuru.Core.Translations.Data;
+﻿namespace Tsukuru.Schemas.Translations;
 
 public interface IFormatArgument
 {

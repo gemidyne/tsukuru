@@ -1,18 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
         <Authors>gemidyne</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackAsTool>true</PackAsTool>
+        <IsPackable>true</IsPackable>
         <ToolCommandName>tsukuru</ToolCommandName>
         <PackageOutputPath>../nupkg</PackageOutputPath>
-        <PackageId>Tsukuru</PackageId>
-        <Title>Tsukuru CLI</Title>
-        <Description>Command line interface for Tsukuru Source Engine build tool</Description>
+        <PackageId>Tsukuru.Schemas.Translations</PackageId>
+        <Title>Tsukuru Schemas: Translations</Title>
+        <Description>Schema classes for Translation Projects in Tsukuru</Description>
         <PackageProjectUrl>https://github.com/gemidyne/tsukuru</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/gemidyne/tsukuru/blob/master/LICENSE.md</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/gemidyne/tsukuru</RepositoryUrl>
@@ -22,20 +20,16 @@
         <PackageIcon>appicon.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>2023 gemidyne &amp; Safalin</Copyright>
-        <Version>1.1.0</Version>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CommandLineParser" Version="2.9.1" />
+      <PackageReference Include="Chiaki" Version="1.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Tsukuru.Core.Translations\Tsukuru.Core.Translations.csproj" />
+        <None Include="appicon.png" Pack="true" PackagePath="" />
+        <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
-
-    <ItemGroup>
-      <None Include="appicon.png" Pack="true" PackagePath="" />
-      <None Include="README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-
 </Project>

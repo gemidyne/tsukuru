@@ -7,7 +7,6 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
     runs-on: windows-latest 
 
@@ -42,4 +41,3 @@ jobs:
       with:
         name: Package
         path: Tsukuru.App\bin\Release\net8.0-windows\publish\
-    

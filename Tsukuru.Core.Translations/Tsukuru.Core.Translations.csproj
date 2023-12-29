@@ -10,4 +10,8 @@
     <PackageReference Include="SteamKit2" Version="2.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tsukuru.Schemas.Translations\Tsukuru.Schemas.Translations.csproj" />
+  </ItemGroup>
+
 </Project>

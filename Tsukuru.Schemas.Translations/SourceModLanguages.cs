@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿namespace Tsukuru.Schemas.Translations;
 
-namespace Tsukuru.Core.Translations.Data;
-
-public static class SourceModLanguageList 
+public static class SourceModLanguages
 {
-    public static IReadOnlyList<string> Languages = new List<string>(new[]
+    public static IReadOnlyList<string> Codes = new List<string>(new[]
     {
         "en",
         "ar",

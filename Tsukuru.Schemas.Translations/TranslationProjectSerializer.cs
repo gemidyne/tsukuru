@@ -1,12 +1,10 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Tsukuru.Core.Translations.Data;
+﻿using Newtonsoft.Json;
 
-namespace Tsukuru.Core.Translations;
+namespace Tsukuru.Schemas.Translations;
 
 public class TranslationProjectSerializer : ITranslationProjectSerializer
 {
-    private readonly JsonSerializerSettings _settings = new JsonSerializerSettings
+    private readonly JsonSerializerSettings _settings = new()
     {
         Formatting = Formatting.Indented,
         TypeNameHandling = TypeNameHandling.Auto

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Chiaki;
 using SteamKit2;
-using Tsukuru.Core.Translations.Data;
+using Tsukuru.Schemas.Translations;
 
 namespace Tsukuru.Core.Translations;
 
@@ -48,7 +48,7 @@ public class TranslationExporter
         GenerateExportEnglish()
             .SaveToFile(englishTxtFile.FullName, asBinary: false);
 
-        foreach (var language in SourceModLanguageList.Languages.Where(x => x != "en"))
+        foreach (var language in SourceModLanguages.Codes.Where(x => x != "en"))
         {
             DoLanguageExportToFileSystem(language);
         }
@@ -61,7 +61,7 @@ public class TranslationExporter
             ["en"] = GenerateExportEnglish()
         };
 
-        foreach (var language in SourceModLanguageList.Languages.Where(x => x != "en"))
+        foreach (var language in SourceModLanguages.Codes.Where(x => x != "en"))
         {
             var kv = GenerateExportForLanguage(language);
 
