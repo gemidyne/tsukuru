@@ -22,7 +22,7 @@
         <PackageIcon>appicon.png</PackageIcon>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>2023 gemidyne &amp; Safalin</Copyright>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
