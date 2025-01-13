@@ -38,7 +38,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="13.0.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Sentry" Version="4.13.0" />
+    <PackageReference Include="Sentry" Version="5.0.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
 <!--    <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />-->
     <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
