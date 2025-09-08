@@ -37,7 +37,7 @@ jobs:
       run: dotnet publish Tsukuru.App/Tsukuru.App.csproj
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Package
         path: Tsukuru.App\bin\Release\net8.0-windows\publish\
